@@ -31,19 +31,19 @@
 
           <!-- Button to open the modal login form -->
           <br><br>
-      <button onclick="document.getElementById('id01').style.display='block'">LOG IN</button>
+      <button onclick="document.getElementById('id_1').style.display='block'">LOG IN</button>
   </div>
   <div class="col-2"></div>
 </div>
 
 
 <!-- The Modal -->
-<div id="id01" class="modal">
-  <span onclick="document.getElementById('id01').style.display='none'"
+<div id="id_1" class="modal">
+  <span onclick="document.getElementById('id_1').style.display='none'"
 class="close" title="Close Modal">&times;</span>
 
   <!-- Modal Content -->
-  <form class="modal-content animate login_form row" action="/action_page.php">
+  <form class="Login_form" action="/action_page.php">
     <div class="col-2"></div>
 
     <div class="container col-8">
@@ -55,13 +55,13 @@ class="close" title="Close Modal">&times;</span>
             <input type="checkbox" name="remember"> Remember me
           </label>
           <br><br>
-          <button type="submit" class="formBtn">Login</button>
+          <button type="submit" class="LoginInto">Login</button>
         </div>
         <div class="col-6 form_fields">
           <label for="psw"><b>Password</b></label><br><br>
           <input type="password" placeholder="Enter Password" name="psw" required><br><br>
           <span class="psw">Forgot <a href="#">password?</a></span><br><br>
-          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn formBtn">Cancel</button>
+          <button type="button" onclick="document.getElementById('id_1').style.display='none'" class="Login_cancel">Cancel</button>
         </div>
       </div>
     </div>
