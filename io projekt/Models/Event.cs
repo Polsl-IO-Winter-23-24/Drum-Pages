@@ -47,6 +47,10 @@ namespace io_projekt.Models
         {
         return id;
         }
+        public int getOrganizorId()
+        {
+            return organizorId;
+        }
         private static IMemoryCache GetCacheInstance()
         {
             if (_cache == null)
@@ -55,7 +59,6 @@ namespace io_projekt.Models
             }
             return _cache;
         }
-
 
         public static (Event? evnt, string message) GetEventById(int id)
         {

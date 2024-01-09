@@ -1,6 +1,7 @@
 ﻿
 using io_projekt.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 using System.Diagnostics;
 
 namespace io_projekt.Controllers
@@ -15,35 +16,65 @@ namespace io_projekt.Controllers
         }
 
         public IActionResult Index()
-        {
+        {   
             return View();
         }
 
 
         public IActionResult Forum()
         {
-            return View();
+            return View("Events");
         }
 
         public IActionResult Kursy()
         {
             return View();
         }
-
-        public IActionResult AddNewUser()
+        public IActionResult Events()
         {
-
-            if(Request.Method == "POST") 
-            {
-               
-
-                int wiek = Int32.Parse(Request.Form["age"]);
-                int skill = Int32.Parse(Request.Form["skills"]);
-                MainUser.AddNewUser(Request.Form["login"], Request.Form["password"], Request.Form["name"], Request.Form["lastName"], wiek, Request.Form["type"], skill);
-                
-            }
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Login(string uname, string psw, bool remember)
+        {
+            // Obsługa logowania
+            // Tutaj dodaj kod do obsługi logowania
+            return RedirectToAction("Index"); // Przekierowanie po zalogowaniu
+
+        }
+
+        [HttpPost]
+        public IActionResult Register(string name, string surname, string email, string regname, string regpass)
+        {
+            // Obsługa rejestracji
+            int wiek = 0;// Int32.Parse(Request.Form["age"]);
+            int skill = 0;// Int32.Parse(Request.Form["skills"]);
+            String konto = "Pro";
+            MainUser.AddNewUser(regname, regpass, name, surname, wiek, konto, skill);
+
+            return RedirectToAction("Index"); // Przekierowanie po zarejestrowaniu
+        }
+
+        [HttpPost]
+        public IActionResult AddEvent(string Event_name, DateTime Event_date, string Event_description, string Event_location, string Event_creator)
+        {
+            // Dodaj nowe wydarzenie do listy
+            var result = Event.AddNewEvet(Event_name, Event_date, Event_description, Event_location, 3);
+
+            // Sprawdź wynik i podejmij odpowiednie działania, np. przekierowanie do innej akcji
+            if (result.boolean)
+            {
+                // Sukces, możesz przekierować gdziekolwiek chcesz
+                return RedirectToAction("Events");
+            }
+            else
+            {
+                // Wystąpił błąd, możesz obsłużyć go w jakiś sposób (np. przekierowanie do strony błędu)
+                return RedirectToAction("Error");
+            }
+        }
+
 
         public IActionResult Privacy()
         {

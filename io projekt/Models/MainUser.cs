@@ -105,7 +105,7 @@ namespace io_projekt.Models
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         connection.Open();
-                        string queryString = $"SELECT * FROM master.dbo.Uzytkownicy WHERE userId = {id}";
+                        string queryString = $"SELECT * FROM master.dbo.Uzytkownicy WHERE uzytkownikId = {id}";
                         using (SqlCommand command = new SqlCommand(queryString, connection))
                         {
                             using (SqlDataReader reader = command.ExecuteReader())
