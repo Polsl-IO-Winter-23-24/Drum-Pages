@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row content welcome_content">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <p class="highlight">
+            <b>
+                During almost every concert, a drummer is a necessity for almost all bands, because the music notes wouldn't be the same without his help.
+                Despite that, many future musicians focus on other instruments and overlook the magnificent opportunity of career growth given by the drums.
+            </b>
+            <br>
+        </p>
+        <p3>
+            <br>
+            <br>
+            Drum pages is the first of its kind website dedicated to all people passionate with music, who have a particular interest in drums. It has been made as a project in order
+            to gather together all drum lovers and help them expand their opporunities. In here you will be able to share your passion with others and learn new ideas related to this topic.
+            <br>
+            <br>
+            <br>
+            Thanks to our collaboration with professional drummers from the entire world you too can learn how to play like a pro with our lessons available to everyone for free.
+            <br>
+        </p3>
+
+        <!-- Button to open the modal login form -->
+        <br><br>
+        <button onclick="document.getElementById('id_1').style.display='block'">LOG IN</button>
+        <a asp-area="" asp-controller="Home" asp-action="AddNewUser"><button>Rejestruj</button></a>
+
+    </div>
+    <div class="col-2"></div>
+</d>
+
+
+<!-- The Modal -->
+<div id="id_1" class="modal">
+    <span onclick="document.getElementById('id_1').style.display='none'"
+          class="close" title="Close Modal">&times;</span>
+
+    <!-- Modal Content -->
+    <form class="Login_form" method="post">
+        <div class="col-2"></div>
+
+        <div class="container col-8">
+            <div class="row centered_container">
+                <div class="col-6 form_fields">
+                    <label for="uname"><b>Username</b></label><br><br>
+                    <input type="text" placeholder="Enter Username" name="uname" required><br><br>
+                    <label>
+                        <input type="checkbox" name="remember"> Remember me
+                    </label>
+                    <br><br>
+                    <button type="submit" class="LoginInto">Login</button>
+                </div>
+                <div class="col-6 form_fields">
+                    <label for="psw"><b>Password</b></label><br><br>
+                    <input type="password" placeholder="Enter Password" name="psw" required><br><br>
+                    <span class="psw">Forgot <a href="#">password?</a></span><br><br>
+                    <button type="button" onclick="document.getElementById('id_1').style.display='none'" class="Login_cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </form>
+</div>

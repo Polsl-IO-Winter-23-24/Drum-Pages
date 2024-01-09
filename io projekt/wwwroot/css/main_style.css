@@ -1,0 +1,232 @@
+/* Author: MT */
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Lato&display=swap');
+
+:root
+{
+    --main-color: #ffffff;
+    --main-color-shaded: #dddddd;
+    --aux-color: #ff9b05;
+    --main-text-color: #000000;
+    --aux-text-color: #ffffff;
+    --aux-color-shaded: #dd7903;
+    --main-border-color: #777777;
+}
+
+*
+{
+    box-sizing: border-box;
+}
+
+body
+{
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    margin: 0px;
+    padding: 0px;
+    color: var(--main-text-color);
+    background-color: var(--main-color);
+}
+
+a
+{
+    color: var(--aux-color);
+    text-decoration: none;
+}
+
+button
+{
+    font-size: 22px;
+    color: var(--aux-text-color);
+    background-color: var(--aux-color);
+    border-radius: 10em;
+    border-color: var(--main-border-color);
+    border-width: 2px;
+    text-align: center;
+    width: 50%;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+
+
+button:hover
+{
+    background-color: var(--aux-color-shaded);
+    transition: background-color 0.5s;
+}
+
+.header
+{
+    background-color: var(--aux-color);
+    color: var(--aux-text-color);
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 7vh 7vh;
+}
+
+.header-text
+{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.content
+{
+    margin-top: 2vh;
+}
+
+.welcome_content
+{
+    text-align: center;
+}
+
+.highlight
+{
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.login_form
+{
+    border-radius: 2em;
+    display: flex;
+    height: 25vh;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
+}
+
+.centered_container
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formBtn
+{
+    width: 100%;
+}
+
+.form_fields
+{
+    text-align: center;
+}
+
+.selection_box
+{
+    background-color: var(--main-color-shaded);
+    border-radius: 2em;
+    margin-top: 1em;
+}
+
+.row::after
+{
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"]
+{
+    float: left;
+    padding: 15px;
+}
+
+@media only screen and (max-width: 768px)
+{
+    /* For mobile phones: */
+    [class*="col-"] {
+      width: 100%;
+    }
+}
+
+/* Author: KB */
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5px auto; /* 15% from the top and centered */
+}
+
+/* The Close Button */
+.close {
+  /* Position it in the top right corner outside of the modal */
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+/* Close button on hover */
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+
+.nav-item {
+    float: left;
+    height: 100%;
+    text-align: center;
+    padding-top: 5px;
+    margin-left: 50px;
+    color: white;
+    z-index: 3;
+}
+
+.nav-link {
+    color: white;
+}

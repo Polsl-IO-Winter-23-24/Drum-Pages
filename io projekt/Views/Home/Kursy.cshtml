@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<br>
+<h2>List of Courses</h2>
+
+
+
+
+
+<table class ="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>nazwa</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var model = new io_projekt.Models.Courses();
+            model.connectToDataBase();
+            foreach(var item in model.courses)
+            {
+                <tr>
+                    <td>@item.getID()</td>
+                    <td>@item.getTitle()</td>
+                </tr>
+            
+            }
+        }
+    </tbody>
+</table>
+<h2>List of classes</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>tytul</th>
+            <th>tresc</th>
+            <th>id_kursu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in model.classes)
+            {
+                <tr>
+                    <td>@item.getID()</td>
+                    <td>@item.getTitle()</td>
+                    <td>@item.getContent()</td>
+                    <td>@item.getCourseID()</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
