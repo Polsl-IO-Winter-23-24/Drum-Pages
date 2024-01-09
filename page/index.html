@@ -31,6 +31,9 @@
 
           <!-- Button to open the modal login form -->
           <br><br>
+          
+        
+      <button onclick="document.getElementById('id02').style.display='block'">REGISTER</button>
       <button onclick="document.getElementById('id01').style.display='block'">LOG IN</button>
   </div>
   <div class="col-2"></div>
@@ -55,13 +58,43 @@ class="close" title="Close Modal">&times;</span>
             <input type="checkbox" name="remember"> Remember me
           </label>
           <br><br>
-          <button type="submit" class="formBtn">Login</button>
+          <button type="submit" class="formregister">Login</button>
         </div>
         <div class="col-6 form_fields">
           <label for="psw"><b>Password</b></label><br><br>
           <input type="password" placeholder="Enter Password" name="psw" required><br><br>
           <span class="psw">Forgot <a href="#">password?</a></span><br><br>
           <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn formBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-2"></div>
+  </form>
+</div> 
+
+
+<div id="id02" class="modal">
+  <span onclick="document.getElementById('id02').style.display='none'"
+class="close" title="Close Modal">&times;</span>
+
+  <!-- Modal Content -->
+  <form class="modal-content animate register_form row" action="/action_page.php">
+    <div class="col-2"></div>
+
+    <div class="container col-8">
+      <div class="row centered_container">
+        <div class="col-6 form_fields">
+          <label for="name"><b>Name</b></label><br><br>
+          <input type="text" placeholder="Your name" name="name" required><br><br>
+          <label for="surname"><b>Surname</b></label><br><br>
+          <input type="text" placeholder="Your Surname" name="surname" required><br><br>
+          <label for="email"><b>Email</b></label><br><br>
+          <input type="email" placeholder="Email address" name="email" required><br><br>
+          <label for="regname"><b>Username</b></label><br><br>
+          <input type="text" placeholder="Enter Username" name="regname" required><br><br>
+          <label for="regpass"><b>Password</b></label><br><br>
+          <input type="password" placeholder="Your password" name="regpass" required><br><br>
+          <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn formBtn">Cancel</button>
         </div>
       </div>
     </div>
