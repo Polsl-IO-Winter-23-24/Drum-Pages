@@ -22,6 +22,7 @@ namespace io_projekt.Models
                     Console.WriteLine("tabela: ");
                     connection.Open();
                     String query = "select * from Kursy";
+
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
