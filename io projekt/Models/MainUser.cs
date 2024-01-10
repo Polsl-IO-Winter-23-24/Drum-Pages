@@ -301,7 +301,7 @@ namespace io_projekt.Models
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $"SELECT userId FROM master.dbo.Uzytkownicy WHERE login = @login";
+                    string query = $"SELECT uzytkownikId FROM master.dbo.Uzytkownicy WHERE login = @login";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@login", login);
 

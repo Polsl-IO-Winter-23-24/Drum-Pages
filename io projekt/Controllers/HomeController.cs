@@ -1,5 +1,6 @@
 ﻿
 using io_projekt.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using System.Diagnostics;
@@ -9,10 +10,13 @@ namespace io_projekt.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ISession _session;
+        private int currentUserID;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
+            _session = httpContextAccessor.HttpContext.Session;
         }
 
         public IActionResult Index()
@@ -38,8 +42,12 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult Login(string uname, string psw, bool remember)
         {
-            // Obsługa logowania
-            // Tutaj dodaj kod do obsługi logowania
+            bool pswCorrect = MainUser.CheckPassword(uname, psw);
+            if (pswCorrect)
+            {
+                currentUserID = MainUser.GetUserIdByLogin(uname);
+                _session.SetInt32("currentUserID", currentUserID);
+            }
             return RedirectToAction("Index"); // Przekierowanie po zalogowaniu
 
         }
@@ -59,18 +67,17 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult AddEvent(string Event_name, DateTime Event_date, string Event_description, string Event_location, string Event_creator)
         {
-            // Dodaj nowe wydarzenie do listy
-            var result = Event.AddNewEvet(Event_name, Event_date, Event_description, Event_location, 3);
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            
+            var result = Event.AddNewEvet(Event_name, Event_date, Event_description, Event_location, currentUserID);
 
-            // Sprawdź wynik i podejmij odpowiednie działania, np. przekierowanie do innej akcji
+            
             if (result.boolean)
             {
-                // Sukces, możesz przekierować gdziekolwiek chcesz
                 return RedirectToAction("Events");
             }
             else
             {
-                // Wystąpił błąd, możesz obsłużyć go w jakiś sposób (np. przekierowanie do strony błędu)
                 return RedirectToAction("Error");
             }
         }
