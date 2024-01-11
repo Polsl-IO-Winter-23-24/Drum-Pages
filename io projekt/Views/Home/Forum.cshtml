@@ -1,88 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Forum";
-}
-
-<br>
-<h2>List of Users</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-          
-
-            foreach (var item in MainUser.GetAllUsers())
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main_style.css">
+</head>
+<body>
+    <div class="header"><span class="header-text">DRUM PAGES</span></div>
+    <div class="col-2"></div>
+    <div class="row content welcome_content">
+        <div class="col-8">
+            @foreach (var item in Post.GetPostsByThreadId(3))
             {
-                <tr>
-                    <td>@item.getLogin()</td>
-                    <td>@item.getName()</td>
-                </tr>
-
+                <div class="selection_box">
+                    <!-- Tutaj będą wyświetlane wydarzenia z kontrolera -->
+                    <label for="Event_name"><b>@item.getCreationDate()</b></label>
+                    <br>
+                    <label for="Event_date"><b>@item.getContent()</b></label>
+                    <br>
+                    <label for="Event_date"><b>@item.getUserID()</b></label>
+                    <br>
+                </div>
             }
-        }
-    </tbody>
-</table>
-
-
-
-
-
-<h2>List of threads</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>temat</th>
-            <th>data_utworzenia</th>
-            <th>id_uzytkownika</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var model = new io_projekt.Models.Model();
-            model.connectToDataBase();
-
-            foreach (var item in model.Threads)
-            {
-                <tr>
-                    <td>@item.getID()</td>
-                    <td>@item.getTheme()</td>
-                    <td>@item.getCreationDate()</td>
-                    <td>@item.getUserID()</td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-<h2>List of posts</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>zawartosc</th>
-            <th>data_utworzenia</th>
-            <th>id_watku</th>
-            <th>id_uzytkownika</th>
-        </tr>
-    </thead>
-    <tbody>
-         @{
-            Thread thread = model.Threads[1];
-            List<Post> posts = thread.getPosts();
-            foreach (var item in posts)
-            {
-                <tr>
-                    <td>@item.getID()</td>
-                    <td>@item.getContent()</td>
-                    <td>@item.getCreationDate()</td>
-                    <td>@item.getThreadID()</td>
-                    <td>@item.getUserID()</td>
-                </tr>
-            }
-        }  
-    </tbody>
-</table>
+        </div>
+    </div>
+</body>
+</html>

@@ -20,6 +20,8 @@
         public static string addNewEventError => "Błąd podczas dodawania wydarzenia";
         public static string RemoveEventError => "Błąd podczas usuwanie wydarzenia";
         public static string RemoveEventSucces => "Usunieto wydarzenie";
+        public static string GetThreadsSuccess => "Odczytano watki";
+        public static string GetPostsSuccess => "Odczytano wpisy";
     }
 }
 

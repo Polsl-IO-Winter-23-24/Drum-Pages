@@ -27,7 +27,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Forum()
         {
-            return View("Events");
+            return View();
         }
 
         public IActionResult Kursy()
