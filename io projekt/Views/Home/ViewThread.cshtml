@@ -1,0 +1,30 @@
+﻿@model List<Post>  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main_style.css">
+</head>
+<body>
+    <div class="col-2"></div>
+    <div class="row content welcome_content">
+        <div class="col-8">
+            <!-- Display posts for the selected thread -->
+            @foreach (var post in Model)
+            {
+                <div class="post">
+                    <!-- Display post information -->
+                    <label for="Post_date"><b>@post.getCreationDate()</b></label>
+                    <br>
+                    <label for="Post_content"><b>@post.getContent()</b></label>
+                    <br>
+                    <label for="Post_user"><b>@post.getThreadID()</b></label>
+                    <br>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

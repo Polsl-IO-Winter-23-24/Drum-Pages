@@ -64,6 +64,16 @@ namespace io_projekt.Controllers
             return RedirectToAction("Index"); // Przekierowanie po zarejestrowaniu
         }
 
+        [HttpGet]
+        public IActionResult ViewThread(int threadId)
+        {
+            // Retrieve entries for the specified threadId from your data source
+            List<Post> posts = Post.GetPostsByThreadId(threadId);
+
+            // You may need to pass the entries to the view
+            return View(posts);
+        }
+
         [HttpPost]
         public IActionResult AddEvent(string Event_name, DateTime Event_date, string Event_description, string Event_location, string Event_creator)
         {

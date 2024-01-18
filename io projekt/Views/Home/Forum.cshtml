@@ -6,23 +6,26 @@
     <link rel="stylesheet" href="main_style.css">
 </head>
 <body>
-    <div class="header"><span class="header-text">DRUM PAGES</span></div>
     <div class="col-2"></div>
     <div class="row content welcome_content">
         <div class="col-8">
-            @foreach (var item in Post.GetPostsByThreadId(3))
+            @foreach (var item in Thread.getAllThreads())
             {
                 <div class="selection_box">
                     <!-- Tutaj będą wyświetlane wydarzenia z kontrolera -->
-                    <label for="Event_name"><b>@item.getCreationDate()</b></label>
+                    <label for="Event_name"><b>@item.getTheme()</b></label>
                     <br>
-                    <label for="Event_date"><b>@item.getContent()</b></label>
+                    <label for="Event_date"><b>@item.getDate()</b></label>
                     <br>
-                    <label for="Event_date"><b>@item.getUserID()</b></label>
+                    <label for="Event_description"><b>@item.getUserID()</b></label>
                     <br>
+                    <a href="@Url.Action("ViewThread", "Home", new { threadId = item.getID() })">
+                        <button>View Entries</button>
+                    </a>
                 </div>
             }
         </div>
     </div>
 </body>
 </html>
+
