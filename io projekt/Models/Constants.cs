@@ -22,6 +22,11 @@
         public static string RemoveEventSucces => "Usunieto wydarzenie";
         public static string GetThreadsSuccess => "Odczytano watki";
         public static string GetPostsSuccess => "Odczytano wpisy";
+        public static string addNewThreadSucces => "Udało się dodać wątek";
+        public static string addNewThreadError => "Nie udało się dodać wątku";
+        public static string addNewPostError => "Nie udało sie dodać postu";
+        public static string addNewPostSuccess => "Udało sie dodać post";
+
     }
 }
 

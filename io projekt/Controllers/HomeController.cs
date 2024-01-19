@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using System.Diagnostics;
+using System.Threading;
+using Thread = io_projekt.Models.Thread;
 
 namespace io_projekt.Controllers
 {
@@ -27,7 +29,19 @@ namespace io_projekt.Controllers
 
         public IActionResult Forum()
         {
-            return View();
+            // Retrieve entries for the specified threadId from your data source
+            List<Thread> threads = Thread.getAllThreads();
+            List<Tuple<Thread, List<Post>>> threadDataList = new List<Tuple<Thread, List<Post>>>();
+
+            foreach (var thread in threads)
+            {
+                List<Post> posts = Post.GetPostsByThreadId(thread.getID());
+                Tuple<Thread, List<Post>> threadData = new Tuple<Thread, List<Post>>(thread, posts);
+                threadDataList.Add(threadData);
+            }
+
+            // You may need to pass the entries to the view
+            return View(threadDataList);
         }
 
         public IActionResult Kursy()
@@ -65,14 +79,55 @@ namespace io_projekt.Controllers
         }
 
         [HttpGet]
-        public IActionResult ViewThread(int threadId)
+        public IActionResult ViewThread()
         {
             // Retrieve entries for the specified threadId from your data source
-            List<Post> posts = Post.GetPostsByThreadId(threadId);
+            List<int> threadIds = Thread.GetThreadIds();
+            List<Tuple<int, List<Post>>> threadDataList = new List<Tuple<int, List<Post>>>();
+
+            foreach (int threadId in threadIds)
+            {
+                List<Post> posts = Post.GetPostsByThreadId(threadId);
+                Tuple<int, List<Post>> threadData = new Tuple<int, List<Post>>(threadId, posts);
+                threadDataList.Add(threadData);
+            }
 
             // You may need to pass the entries to the view
-            return View(posts);
+            return View(threadDataList);
         }
+
+        [HttpPost]
+        public IActionResult AddThread(string newThreadTheme)
+        {
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            DateTime creationDate = DateTime.Now;
+
+            (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
+            return RedirectToAction("Forum");
+        }
+
+        [HttpPost]
+        public IActionResult AddPost(string newPostContent, int threadId)
+        {
+            try
+            {
+                currentUserID = _session.GetInt32("currentUserID") ?? 0;
+                DateTime creationDate = DateTime.Now;
+
+                Post.AddNewPost(newPostContent, creationDate, threadId, currentUserID);
+
+                return RedirectToAction("Forum");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception in adding a new post to the database: " + ex.ToString());
+                // Handle the exception as needed
+
+                return RedirectToAction("Forum");
+            }
+        }
+
+
 
         [HttpPost]
         public IActionResult AddEvent(string Event_name, DateTime Event_date, string Event_description, string Event_location, string Event_creator)

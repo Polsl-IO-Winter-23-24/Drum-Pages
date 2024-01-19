@@ -62,7 +62,7 @@ button:hover
     font-size: 22px;
     font-weight: bold;
     text-align: center;
-    height: 15vh;
+    height: 7vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,12 +101,23 @@ button:hover
     width: 60vw;
 }
 
+.register_form
+{
+    border-radius: 2em;
+    display: flex;
+    height: 50vh;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
+}
+
 .centered_container
 {
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 
 .formBtn
 {
@@ -214,19 +225,5 @@ button:hover
 @keyframes animatezoom {
   from {transform: scale(0)}
   to {transform: scale(1)}
-}
+} 
 
-
-.nav-item {
-    float: left;
-    height: 100%;
-    text-align: center;
-    padding-top: 5px;
-    margin-left: 50px;
-    color: white;
-    z-index: 3;
-}
-
-.nav-link {
-    color: white;
-}

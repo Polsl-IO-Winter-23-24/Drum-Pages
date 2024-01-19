@@ -1,31 +1,150 @@
-﻿<!DOCTYPE html>
+﻿@model List<Tuple<Thread, List<Post>>>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main_style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="CodeHim">
+    <title>Discussion Board Experiment Example</title>
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="~/css/style.css">
+    <!-- Demo CSS (No need to include it into your project) -->
+    <link rel="stylesheet" href="~/css/demo.css">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 </head>
 <body>
-    <div class="col-2"></div>
-    <div class="row content welcome_content">
-        <div class="col-8">
-            @foreach (var item in Thread.getAllThreads())
-            {
-                <div class="selection_box">
-                    <!-- Tutaj będą wyświetlane wydarzenia z kontrolera -->
-                    <label for="Event_name"><b>@item.getTheme()</b></label>
-                    <br>
-                    <label for="Event_date"><b>@item.getDate()</b></label>
-                    <br>
-                    <label for="Event_description"><b>@item.getUserID()</b></label>
-                    <br>
-                    <a href="@Url.Action("ViewThread", "Home", new { threadId = item.getID() })">
-                        <button>View Entries</button>
-                    </a>
-                </div>
-            }
+    <header class="cd__intro">
+        <h1>Discussion Board Experiment Example</h1>
+        <p>Discussion Board Experiment</p>
+        <div class="cd__action">
+            <a href="https://www.codehim.com/html5-css3/html-code-for-discussion-forum" title="Back to download and tutorial page" class="cd__btn back">Back to Tutorial</a>
         </div>
-    </div>
+    </header>
+    <!--$%adsense%$-->
+    <main class="cd__main">
+        <!-- Start DEMO HTML (Use the following code into your project)-->
+        <div class="container">
+            <div class="response-group">
+                <header>
+                    <h2>
+                        <strong>Lesson Title</strong><i class="fa fa-angle-right"></i><span class="header-dropdown-trigger">Activity Title</span>
+                    </h2>
+                </header>
+                <div class="header-dropdown">
+                    <div class="panel">
+                        <ul>
+                            @for (int i = 1; i <= 4; i++)
+                            {
+                                <li>
+                                    <h2>
+                                        Activity Title
+                                    </h2>
+                                    <span>2/4</span>
+                                    <div class="progress">
+                                        <div class="progress__complete"></div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                @{
+                    int threadCounter = 0;
+                    var sortedModel = Model.OrderBy(thread => thread.Item1.getDate()).ToList();
+                }
+                @foreach (var threadData in sortedModel)
+                {
+                    threadCounter++;
+                    <div class="response">
+                        <div class="response__number">
+                            @threadCounter
+                        </div>
+                        <h1 class="response__title">
+                            @threadData.Item1.getTheme()
+                        </h1>
+                        <div class="post-group">
+                            @if (threadData.Item2 != null && threadData.Item2.Any())
+                            {
+
+                                (MainUser user, String msg) = MainUser.GetUserById(threadData.Item2[0].getUserID());
+                                int numberOfReplies = threadData.Item2.Count - 1;
+
+
+                                <div class="post">
+                                    <div class="post__avatar"></div>
+                                    <h3 class="post__author">
+                                        @user.getName()
+                                    </h3>
+                                    <h4 class="post__timestamp">
+                                        @threadData.Item2[0].getCreationDate();
+                                    </h4>
+                                    <p class="post__body">
+                                        @threadData.Item2[0].getContent();
+                                    </p>
+                                    <div class="post__actions">
+                                        <div class="button button--approve">
+                                            <i class="fa fa-thumbs-o-up"></i><i class="fa fa-thumbs-up solid"></i>
+                                        </div>
+                                        <div class="button button--deny">
+                                            <i class="fa fa-thumbs-o-down"></i><i class="fa fa-thumbs-down solid"></i>
+                                        </div>
+                                        <div class="button button--fill comment-trigger">
+                                            <span>Comment...</span>
+                                        </div>
+                                        <div class="button button--flag">
+                                            <i class="fa fa-comment-o"></i><i class="fa fa-comment solid"></i>@numberOfReplies
+                                        </div>
+                                        <div class="post__comments">
+                                            <div class="comment-group">
+                                                @for (int i = 1; i < threadData.Item2.Count; i++) // Adjust the loop count as needed
+                                                {
+                                                    (MainUser user2, String msg2) = MainUser.GetUserById(threadData.Item2[i].getUserID());
+                                                    <div class="comment">
+                                                        <div class="comment__avatar"></div>
+                                                        <h3 class="comment__author">
+                                                            @user2.getName()
+                                                        </h3>
+                                                        <h4 class="comment__timestamp">
+                                                            @threadData.Item2[i].getCreationDate()
+                                                        </h4>
+                                                        <p class="comment__body">
+                                                            @threadData.Item2[i].getContent()
+                                                        </p>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="comment-form">
+                                                <div class="comment-form__avatar"></div>
+                                                <form method="post" action="@Url.Action("AddPost", "Home")">
+                                                    @Html.Hidden("threadId", threadData.Item1.getID())
+                                                    <textarea name="newPostContent"></textarea>
+                                                    <div class="comment-form__actions">
+                                                        <div class="button button--light cancel">
+                                                            Cancel
+                                                        </div>
+                                                        <button type="submit" class="button button--confirm">
+                                                            Comment
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <p>No posts found for this thread.</p>
+                            }
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </main>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="~/js/script.js"></script>
 </body>
 </html>
-
