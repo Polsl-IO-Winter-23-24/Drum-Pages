@@ -1,0 +1,86 @@
+﻿
+/* autor MacB */
+/* Kursy */
+.CoursesTagSection {
+    clear:both;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+
+#CoursesCurrentSection {
+    width: 100%;
+    height: 240px;
+    padding: 0px 10px 0px 10px;
+    border-top: 1px solid orange;
+    border-bottom: 1px solid orange;
+    clear: both;
+    overflow-y: hidden;
+    overflow-x: auto;
+    float: left;
+    margin-bottom: 30px;
+    white-space: nowrap;
+}
+
+.CoursesTag {
+    font-size: 20pt;
+    font-weight: 1000;
+    color: orange;
+    
+}
+
+
+.CourseBlock {
+    width: 100px;
+    height: 180px;
+    background: rgb(200,132,22);
+    background: linear-gradient(0deg, rgba(200,132,22,1) 7%, rgba(195,139,34,1) 13%, rgba(195,172,34,1) 73%);
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 20px 10px 0px 10px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 650;
+    letter-spacing: 1pt;
+    white-space: break-spaces;
+}
+    .CourseBlock :hover {
+        cursor: grab;
+    }
+
+.CourseBlockTag {
+    width: 100%;
+    height: 100%;
+    display:block;
+    padding: 0px 5px 0px 5px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#CoursesCurrentTag {
+    margin-left: 10px;
+}
+
+#CoursesAddTag {
+    margin-right: 10px;
+    float: right;
+}
+
+#CoursesTopTag {
+    margin-left: 10px;
+}
+
+#CoursesTopSection {
+    width: 100%;
+    height: 240px;
+    padding: 0px 10px 0px 10px;
+    border-top: 1px solid orange;
+    border-bottom: 1px solid orange;
+    clear: both;
+    overflow-y: hidden;
+    overflow-x: auto;
+    float: left;
+    margin-bottom: 30px;
+    white-space: nowrap;
+}

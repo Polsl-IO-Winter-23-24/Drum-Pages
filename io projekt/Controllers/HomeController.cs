@@ -52,6 +52,10 @@ namespace io_projekt.Controllers
         {
             return View();
         }
+        public IActionResult Lekcja()
+        {
+            return View();
+        }
 
         [HttpPost]
         public IActionResult Login(string uname, string psw, bool remember)

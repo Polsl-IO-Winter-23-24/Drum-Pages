@@ -1,58 +1,65 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@page
+@model Courses
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/main_style.css">
+    <link rel="stylesheet" href="~/css/Classes.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+ 
+</head>
+<body>
+
+@{
+        var model = new io_projekt.Models.Courses();
 }
 
-<br>
-<h2>List of Courses</h2>
+<div class="CoursesTagSection">
+    <span id="CoursesCurrentTag" class="CoursesTag">Current</span>
+    <span id="CoursesAddTag" class="CoursesTag">+ Create</span>
+</div>
+<div id="CoursesCurrentSection">
+@{
+    
+    model.connectToDataBase();
+    foreach (var item in model.courses)
+    {
+               
+                  <div class="CourseBlock">
 
+                      <div class="CourseBlockTag">@item.getTitle()</div>
 
+                  </div>
+              
 
+    }
+}
+</div>
+<div class="CoursesTagSection">
+    <span id="CoursesTopTag" class="CoursesTag">Top</span>
+        
+</div>
+<div id="CoursesTopSection">
 
+@{
+   
+    
+    foreach (var item in model.Topcourses)
+    {
+               
+                <div class="CourseBlock">
 
-<table class ="table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>nazwa</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var model = new io_projekt.Models.Courses();
-            model.connectToDataBase();
-            foreach(var item in model.courses)
-            {
-                <tr>
-                    <td>@item.getID()</td>
-                    <td>@item.getTitle()</td>
-                </tr>
-            
-            }
-        }
-    </tbody>
-</table>
-<h2>List of classes</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>tytul</th>
-            <th>tresc</th>
-            <th>id_kursu</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in model.classes)
-            {
-                <tr>
-                    <td>@item.getID()</td>
-                    <td>@item.getTitle()</td>
-                    <td>@item.getContent()</td>
-                    <td>@item.getCourseID()</td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+                    <div class="CourseBlockTag">@item.getTitle()</div>
+                
+                </div>
+         
+    }
+}
 
+    </div>
+</body>
+</html>

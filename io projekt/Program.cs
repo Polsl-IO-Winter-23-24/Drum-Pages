@@ -3,7 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromHours(12);
+    options.Cookie.Name = ".yourApp.Session"; // <--- Add line
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddMvc();
 var app = builder.Build();
 

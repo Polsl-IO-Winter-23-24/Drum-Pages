@@ -1,14 +1,16 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 using System.Threading;
 
 namespace io_projekt.Models
 {
     public class Courses
     {
-       
-        
+
+
         public List<Course> courses = new List<Course>();
-        public List<Class> classes = new List<Class>();
+        public List<Course> Topcourses = new List<Course>();
+
         public List<Comment> comments = new List<Comment>();
         public void connectToDataBase()
         {
@@ -43,9 +45,7 @@ namespace io_projekt.Models
                         }
                     }
 
-
-
-                    query = "select * from Lekcje";
+                    query = "select * from Kursy order by ocena desc";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -54,19 +54,20 @@ namespace io_projekt.Models
 
                             while (reader.Read())
                             {
-                                Class lesson = new Class();
-                                lesson.setID(reader.GetInt32(0));
-                                lesson.setTitle(reader.GetString(1));
-                                lesson.setContent(reader.GetString(2));
-                                lesson.setCourseID(reader.GetInt32(3));
-                                lesson.setVideoURL(reader.GetString(4));
-                                lesson.setRating(reader.GetInt32(5));
+                                Course course = new Course();
+                                course.setID(reader.GetInt32(0));
+                                course.setTitle(reader.GetString(1));
+                                course.setDescription(reader.GetString(2));
+                                course.setAuthorID(reader.GetInt32(3));
+                                course.setDifficulty(reader.GetInt32(4));
+                                course.setRating(reader.GetInt32(5));
 
-                                classes.Add(lesson); 
-                              
+                                Topcourses.Add(course);
                             }
                         }
                     }
+
+
 
 
 
@@ -95,109 +96,80 @@ namespace io_projekt.Models
 
 
 
-                }           
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
-    }
 
 
 
-    public class Course
-    {
-        private int id;
-        private string title;
-        private string description;
-        private int authorID;
-        private int difficutly;
-        private int rating;
 
-        public Course()
+
+
+        public class Course
         {
-            title = "";
-            description = "";
-        }
+            private int id;
+            private string title;
+            private string description;
+            private int authorID;
+            private int difficutly;
+            private int rating;
 
-        public int getID() { return id; }
-        public string getTitle() { return title; }
-        public string getDescription() { return description; }
-        public int getAuthorID() { return authorID; }
-        public int getDifficulty() { return difficutly; }
-        public int getRating() { return rating; }
+            public Course()
+            {
+                title = "";
+                description = "";
+            }
 
-        public void setID(int id) { this.id = id; }
-        public void setTitle(string title) { this.title = title; }
-        public void setDescription(string description) { this.description = description; }
-        public void setAuthorID(int authorID) { this.authorID = authorID; }
-        public void setDifficulty(int difficulty) { this.difficutly = difficulty; }
-        public void setRating(int rating) { this.rating = rating; }
+            public int getID() { return id; }
+            public string getTitle() { return title; }
+            public string getDescription() { return description; }
+            public int getAuthorID() { return authorID; }
+            public int getDifficulty() { return difficutly; }
+            public int getRating() { return rating; }
 
-    }
+            public void setID(int id) { this.id = id; }
+            public void setTitle(string title) { this.title = title; }
+            public void setDescription(string description) { this.description = description; }
+            public void setAuthorID(int authorID) { this.authorID = authorID; }
+            public void setDifficulty(int difficulty) { this.difficutly = difficulty; }
+            public void setRating(int rating) { this.rating = rating; }
 
-    public class Class
-    {
-        private int id;
-        private string title;
-        private string content;
-        private int courseID;
-        private string videoURL;
-        private int rating;
-
-
-        public Class()
-        {
-            title = "";
-            content = "";
-            videoURL = "";
         }
 
 
-        public int getID() { return id; }
-        public string getTitle() { return title; }
-        public string getContent() { return content; }
-        public int getCourseID() { return courseID; }
-        public string getVideoURL() { return videoURL; }
-        public int getRating() { return rating; }
 
-        public void setID(int id) { this.id = id; }
-        public void setTitle(string title) { this.title = title; }
-        public void setContent(string content) { this.content = content; }
-        public void setCourseID(int courseID) { this.courseID = courseID; }
-        public void setVideoURL(string url) { this.videoURL = url; }
-        public void setRating(int rating) { this.rating = rating; }
-
-    }
-
-    public class Comment
-    {
-        private int id;
-        private int classID;
-        private int authorID;
-        private int courseID;
-        private string content;
-        private int rating;
-
-        public Comment()
+        public class Comment
         {
-            content = "";
+            private int id;
+            private int classID;
+            private int authorID;
+            private int courseID;
+            private string content;
+            private int rating;
+
+            public Comment()
+            {
+                content = "";
+            }
+
+            public int getID() { return id; }
+            public int getClassID() { return classID; }
+            public int getAuthorID() { return authorID; }
+            public int getCourseID() { return courseID; }
+            public string getContent() { return content; }
+            public int getRating() { return rating; }
+
+            public void setID(int id) { this.id = id; }
+            public void setClassID(int classID) { this.classID = classID; }
+            public void setAuthorID(int authorID) { this.authorID = authorID; }
+            public void setCourseID(int courseID) { this.courseID = courseID; }
+            public void setContent(string content) { this.content = content; }
+            public void setRating(int rating) { this.rating = rating; }
+
         }
-
-        public int getID() { return id; }
-        public int getClassID() { return classID; }
-        public int getAuthorID() { return authorID; }
-        public int getCourseID() { return courseID; }
-        public string getContent() { return content; }
-        public int getRating() { return rating; }
-
-        public void setID(int id) { this.id = id; }
-        public void setClassID(int classID) { this.classID = classID; }
-        public void setAuthorID(int authorID) { this.authorID = authorID; }
-        public void setCourseID(int courseID) { this.courseID = courseID; }
-        public void setContent(string content) { this.content = content; }
-        public void setRating(int rating) { this.rating = rating; }
-
     }
 }

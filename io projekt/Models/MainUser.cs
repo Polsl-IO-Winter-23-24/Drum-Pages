@@ -377,7 +377,7 @@ namespace io_projekt.Models
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string queryString = "SELECT MAX(uzytkownikId) FROM master.dbo.Uzytkownicy";
+                    string queryString = "SELECT MAX(userId) FROM master.dbo.Uzytkownicy";
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
                     {

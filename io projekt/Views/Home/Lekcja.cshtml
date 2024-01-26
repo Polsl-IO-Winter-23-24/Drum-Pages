@@ -1,0 +1,27 @@
+﻿@page
+@model Lesson
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/main_style.css">
+    <link rel="stylesheet" href="~/css/Classes.css">
+
+
+</head>
+<body>
+   
+
+	@{
+		var model = new io_projekt.Models.Lesson();
+		var text = model.getContent();
+		<span id="lessontext">@text</span>
+	}
+
+    
+  
+</body>
+</html>
