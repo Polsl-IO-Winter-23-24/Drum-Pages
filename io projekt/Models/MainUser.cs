@@ -256,10 +256,6 @@ namespace io_projekt.Models
 
                 return (Constants.addNewUserError + ": " + Constants.badLoginPassword, false);
             }
-
-           
-
-
         }
 
 
@@ -319,11 +315,129 @@ namespace io_projekt.Models
             {
                 Console.WriteLine("Błąd podczas pobierania ID użytkownika: " + ex.Message);
             }
-            Console.WriteLine("odczytanie id z bazy:");
             return userId;
         }
 
 
+
+     
+        private static bool updateQuery(int userId, string toUpdate ,string newValue)
+        {
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"UPDATE master.dbo.Uzytkownicy SET {toUpdate} = @newValue WHERE uzytkownikId = @userId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.ExecuteNonQuery();
+                    IMemoryCache cache = GetCacheInstance();
+                    List<MainUser> usersFromCache = cache.Get<List<MainUser>>("AllUsers");
+                    if (usersFromCache == null)
+                    {
+                        usersFromCache = new List<MainUser>();
+                    }
+                    MainUser userToUpdate = usersFromCache.Find(user => user.id == userId);
+                    if (userToUpdate != null)
+                    {
+                        //tu case dla kazdego przypadku 
+                        switch (toUpdate)
+                        {
+                            case "login":
+                                userToUpdate.login = newValue;
+                                break;
+                            case "haslo":
+                                userToUpdate.password = newValue;
+                                break;
+                            case "imie":
+                                userToUpdate.name = newValue;
+                                break;
+                            case "wiek":
+                                userToUpdate.age = int.Parse(newValue);
+                                break;
+                            case "umiejetnosci":
+                                userToUpdate.skills = int.Parse(newValue);
+                                break;
+                            case "rodzajKonta":
+                                userToUpdate.accountType = newValue;
+                                break;
+                        }
+                        var cacheEntryOptions = new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                        };
+                        cache.Set("AllUsers", usersFromCache, cacheEntryOptions);
+                        return (true);
+                    }
+                    return (true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error");
+                return ( false);
+            }
+        }
+
+        /// <summary>
+        /// Updates user info- can update account type - so before check if admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="what">What to update: login or haslo or imie, wiek, umiejetnosci, rodzajKonta</param>
+        /// <param name="newValue">new value- always as string</param>
+        /// <returns></returns>
+        public static (string message, bool boolean) EditAccount(int id, string what, string newValue)
+        {
+            if (UserExists(id))
+            {
+                if (updateQuery(id, what, newValue))
+                {
+                    return ("gotowe", true);
+                }
+                    return ("blad edycji", false);     
+            }
+                return ("nie dziala", false); 
+        }
+
+        public static (string message, bool booelean) DeleteAcoount(int userId)
+        {
+            if (UserExists(userId))
+            {
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string query = "DELETE FROM master.dbo.Uzytkownicy WHERE uzytkownikId = @userId";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
+
+                        IMemoryCache cache = GetCacheInstance();
+                        List<MainUser> usersFromCache = cache.Get<List<MainUser>>("AllUsers");
+                        if (usersFromCache != null)
+                        {
+                            MainUser userToRemove = usersFromCache.FirstOrDefault(u => u.id == userId);
+                            if (userToRemove != null)
+                            {
+                                usersFromCache.Remove(userToRemove);
+                                cache.Set("AllUsers", usersFromCache);
+                                return ("Usunieto usera", false);
+                            }
+                        }
+                        return ("blad kasowania", false);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return ($"kasowanie: {ex.Message}", false);
+                }
+            }
+            return ("brak usera- kasowanie", false);
+        }
         //Czy haslo jest poprawne - regex
         public static bool ValidatePassword(string password)
         {
@@ -344,6 +458,30 @@ namespace io_projekt.Models
        // {        
        //     return 1;
        // }
+
+        public static bool UserExists(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string checkQuery = "SELECT COUNT(*) FROM master.dbo.Uzytkownicy WHERE uzytkownikId = @userId";
+                    SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                    checkCommand.Parameters.AddWithValue("@userId", id);
+                    int userCount = (int)checkCommand.ExecuteScalar();
+                    Console.WriteLine($"jest taki user:, {userCount}");
+                    return userCount > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd w funkcji UserExists: " + ex.Message);
+                return false;
+            }
+        }
+
 
         //Czy podane podczas logowania hasło jest poprawne 
         public static bool CheckPassword(string login,string password)
@@ -377,7 +515,7 @@ namespace io_projekt.Models
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string queryString = "SELECT MAX(userId) FROM master.dbo.Uzytkownicy";
+                    string queryString = "SELECT MAX(uzytkownikId) FROM master.dbo.Uzytkownicy";
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
                     {
@@ -392,7 +530,7 @@ namespace io_projekt.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Błąd podczas pobierania maksymalnej wartości userId: " + ex.Message);
+                Console.WriteLine("Błąd podczas pobierania maksymalnej wartości uzytkownikId: " + ex.Message);
             }
             maxId = maxUserId;  
             return maxUserId;
