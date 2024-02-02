@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Threading;
@@ -18,58 +18,59 @@ namespace io_projekt.Models
         private string videoURL;
         private int rating;
 
-       
 
         public Lesson()
         {
+
+        }
+            public Lesson(int classid) 
+        {
             title = "";
-            content = "xddd";
+            content = "";
             videoURL = "";
-            OnGet();
-        }
-
-        public void OnGet()
-        {
-        if (int.TryParse(Request.Query["id"], out int Cid))
-        {
-            this.id = Cid;
-
-            try
-            {
-
-                String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    Console.WriteLine("tabela: ");
-                    connection.Open();
-                    String query = "select * from Kursy where kursId=" + this.id;
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-
-                            while (reader.Read())
-                            {
-
-                                this.content = reader.GetString(3);
-
-                            }
-                        }
-                    }
-
-                }
+			id = classid;
+           
 
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-        }
+                try
+				{
 
+					String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+
+					using (SqlConnection connection = new SqlConnection(connectionString))
+					{
+						Console.WriteLine("tabela: ");
+						connection.Open();
+						String query = "select * from Lekcje where lekcjaId=" + this.id;
+
+						using (SqlCommand command = new SqlCommand(query, connection))
+						{
+							using (SqlDataReader reader = command.ExecuteReader())
+							{
+
+								while (reader.Read())
+								{
+
+                                this.content = reader.GetString(2);
+                                    this.videoURL = reader.GetString(4);
+
+                                }
+							}
+						}
+
+					}
+
+
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
+			
+
+		}
+
+    
 
 
         public int getID() { return id; }
