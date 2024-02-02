@@ -1,0 +1,65 @@
+@page
+@model Courses
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/main_style.css">
+    <link rel="stylesheet" href="~/css/Classes.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+ 
+</head>
+<body>
+
+@{
+        var model = new io_projekt.Models.Courses();
+}
+
+<div class="CoursesTagSection">
+    <span id="CoursesCurrentTag" class="CoursesTag">Current</span>
+    <span id="CoursesAddTag" class="CoursesTag">+ Create</span>
+</div>
+<div id="CoursesCurrentSection">
+@{
+    
+    model.connectToDataBase();
+    foreach (var item in model.courses)
+    {
+               
+                  <div class="CourseBlock">
+                    <a asp-area="" asp-controller="Home" asp-action="Course" asp-route-courseID="@item.getID()">
+                        <div class="CourseBlockTag">@item.getTitle()</div>
+                    </a>
+                  </div>
+              
+
+    }
+}
+</div>
+<div class="CoursesTagSection">
+    <span id="CoursesTopTag" class="CoursesTag">Top</span>
+        
+</div>
+<div id="CoursesTopSection">
+
+@{
+   
+    
+    foreach (var item in model.Topcourses)
+    {
+               
+                <div class="CourseBlock">
+                    <a asp-area="" asp-controller="Home" asp-action="Course" asp-route-courseID="@item.getID()">
+                        <div class="CourseBlockTag">@item.getTitle()</div>
+					</a>
+                </div>
+         
+    }
+}
+
+    </div>
+</body>
+</html>
