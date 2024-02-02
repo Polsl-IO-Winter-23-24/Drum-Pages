@@ -44,17 +44,27 @@ namespace io_projekt.Controllers
             return View(threadDataList);
         }
 
-        public IActionResult Kursy()
-        {
-            return View();
-        }
+       
         public IActionResult Events()
         {
             return View();
         }
-        public IActionResult Lekcja()
+        
+        public IActionResult Courses()
         {
-            return View();
+	        return View();
+        }
+        
+        public IActionResult Course(int courseID)
+        {
+	        ViewBag.courseId = courseID;
+	        return View();
+        }
+
+        public IActionResult Lesson(int classID)
+        {
+	        ViewBag.LessonId = classID;
+	        return View();
         }
         public IActionResult AdminPanel()
         {
