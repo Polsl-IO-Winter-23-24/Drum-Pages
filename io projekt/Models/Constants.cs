@@ -18,6 +18,7 @@
         public static string dataBaseException => "Wyjątek- baza danych";
         public static string addNewEventSucces => "Dodano nowe wydarzenie";
         public static string addNewEventError => "Błąd podczas dodawania wydarzenia";
+        public static string GetEventSucces => "Udało się odczytać event";
         public static string RemoveEventError => "Błąd podczas usuwanie wydarzenia";
         public static string RemoveEventSucces => "Usunieto wydarzenie";
         public static string GetThreadsSuccess => "Odczytano watki";

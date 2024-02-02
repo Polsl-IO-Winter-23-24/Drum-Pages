@@ -98,7 +98,7 @@ namespace io_projekt.Models
         public static (MainUser ?user, String message) GetUserById(int id)
         {
             IMemoryCache cache = GetCacheInstance();
-            if (!cache.TryGetValue($"User_{id}", out MainUser cachedUser))
+            if (!cache.TryGetValue("AllUsers", out List<MainUser> cachedUsers)) //jezeli nie pobrano z pamieci do odczytaj z bazy
             {
                 try
                 {                  
@@ -112,6 +112,7 @@ namespace io_projekt.Models
                             {
                                 if (reader.Read())
                                 {
+                                    cachedUsers = new List<MainUser>();
                                     //Wczytanie danych z bazy 
                                     int dataId = reader.GetInt32(0);
                                     string dataLogin = reader.GetString(1);
@@ -121,15 +122,15 @@ namespace io_projekt.Models
                                     int dataAge = reader.GetInt32(5);
                                     string dataAccountType = reader.GetString(6);
                                     int dataSkills = reader.GetInt32(7);
-                                    Console.WriteLine("pierwsze odczytanie " + dataName);
                                     //stworzenie noego obiekty typu user i wpisanie go do cache
-                                    cachedUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills);
+                                    // MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills);
+                                    cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills));
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
                                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
                                     };
-                                    cache.Set($"User_{id}", cachedUser, cacheEntryOptions);
-
+                                    cache.Set("AllUsers", cachedUsers, cacheEntryOptions);
+                                    return (cachedUsers.Last(), Constants.getUserSucces);
                                 }
                                 else 
                                 {
@@ -142,8 +143,11 @@ namespace io_projekt.Models
                 catch (Exception ex)
                 {    
                     return (null, Constants.dataBaseException + " " + ex.ToString());
-                }         
-            }    
+                }
+               
+            }
+            //odczytanie z pamieci
+            MainUser cachedUser = cachedUsers.FirstOrDefault(u => u.id == id);
             return (cachedUser,Constants.getUserSucces);
         }
 
@@ -323,7 +327,8 @@ namespace io_projekt.Models
      
         private static bool updateQuery(int userId, string toUpdate ,string newValue)
         {
-
+            //aktualizacja pamieci
+            GetAllUsers();
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -467,11 +472,10 @@ namespace io_projekt.Models
                 {
                     connection.Open();
 
-                    string checkQuery = "SELECT COUNT(*) FROM master.dbo.Uzytkownicy WHERE uzytkownikId = @userId";
+                    string checkQuery = "SELECT COUNT(*) FROM master.dbo.Uzytkownicy WHERE uzytkownikId = @id";
                     SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
-                    checkCommand.Parameters.AddWithValue("@userId", id);
+                    checkCommand.Parameters.AddWithValue("@id", id);
                     int userCount = (int)checkCommand.ExecuteScalar();
-                    Console.WriteLine($"jest taki user:, {userCount}");
                     return userCount > 0;
                 }
             }

@@ -60,10 +60,33 @@ namespace io_projekt.Models
             return _cache;
         }
 
+        public static bool EventExists(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string checkQuery = "SELECT COUNT(*) FROM master.dbo.Wydarzenia WHERE idWydarzenia = @id";
+                    SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                    checkCommand.Parameters.AddWithValue("@id", id);
+                    int userCount = (int)checkCommand.ExecuteScalar();
+                    return userCount > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd w funkcji EventExists: " + ex.Message);
+                return false;
+            }
+        }
+
+
         public static (Event? evnt, string message) GetEventById(int id)
         {
             IMemoryCache cache = GetCacheInstance();
-            if (!cache.TryGetValue($"Event_{id}", out Event cachedEvent))
+            if (!cache.TryGetValue("AllEvents", out List<Event> cachedEvents))
             {
                 try
                 {
@@ -77,6 +100,7 @@ namespace io_projekt.Models
                             {
                                 if (reader.Read())
                                 {
+                                    cachedEvents = new List<Event>();
                                     //Wczytanie danych z bazy 
                                     int dataId = reader.GetInt32(0);
                                     string dataName = reader.GetString(1);
@@ -86,12 +110,13 @@ namespace io_projekt.Models
                                     int dataOrganizorId = reader.GetInt32(5);
                                     Console.WriteLine("pierwsze odczytanie " + dataName);
                                     //stworzenie noego obiekty typu user i wpisanie go do cache
-                                    cachedEvent = new Event(dataId, dataName, dataDate, dataDescription, dataPlace, dataOrganizorId);
+                                    cachedEvents.Add(new Event(dataId, dataName, dataDate, dataDescription, dataPlace, dataOrganizorId)); 
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
                                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
                                     };
-                                    cache.Set($"User_{id}", cachedEvent, cacheEntryOptions);
+                                    cache.Set("AllEvents", cachedEvents, cacheEntryOptions);
+                                    return (cachedEvents.Last(), Constants.GetEventSucces);
                                 }
                                 else
                                 {
@@ -107,7 +132,9 @@ namespace io_projekt.Models
                 }
                 
             }
-            return (cachedEvent, Constants.getUserSucces);
+            Event cachedEvent = cachedEvents.FirstOrDefault(e => e.id == id);
+            return (cachedEvent, Constants.GetEventSucces);
+           
         }
 
         public static List<Event> GetAllEvents()
@@ -293,7 +320,95 @@ namespace io_projekt.Models
                 return (Constants.RemoveEventError +": " + ex.Message, false);
             }
         }
+        private static bool updateQuery(int eventId, string toUpdate, string newValue)
+        {
+            //zaktualizowanie pamieci cache 
+            GetAllEvents();
 
-      
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"UPDATE master.dbo.Wydarzenia SET {toUpdate} = @newValue WHERE idWydarzenia = @eventId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                    command.Parameters.AddWithValue("@eventId", eventId);
+                    command.ExecuteNonQuery();
+                    IMemoryCache cache = GetCacheInstance();
+                    List<Event> eventsFromCache = cache.Get<List<Event>>("AllEvents");
+                    if (eventsFromCache == null)
+                    {
+                        eventsFromCache = new List<Event>();
+                    }
+                    Event eventToUpdate = eventsFromCache.Find(e => e.id == eventId);
+                    if (eventToUpdate != null)
+                    {
+                        //tu case dla kazdego przypadku 
+                        switch (toUpdate)
+                        {
+                            case "nazwa":
+                                eventToUpdate.name = newValue;
+                                break;
+                            case "data":
+                                eventToUpdate.date = DateTime.Parse(newValue);
+                                break;
+                            case "opis":
+                                eventToUpdate.description = newValue;
+                                break;
+                            case "lokalizacja":
+                                eventToUpdate.place = newValue;
+                                break;                          
+                            case "organizatorId":
+                                if (MainUser.UserExists(int.Parse(newValue)))
+                                {
+                                    eventToUpdate.organizorId = int.Parse(newValue);
+                                }
+                                else 
+                                {
+                                    return (false);
+                                }
+                                break;
+
+                        }
+                        var cacheEntryOptions = new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                        };
+                        cache.Set("AllEvents", eventsFromCache, cacheEntryOptions);
+                        return (true);
+                    }
+                    return (true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error");
+                return (false);
+            }
+        }
+
+
+        /// <summary>
+        /// Updates event info
+        /// </summary>
+        /// <param name="id">Event's id to update</param>
+        /// <param name="what">What to update: nazwa, data, opis, lokalizacja, organizatorId</param>
+        /// <param name="newValue">new value- always as string</param>
+        /// <returns></returns>
+        public static (string message, bool boolean) EditEvent(int id, string what, string newValue)
+        {
+            if (EventExists(id))
+            {
+                if (updateQuery(id, what, newValue))
+                {
+                    return ("gotowe", true);
+                }
+                return ("blad edycji", false);
+            }
+            return ("nie dziala", false);
+        }
+
+
     }
 }
