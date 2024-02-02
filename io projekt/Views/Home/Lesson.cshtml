@@ -1,0 +1,48 @@
+@page
+@model Lesson
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/main_style.css">
+    <link rel="stylesheet" href="~/css/Classes.css">
+
+
+</head>
+<body>
+   
+
+    @{
+        var id = ViewBag.LessonId;
+        var model = new io_projekt.Models.Lesson(id);
+        var text = model.getContent();
+        var URL = model.getVideoURL();
+
+	}
+    <div style="clear: both;">
+        <div id="courseDescriprion" style="float: left;
+                                       width: 50%;
+                                       height: 360px;
+                                       border: 1px solid black;">
+            <span>@text</span>
+        </div>
+
+        <div id="courseAuthor" style="float: left;
+                                  width: 50%;
+                                  height: 360px;
+                                  border: 1px solid black;">
+            
+
+            <iframe width="640" height="360"
+                    src="@URL">
+            </iframe>
+    </div>
+
+ 
+    
+  
+</body>
+</html>
