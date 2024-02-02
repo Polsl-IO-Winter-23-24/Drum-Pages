@@ -1,0 +1,58 @@
+@page
+@model Course
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/main_style.css">
+    <link rel="stylesheet" href="~/css/Classes.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+</head>
+<body>
+
+    @{
+        var model = new io_projekt.Models.Course(ViewBag.courseId);
+        var cont = model.getDescription();
+        var author = model.getAuthorName();
+        var diff = model.getDifficulty();
+        var rating = model.getRating();
+
+
+    }
+
+<div style="clear: both;">
+    <div id="courseDescriprion" style="float: left;
+                                       width: 50%;
+                                       height: 200px;
+                                       border: 1px solid black;">
+        @cont
+    </div>
+
+    <div id="courseAuthor" style="float: left;
+                                  width: 50%;
+                                  height: 200px;
+                                  border: 1px solid black;">
+        Author: @author </br>
+        Difficulty: @diff </br>
+        Rating: @rating 
+    </div>
+</div>
+<div id="CoursesCurrentSection">
+    @{
+        foreach (var item in model.lessons)
+        {
+            <div id="classesBox" class="CourseBlock">
+                <a asp-area="" asp-controller="Home" asp-action="Lesson" asp-route-classID="@item.getID()">
+                    <div class="CourseBlockTag">@item.getTitle()</div>
+                </a>
+            </div>
+        }
+    }
+</div>
+ 
+</body>
+</html>
