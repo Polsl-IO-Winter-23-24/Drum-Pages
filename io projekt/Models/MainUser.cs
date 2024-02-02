@@ -85,7 +85,7 @@ namespace io_projekt.Models
         }
 
 
-        private static IMemoryCache GetCacheInstance()
+        public static IMemoryCache GetCacheInstance()
         {
             if (_cache == null)
             {             
@@ -144,11 +144,18 @@ namespace io_projekt.Models
                 {    
                     return (null, Constants.dataBaseException + " " + ex.ToString());
                 }
-               
             }
-            //odczytanie z pamieci
             MainUser cachedUser = cachedUsers.FirstOrDefault(u => u.id == id);
-            return (cachedUser,Constants.getUserSucces);
+            if (cachedUser != null)
+            {
+                return (cachedUser, Constants.getUserSucces);
+            }
+            else
+            {
+                var cache2 = MainUser.GetCacheInstance();
+                cache2.Remove("AllUsers");
+                return GetUserById(id);
+            }
         }
 
         public static List<MainUser> GetAllUsers()

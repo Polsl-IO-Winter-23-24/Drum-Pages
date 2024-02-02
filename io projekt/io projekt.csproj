@@ -12,12 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Home\AdminPanel.cshtml" />
     <Content Remove="Views\Home\Index1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Home\AdminPanel.cshtml" />
     <None Include="wwwroot\css\responsive.css" />
     <None Include="wwwroot\js\JavaAdmin.js" />
   </ItemGroup>

@@ -56,10 +56,17 @@ namespace io_projekt.Controllers
         {
             return View();
         }
+        public IActionResult AdminPanel()
+        {
+            return View();
+        }
 
         [HttpPost]
         public IActionResult Login(string uname, string psw, bool remember)
         {
+            var cache = MainUser.GetCacheInstance();
+            cache.Remove("AllUsers");
+
             bool pswCorrect = MainUser.CheckPassword(uname, psw);
             if (pswCorrect)
             {
