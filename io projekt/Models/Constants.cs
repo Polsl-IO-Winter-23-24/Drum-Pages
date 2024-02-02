@@ -10,7 +10,7 @@
         public static string validatePassword => "Hasło jest poprawne";
         public static string validatePasswordError => "Hasło nie spełnia wymagań";
         public static string badLoginPassword => "Błedny login/ hasło";
-        public static string getUserIdError => "Błąd podczas pobierania ID użytkownika";
+        public static string getUserIdError => "Błąd podczas pobierania ID użytkownika zmiana";
         public static string getUserIdSucces => "Odczytano id z bazy";
         public static string getUserSucces => "Odczytana uzytkownika z bazy";
         public static string noUserFound => "Nie znaleziono uzytkownika";
