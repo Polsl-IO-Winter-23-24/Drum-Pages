@@ -97,65 +97,77 @@ namespace io_projekt.Models
    
         public static (MainUser ?user, String message) GetUserById(int id)
         {
-            IMemoryCache cache = GetCacheInstance();
-            if (!cache.TryGetValue("AllUsers", out List<MainUser> cachedUsers)) //jezeli nie pobrano z pamieci do odczytaj z bazy
+            List<MainUser> users = GetAllUsers();
+            int index = users.FindIndex(user => user.id == id);
+            if (index == -1)
             {
-                try
-                {                  
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        connection.Open();
-                        string queryString = $"SELECT * FROM master.dbo.Uzytkownicy WHERE uzytkownikId = {id}";
-                        using (SqlCommand command = new SqlCommand(queryString, connection))
-                        {
-                            using (SqlDataReader reader = command.ExecuteReader())
-                            {
-                                if (reader.Read())
-                                {
-                                    cachedUsers = new List<MainUser>();
-                                    //Wczytanie danych z bazy 
-                                    int dataId = reader.GetInt32(0);
-                                    string dataLogin = reader.GetString(1);
-                                    string dataPassword = reader.GetString(2);
-                                    string dataName = reader.GetString(3);
-                                    string dataLastName = reader.GetString(4);
-                                    int dataAge = reader.GetInt32(5);
-                                    string dataAccountType = reader.GetString(6);
-                                    int dataSkills = reader.GetInt32(7);
-                                    //stworzenie noego obiekty typu user i wpisanie go do cache
-                                    // MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills);
-                                    cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills));
-                                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                                    {
-                                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
-                                    };
-                                    cache.Set("AllUsers", cachedUsers, cacheEntryOptions);
-                                    return (cachedUsers.Last(), Constants.getUserSucces);
-                                }
-                                else 
-                                {
-                                    return (null,Constants.emptyTable);
-                                }
-                            }
-                        }      
-                    }
-                }
-                catch (Exception ex)
-                {    
-                    return (null, Constants.dataBaseException + " " + ex.ToString());
-                }
+                return (null, Constants.emptyTable);
             }
-            MainUser cachedUser = cachedUsers.FirstOrDefault(u => u.id == id);
-            if (cachedUser != null)
-            {
-                return (cachedUser, Constants.getUserSucces);
-            }
-            else
-            {
-                var cache2 = MainUser.GetCacheInstance();
-                cache2.Remove("AllUsers");
-                return GetUserById(id);
-            }
+            return (users[index], Constants.getUserSucces);
+            //if (fromHtml)
+            //{
+            //    GetAllUsers();
+            //} 
+            //IMemoryCache cache = GetCacheInstance();
+            //if (!cache.TryGetValue("AllUsers", out List<MainUser> cachedUsers)) //jezeli nie pobrano z pamieci do odczytaj z bazy
+            //{
+            //    try
+            //    {                  
+            //        using (SqlConnection connection = new SqlConnection(connectionString))
+            //        {
+            //            connection.Open();
+            //            string queryString = $"SELECT * FROM master.dbo.Uzytkownicy WHERE uzytkownikId = {id}";
+            //            using (SqlCommand command = new SqlCommand(queryString, connection))
+            //            {
+            //                using (SqlDataReader reader = command.ExecuteReader())
+            //                {
+            //                    if (reader.Read())
+            //                    {
+            //                        cachedUsers = new List<MainUser>();
+            //                        //Wczytanie danych z bazy 
+            //                        int dataId = reader.GetInt32(0);
+            //                        string dataLogin = reader.GetString(1);
+            //                        string dataPassword = reader.GetString(2);
+            //                        string dataName = reader.GetString(3);
+            //                        string dataLastName = reader.GetString(4);
+            //                        int dataAge = reader.GetInt32(5);
+            //                        string dataAccountType = reader.GetString(6);
+            //                        int dataSkills = reader.GetInt32(7);
+            //                        //stworzenie noego obiekty typu user i wpisanie go do cache
+            //                        // MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills);
+            //                        cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills));
+            //                        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //                        {
+            //                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
+            //                        };
+            //                        cache.Set("AllUsers", cachedUsers, cacheEntryOptions);
+            //                        return (cachedUsers.Last(), Constants.getUserSucces);
+            //                    }
+            //                    else 
+            //                    {
+            //                        return (null,Constants.emptyTable);
+            //                    }
+            //                }
+            //            }      
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {    
+            //        return (null, Constants.dataBaseException + " " + ex.ToString());
+            //    }
+            //}
+            //MainUser cachedUser = cachedUsers.FirstOrDefault(u => u.id == id);
+            //if (cachedUser != null)
+            //{
+            //    return (cachedUser, Constants.getUserSucces);
+            //}
+            //else
+            //{
+            //    // var cache2 = MainUser.GetCacheInstance();
+            //    //cache2.Remove("AllUsers");
+            //    //return GetUserById(id);
+            //    return (null, Constants.emptyTable);
+            //}
         }
 
         public static List<MainUser> GetAllUsers()
