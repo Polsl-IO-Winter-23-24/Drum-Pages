@@ -133,7 +133,6 @@ namespace io_projekt.Controllers
                 DateTime creationDate = DateTime.Now;
 
                 Post.AddNewPost(newPostContent, creationDate, threadId, currentUserID);
-                Post.RemovePost(25);
 
                 return RedirectToAction("Forum");
             }
