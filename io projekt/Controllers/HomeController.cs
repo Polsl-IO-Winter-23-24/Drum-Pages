@@ -171,28 +171,14 @@ namespace io_projekt.Controllers
 
         public IActionResult Privacy()
         {
-            //var a = MainUser.TestPar();
-            Console.WriteLine("Odczytanie z bazy wydarzeń: ");
             Console.WriteLine("-----------------------");
-            foreach (var i in Event.GetAllEvents())
-            {
-                Console.WriteLine("Nazawa: " + i.getName());
-            }
+            Console.WriteLine(Misc.GetGearById(1).NAME);
+
             Console.WriteLine("-----------------------");
-            var a = Event.AddNewEvet("test23", new DateTime(2025, 10, 10), "opi2", "miejsc2e", 6);
-            if (a.boolean)
+            foreach (var i in Misc.GetUserStyle(1))
             {
-                Console.WriteLine(a.message);
+                Console.WriteLine("Id: " + i.ID + " Nazwa: " + i.NAME);
             }
-            else 
-            {
-                Console.WriteLine(a.message);
-            }
-            Console.WriteLine("-----------------------");
-            foreach (var i in Event.GetAllEvents())
-              {
-                  Console.WriteLine("Nazawa: " + i.getName());
-              }
             Console.WriteLine("-----------------------");
 
 

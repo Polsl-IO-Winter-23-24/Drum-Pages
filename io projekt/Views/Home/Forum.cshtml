@@ -60,6 +60,8 @@
                             @if (threadData.Item2 != null && threadData.Item2.Any())
                             {
 
+
+
                                 (MainUser user, String msg) = MainUser.GetUserById(threadData.Item2[0].getUserID());
                                 int numberOfReplies = threadData.Item2.Count - 1;
 
