@@ -452,7 +452,7 @@ namespace io_projekt.Models
                             {
                                 usersFromCache.Remove(userToRemove);
                                 cache.Set("AllUsers", usersFromCache);
-                                return ("Usunieto usera", false);
+                                return ("Usunieto usera", true);
                             }
                         }
                         return ("blad kasowania", false);

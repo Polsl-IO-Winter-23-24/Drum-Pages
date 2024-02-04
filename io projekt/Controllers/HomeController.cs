@@ -171,8 +171,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Privacy()
         {
-            Console.WriteLine("-----------------------");
-            Console.WriteLine(Misc.GetGearById(1).NAME);
+
 
             Console.WriteLine("-----------------------");
             foreach (var i in Misc.GetUserStyle(1))
@@ -180,7 +179,11 @@ namespace io_projekt.Controllers
                 Console.WriteLine("Id: " + i.ID + " Nazwa: " + i.NAME);
             }
             Console.WriteLine("-----------------------");
-
+            Misc.EditStyle(5, "Edit");
+            if (!Misc.EditStyle(100, "Edit"))
+            {
+                Console.WriteLine("wszystko ok ");
+            }
 
             return View();
         }

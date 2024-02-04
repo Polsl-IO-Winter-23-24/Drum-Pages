@@ -1,18 +1,11 @@
 ﻿//Klasa na rozne roznosci 
-//pobrać dostępne sprzety- odczytanie słownika ✅
-//pobrać sprzętu danego userea  ✅
-//dodac sprzet do słownika
-//dodać sprzet do usera ze słownika 
-//usunąć sprzet ze słownika- admin - NAJLEPIEJ W TO MIEJSCE WPISAC COS NA ZASADZIE NIEDOSTEPNE 
-//usunąć sprzet od Usera 
-//edycja w slowniku - admin
-//edycja dla usera
 
 
 
 
 using Microsoft.Extensions.Caching.Memory;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace io_projekt.Models
 {
@@ -110,7 +103,6 @@ namespace io_projekt.Models
             }
         }
 
-
         public static Gear GetGearById(int idSprzetu)
         {
             try
@@ -140,7 +132,6 @@ namespace io_projekt.Models
                 return (new Gear(-1,ex.Message));
             }           
         }
-
 
         public static Style GetStyleById(int idStylu)
         {
@@ -173,7 +164,6 @@ namespace io_projekt.Models
 
 
         }
-
 
         public static List<Gear> GetUserGear(int userId) 
         {
@@ -273,31 +263,420 @@ namespace io_projekt.Models
 
         }
 
-
-        public static void AddGear(string name) //na HashSet<string> .add zwraca true false
+        public static bool GearExists(string gearName)
         {
-           
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string checkQuery = "SELECT COUNT(*) FROM master.dbo.Sprzet WHERE nazwa = @gearName";
+                    SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                    checkCommand.Parameters.AddWithValue("@gearName", gearName);
+                    int gearCount = (int)checkCommand.ExecuteScalar();
+                    return gearCount > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd w funkcji GearExists: " + ex.Message);
+                return false;
+            }         
         }
 
-        public static void AddUserGear(int userId, int gearId)
-        { 
-        
+        public static bool StyleExists(string styleName)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string checkQuery = "SELECT COUNT(*) FROM master.dbo.Style WHERE opis = @styleName";
+                    SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                    checkCommand.Parameters.AddWithValue("@styleName", styleName);
+                    int styleCount = (int)checkCommand.ExecuteScalar();
+                    return styleCount > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd w funkcji GearExists: " + ex.Message);
+                return false;
+            }
         }
 
-        public static void RemoveGear(int id)
-        { 
-        
+        public static bool AddGear(string name) 
+        {
+            if (!GearExists(name))
+            {
+                try
+                {               
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+                            string query = "INSERT INTO master.dbo.Sprzet (nazwa) VALUES (@name)";
+                            SqlCommand command = new SqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@name", name);
+                            command.ExecuteNonQuery();
+                        }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Blad dodawania sprzetu: " +ex.Message);
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
 
-        public static void RemoveUserGear(int userId, int gearId)
-        { 
-        
+        public static bool AddStyle(string name) 
+        {
+            if (!StyleExists(name))
+            {
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string query = "INSERT INTO master.dbo.Style (opis) VALUES (@name)";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@name", name);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Blad dodawania styli: " + ex.Message);
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
 
-        public static void EditGear(int gearId, string name)
-        { 
-        
+        public static (string message, bool boolean) AddUserGear(int userId, int gearId)
+        {
+            List<Gear> gear = GetUserGear(userId);
+            bool alreadyHave = gear.Exists(gear => gear.ID == gearId);
+            if (alreadyHave)
+            {
+                return ("Sprzet przypisany wczesniej", false);
+            }
+
+            if (MainUser.UserExists(userId))
+            {
+                if (GetGearById(gearId).ID != -1)
+                {
+                    try
+                    {
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+                            string query = "INSERT INTO master.dbo.SprzetyUzytkownik (uzytkownikId, idSprzetu) VALUES (@userId, @gearId)";
+                            SqlCommand command = new SqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@userId", userId);
+                            command.Parameters.AddWithValue("@gearId", gearId);
+                            command.ExecuteNonQuery();
+                            return ("Przypisano sprzet do uzytkownika", true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Blad przypisania sprzetu do usera: " + ex.Message);
+                        return ("Blad przypisania sprzetu do usera: " + ex.Message, false);
+                    }
+                }
+                else
+                {
+                    return ("Bledne id sprzetu", false);
+                }
+            }
+            else {
+                return ("Blad: Przypisanie sprzetu do usera: " + Constants.noUserFound, false);
+            }
         }
+
+        public static (string message, bool boolean) AddUserStyle(int userId, int styleId)
+        {
+            List<Style> styles = GetUserStyle(userId);
+            bool alreadyHave = styles.Exists(style => style.ID == styleId);
+            if (alreadyHave)
+            {
+                return ("Styl przypisany wczesniej", false);
+            }
+
+            if (MainUser.UserExists(userId))
+            {
+                if (GetGearById(styleId).ID != -1)
+                {
+                    try
+                    {
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+                            string query = "INSERT INTO master.dbo.StyleUzytkownik (uzytkownikId, stylId) VALUES (@userId, @styleId)";
+                            SqlCommand command = new SqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@userId", userId);
+                            command.Parameters.AddWithValue("@styleId", styleId);
+                            command.ExecuteNonQuery();
+                            return ("Przypisano styl do uzytkownika", true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Blad przypisania stylu do usera: " + ex.Message);
+                        return ("Blad przypisania stylu do usera: " + ex.Message, false);
+                    }
+                }
+                else
+                {
+                    return ("Bledne id stylu", false);
+                }
+            }
+            else
+            {
+                return ("Blad: Przypisanie stylu do usera: " + Constants.noUserFound, false);
+            }
+        }
+
+
+        /// <summary>
+        /// Tylko dla ADMINA !! Usuwanie sprzetu z bazy Sprzety
+        /// </summary>
+        /// <param name="id">gear id to remove</param>
+        public static (string message, bool result) RemoveGear(int id)
+        {
+            if ((GetGearById(id).ID == -1)) // no gear found
+            {
+                return ("Nie znaleziono sprzetu o podanym ID",false);
+            }
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "DELETE FROM master.dbo.Sprzet WHERE idSprzetu = @id";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                    return ("Usunieto sprzet", true);
+                    
+ 
+                }
+            }
+            catch (Exception ex)
+            {
+                return ($"kasowanie sprzetu: {ex.Message}", false);
+            }
+        }
+
+
+        /// <summary>
+        /// Tylko dla ADMINA !!! - Usuwanie styli z bazy  
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static (string message, bool result) RemoveStyle(int id)
+        {
+            if ((GetStyleById(id).ID == -1)) // no style found
+            {
+                return ("Nie znaleziono stylu o podanym ID", false);
+            }
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "DELETE FROM master.dbo.Style WHERE idStylu = @id";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                    return ("Usunieto styl", true);
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return ($"kasowanie stylu: {ex.Message}", false);
+            }
+        }
+
+
+        /// <summary>
+        /// If gearId == -1 removes all gear !!
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="gearId"></param>
+        public static (string message, bool result) RemoveUserGear(int userId, int gearId)
+        {
+            if (!MainUser.UserExists(userId))
+            {
+                return (Constants.noUserFound, false);         
+            }
+            List<Gear> gear = GetUserGear(userId);
+
+            bool haveIt = gear.Exists(gear => gear.ID == gearId);
+            if (gearId == -1 && gear.Count > 0)
+            {
+                haveIt = true;
+            }
+            if (!haveIt)
+            {
+                return ("Uzytkownik nie ma przypisanego podanego sprztu",false);
+            }
+
+            //kasowanie 
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    if (gearId == -1)
+                    {
+                        string query = "DELETE FROM master.dbo.SprzetyUzytkownik WHERE uzytkownikId = @userId";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
+                        return ("Usunieto caly sprzet", true);
+                    }
+
+                    else
+                    {
+                        string query = "DELETE FROM master.dbo.SprzetyUzytkownik WHERE uzytkownikId = @userId AND idSprzetu = @gearId";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@gearId", gearId);
+                        command.ExecuteNonQuery();
+                        return ("Usunieto sprzet", true);
+                    }
+                                                            
+                }
+            }
+            catch (Exception ex)
+            {
+                return ($"kasowanie: {ex.Message}", false);
+            }
+        }
+
+        /// <summary>
+        /// If stylId == -1 removes all styles !!
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="styleId"></param>
+        /// <returns></returns>
+        public static (string message, bool result) RemoveUserStyle(int userId, int styleId)
+        {
+            if (!MainUser.UserExists(userId))
+            {
+                return (Constants.noUserFound, false);
+            }
+            List<Style> style = GetUserStyle(userId);
+
+            bool haveIt = style.Exists(style => style.ID == styleId);
+            if (styleId == -1 && style.Count > 0)
+            {
+                haveIt = true;
+            }
+            if (!haveIt)
+            {
+                return ("Uzytkownik nie ma przypisanego stylu", false);
+            }
+
+            //kasowanie 
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    if (styleId == -1)
+                    {
+                        string query = "DELETE FROM master.dbo.StyleUzytkownik WHERE uzytkownikId = @userId";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
+                        return ("Usunieto wszystkie style", true);
+                    }
+
+                    else
+                    {
+                        string query = "DELETE FROM master.dbo.StyleUzytkownik WHERE uzytkownikId = @userId AND stylId = @styleId";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@styleId", styleId);
+                        command.ExecuteNonQuery();
+                        return ("Usunieto styl", true);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return ($"kasowanie: {ex.Message}", false);
+            }
+        }
+
+
+        public static bool EditGear(int gearId, string name)
+        {
+            if (GetGearById(gearId).ID == -1)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"UPDATE master.dbo.Sprzet SET nazwa = @name WHERE idSprzetu = @gearId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@gearId", gearId);
+                    command.ExecuteNonQuery();
+                    return (true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error");
+                return (false);
+            }
+        }
+
+        public static bool EditStyle(int styleId, string name)
+        {
+            if (GetStyleById(styleId).ID == -1)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"UPDATE master.dbo.Style SET opis = @name WHERE idStylu = @styleId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@styleId", styleId);
+                    command.ExecuteNonQuery();
+                    return (true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error");
+                return (false);
+            }
+        }
+
+
+
+
 
         public static void EditUserGear(int userId, int gearId)
         { 
