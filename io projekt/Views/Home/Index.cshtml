@@ -81,16 +81,35 @@
             <div class="container col-8">
                 <div class="row centered_container">
                     <div class="col-6 form_fields">
-                        <label for="name"><b>Name</b></label><br>
-                        <input type="text" placeholder="Your name" name="name" id="name" autocomplete="on" required><br><br>
-                        <label for="surname"><b>Surname</b></label><br>
-                        <input type="text" placeholder="Your Surname" name="surname" id="surname" required><br><br>
+                        <label for="name"><b>Imie</b></label><br>
+                        <input type="text" placeholder="Podaj imię" name="name" id="name" autocomplete="on" required><br><br>
+                        <label for="surname"><b>Nazwisko</b></label><br>
+                        <input type="text" placeholder="Podaj nazwisko" name="surname" id="surname" required><br><br>
                         <label for="email"><b>Email</b></label><br>
-                        <input type="email" placeholder="Email address" name="email" id="email" autocomplete="on" required><br><br>
-                        <label for="regname"><b>Username</b></label><br>
-                        <input type="text" placeholder="Enter Username" name="regname" id="regname" required><br><br>
-                        <label for="regpass"><b>Password</b></label><br>
-                        <input type="password" placeholder="Your password" name="regpass" id="regpass" required><br><br><br>
+                        <input type="email" placeholder="Adres email" name="email" id="email" autocomplete="on" required><br><br>
+                        <label for="regname"><b>Wiek</b></label><br>
+                        <input type="number" placeholder="Podaj swój wiek" name="age" id="age" min="1" max="100" required><br><br>
+
+                        <label for="regname"><b>Rodzaj użytkownika</b></label><br>
+                        <select name="accountType" id="accountType" multiple>
+                            <option value="Casual">Zwykły użytkownik</option>
+                            <option value="Pro">Pro</option>
+                        </select>
+                        <br />
+                        <label for="regname"><b>Poziom umiejętności <br />(1 - początkujący, 5 - zaawansowany)</b></label><br>
+                        <select name="skill" id="skill" multiple>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <br />
+
+                        <label for="regname"><b>Login</b></label><br>
+                        <input type="text" placeholder="Podaj login" name="regname" id="regname" required><br><br>
+                        <label for="regpass"><b>Hasło</b></label><br>
+                        <input type="password" placeholder="Podaj hasło" name="regpass" id="regpass" required><br><br><br>
                         <button type="submit" class="cancelbtn formBtn">Register</button>
                     </div>
                 </div>

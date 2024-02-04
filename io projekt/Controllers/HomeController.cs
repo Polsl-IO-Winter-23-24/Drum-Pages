@@ -88,13 +88,10 @@ namespace io_projekt.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string name, string surname, string email, string regname, string regpass)
+        public IActionResult Register(string name, string surname, string email, string regname, string regpass, int age, string accountType, int skill)
         {
-            // Obsługa rejestracji
-            int wiek = 0;// Int32.Parse(Request.Form["age"]);
-            int skill = 0;// Int32.Parse(Request.Form["skills"]);
-            String konto = "Pro";
-            MainUser.AddNewUser(regname, regpass, name, surname, wiek, konto, skill);
+       
+            MainUser.AddNewUser(regname, regpass, name, surname, age, accountType, skill);
 
             return RedirectToAction("Index"); // Przekierowanie po zarejestrowaniu
         }
