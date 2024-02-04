@@ -261,6 +261,38 @@ button:hover
 @keyframes animatezoom {
   from {transform: scale(0)}
   to {transform: scale(1)}
-} 
+}
 
+.navbar-nav {
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-item {
+    margin: 0 10px; /* Add more space between items */
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--main-text-color); /* Use black color for font */
+    text-decoration: none;
+}
+
+/* Change font color of navbar items */
+.navbar-nav .nav-link {
+    color: #ffffff; /* Change font color to white */
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+}
 
