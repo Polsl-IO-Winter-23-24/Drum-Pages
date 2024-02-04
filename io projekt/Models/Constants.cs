@@ -27,7 +27,10 @@
         public static string addNewThreadError => "Nie udało się dodać wątku";
         public static string addNewPostError => "Nie udało sie dodać postu";
         public static string addNewPostSuccess => "Udało sie dodać post";
-
+        public static string deletePostError => "Nie udało się usunąć postu";
+        public static string deletePostSuccess => "Udało sie usunąć post";
+        public static string RemoveThreadError => "Nie udało sie usunąć wątku";
+        public static string RemoveThreadSucces => "Udało sie usunąć wątek";
     }
 }
 

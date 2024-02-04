@@ -30,7 +30,7 @@ namespace io_projekt.Controllers
         public IActionResult Forum()
         {
             // Retrieve entries for the specified threadId from your data source
-            List<Thread> threads = Thread.getAllThreads();
+            List<Thread> threads = Thread.GetAllThreads();
             List<Tuple<Thread, List<Post>>> threadDataList = new List<Tuple<Thread, List<Post>>>();
 
             foreach (var thread in threads)
@@ -133,6 +133,7 @@ namespace io_projekt.Controllers
                 DateTime creationDate = DateTime.Now;
 
                 Post.AddNewPost(newPostContent, creationDate, threadId, currentUserID);
+                Post.RemovePost(25);
 
                 return RedirectToAction("Forum");
             }

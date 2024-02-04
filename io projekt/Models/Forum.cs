@@ -5,6 +5,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Xml.Linq;
 
 namespace io_projekt.Models
@@ -49,7 +50,7 @@ namespace io_projekt.Models
             return _cache;
         }
 
-        public static List<Thread> getAllThreads()
+        public static List<Thread> GetAllThreads()
         {
             IMemoryCache cache = GetCacheInstance();
             if (!cache.TryGetValue($"AllThreads", out List<Thread> cachedThreads))
@@ -143,6 +144,104 @@ namespace io_projekt.Models
             }
         }
 
+        public static (string message, bool boolean) RemoveThread(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string deleteQuery = "DELETE FROM master.dbo.Watki WHERE idWatku = @id";
+                    SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
+                    deleteCommand.Parameters.AddWithValue("@id", id);
+                    int rowsAffected = deleteCommand.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        IMemoryCache cache = GetCacheInstance();
+                        List<Thread> threadsFromCache = cache.Get<List<Thread>>("AllThreads");
+                        if (threadsFromCache != null)
+                        {
+                            threadsFromCache.RemoveAll(ev => ev.id == id);
+                            cache.Set("AllThreads", threadsFromCache);
+                        }
+
+                        return (Constants.RemoveThreadSucces, true);
+                    }
+                    else
+                    {
+                        return (Constants.RemoveThreadError, false);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return (Constants.RemoveThreadError + ": " + ex.Message, false);
+            }
+        }
+        private static bool updateQuery(int threadId, string toUpdate, string newValue)
+        {
+            //zaktualizowanie pamieci cache 
+            GetAllThreads();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"UPDATE master.dbo.Watki SET {toUpdate} = @newValue WHERE idWatku = @threadId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                    command.Parameters.AddWithValue("@threadId", threadId);
+                    command.ExecuteNonQuery();
+                    IMemoryCache cache = GetCacheInstance();
+                    List<Thread> threadsFromCache = cache.Get<List<Thread>>("AllThreads");
+                    if (threadsFromCache == null)
+                    {
+                        threadsFromCache = new List<Thread>();
+                    }
+                    Thread threadToUpdate = threadsFromCache.Find(e => e.id == threadId);
+                    if (threadToUpdate != null)
+                    {
+                        //tu case dla kazdego przypadku 
+                        switch (toUpdate)
+                        {
+                            case "temat":
+                                threadToUpdate.theme = newValue;
+                                break;
+                            case "dataUtworzenia":
+                                threadToUpdate.date = DateTime.Parse(newValue);
+                                break;
+                            case "uzytkownikId":
+                                if (MainUser.UserExists(int.Parse(newValue)))
+                                {
+                                    threadToUpdate.userID = int.Parse(newValue);
+                                }
+                                else
+                                {
+                                    return (false);
+                                }
+                                break;
+
+                        }
+                        var cacheEntryOptions = new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                        };
+                        cache.Set("AllThreads", threadsFromCache, cacheEntryOptions);
+                        return (true);
+                    }
+                    return (true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error");
+                return (false);
+            }
+        }
+
+
         public static int GetMaxThreadId()
         {
             int maxThreadId = -1;
@@ -172,6 +271,7 @@ namespace io_projekt.Models
             maxId = maxThreadId;
             return maxThreadId;
         }
+
         public static List<int> GetThreadIds() {
             List<int> threadIds = new List<int>();
             try
@@ -241,6 +341,56 @@ namespace io_projekt.Models
             }
             return _cache;
         }
+
+        public static List<Post> GetAllPosts()
+        {
+            IMemoryCache cache = GetCacheInstance();
+            if (!cache.TryGetValue("AllPosts", out List<Post> cachedPosts))
+            {
+
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string queryString = $"SELECT * FROM master.dbo.Wpisy";
+                        using (SqlCommand command = new SqlCommand(queryString, connection))
+                        {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                cachedPosts = new List<Post>();
+                                while (reader.Read())
+                                {
+                                    //Wczytanie danych z bazy 
+                                    int postId = reader.GetInt32(0);
+                                    string content = reader.GetString(1);
+                                    DateTime creationDate = reader.GetDateTime(2);
+                                    int threadId = reader.GetInt32(3);
+                                    int userId = reader.GetInt32(3);
+
+                                    //stworzenie nowego obiektu typu user i wpisanie go do cache
+                                    cachedPosts.Add(new Post(postId, content, creationDate, threadId, userId));
+                                    var cacheEntryOptions = new MemoryCacheEntryOptions
+                                    {
+                                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //uzytkownikow do pamieci na 10 min
+                                        //AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
+                                    };
+                                    cache.Set("AllPosts", cachedPosts, cacheEntryOptions);
+                                }
+
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception in wrting from posts data base: " + ex.ToString());
+                    return cachedPosts;
+                }
+            }
+            return cachedPosts;
+        }
+
 
         public static List<Post> GetPostsByThreadId(int threadId)
         {
@@ -347,6 +497,140 @@ namespace io_projekt.Models
                 }
             }
         }
+
+        public static (string message, bool boolean) RemovePost(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string deleteQuery = "DELETE FROM master.dbo.Wpisy WHERE idWpisu = @id";
+                    SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
+                    deleteCommand.Parameters.AddWithValue("@id", id);
+                    int rowsAffected = deleteCommand.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        IMemoryCache cache = GetCacheInstance();
+                        int threadId = GetThreadIdByPostId(id);
+
+                        List<Post> postsFromCache = cache.Get<List<Post>>($"Thread_{threadId}");
+                        if (postsFromCache != null)
+                        {
+                            postsFromCache.RemoveAll(ev => ev.id == id);
+                            cache.Set("Thread_{threadId}", postsFromCache);
+                        }
+
+                        return (Constants.deletePostSuccess, true);
+                    }
+                    else
+                    {
+                        return (Constants.deletePostError, false);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return (Constants.deletePostError + ": " + ex.Message, false);
+            }
+        }
+
+
+        private static bool updateQuery(int postId, string toUpdate, string newValue)
+        {
+            //zaktualizowanie pamieci cache 
+            GetAllPosts();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"UPDATE master.dbo.Wpisy SET {toUpdate} = @newValue WHERE idWpisu = @postId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                    command.Parameters.AddWithValue("@postId", postId);
+                    command.ExecuteNonQuery();
+                    IMemoryCache cache = GetCacheInstance();
+                    List<Post> postsFromCache = cache.Get<List<Post>>("AllPosts");
+                    if (postsFromCache == null)
+                    {
+                        postsFromCache = new List<Post>();
+                    }
+                    Post postToUpdate = postsFromCache.Find(e => e.id == postId);
+                    if (postToUpdate != null)
+                    {
+                        //tu case dla kazdego przypadku 
+                        switch (toUpdate)
+                        {
+                            case "zawartosc":
+                                postToUpdate.content = newValue;
+                                break;
+                            case "dataUtworzenia":
+                                postToUpdate.creationDate = DateTime.Parse(newValue);
+                                break;
+                            case "idWatku":
+                                postToUpdate.threadID = int.Parse(newValue);
+                                break;
+                            case "uzytkownikId":
+                                if (MainUser.UserExists(int.Parse(newValue)))
+                                {
+                                    postToUpdate.userID = int.Parse(newValue);
+                                }
+                                else
+                                {
+                                    return (false);
+                                }
+                                break;
+
+                        }
+                        var cacheEntryOptions = new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                        };
+                        cache.Set("AllPosts", postsFromCache, cacheEntryOptions);
+                        return (true);
+                    }
+                    return (true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error");
+                return (false);
+            }
+        }
+
+
+
+        public static int GetThreadIdByPostId(int id) { 
+            int threadId = -1;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string queryString = "SELECT idWatku FROM master.dbo.Wpisy WHERE idWpisu = @id";
+
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        object result = command.ExecuteScalar();
+
+                        if (result != DBNull.Value)
+                        {
+                            threadId = Convert.ToInt32(result);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("B³¹d podczas pobierania maksymalnej wartoœci idWpisu: " + ex.Message);
+            }
+            return threadId;
+        }
+
         public static int GetMaxPostId()
         {
             int maxPostId = -1;
