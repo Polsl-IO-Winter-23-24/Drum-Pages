@@ -1,20 +1,29 @@
-@charset "UTF-8";
+/* Author: Good Question? Some corrections by MT, idk who made this css */
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Lato&display=swap');
+
+:root
+{
+    --main-color: #ffffff;
+    --main-color-shaded: #dddddd;
+    --aux-color: #ff9b05;
+    --main-text-color: #000000;
+    --aux-text-color: #ffffff;
+    --aux-color-shaded: #dd7903;
+    --main-border-color: #777777;
+}
+
+
 * {
   box-sizing: border-box;
 }
 
-.cd__main{
-    background: linear-gradient(to right, #74ebd5, #acb6e5) !important;
-}
-
 html {
-  color: #4d4d4d;
-  background-color: #ebeff1;
-  font-family: "Signika";
+  font-family: 'Lato', sans-serif;
   font-size: 16px;
   font-weight: 300;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  color: var(--main-text-color);
+  background-color: var(--main-color);
 }
 
 h1 {
@@ -35,7 +44,7 @@ h3 {
 h4 {
   font-size: 12px;
   font-weight: 400;
-  color: #89989c;
+  color: var(--main-border-color);
 }
 
 ul {
@@ -50,7 +59,7 @@ ul {
   left: 15px;
   height: 50px;
   width: 50px;
-  background-color: #89989c;
+  background-color: var(--main-border-color);
   border-radius: 50%;
 }
 
@@ -61,29 +70,30 @@ ul {
   height: 35px;
   padding: 0 10px;
   margin-left: 15px;
-  background-color: white;
-  color: #4ab2d9;
+  background-color: var(--main-color);
+  color: var(--aux-color);
   line-height: 35px;
   font-weight: 400;
   text-align: center;
   border-radius: 2px;
   cursor: pointer;
-  border: 1px solid #4ab2d9;
+  border: 1px solid var(--main-border-color);
   -webkit-transition: all 0.1s;
   -o-transition: all 0.1s;
   transition: all 0.1s;
 }
+
 .comment-form .comment-form__actions .button:hover {
-  background-color: #4ab2d9;
-  color: #FFF;
+  background-color: var(--aux-color);
+  color: var(--aux-text-color);
 }
 
 .comment-form, .panel {
   position: relative;
   padding: 15px;
-  background-color: #FFF;
+  background-color: var(--main-color);
   border-radius: 2px;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 1px var(--aux-color);
 }
 
 .container {
@@ -96,9 +106,9 @@ ul {
   position: relative;
   width: 100%;
   padding: 100px 15px 15px;
-  background-color: #fff;
+  background-color: var(--main-color);
   border-radius: 2px;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 1px var(--aux-color);
 }
 .response-group > header {
   position: absolute;
@@ -106,9 +116,9 @@ ul {
   left: 0;
   right: 0;
   padding: 5px 15px;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: var(--main-color);
   border-radius: 2px;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 1px var(--aux-color);
   z-index: 100;
 }
 .response-group > header i {
@@ -129,7 +139,7 @@ ul {
   margin-left: 5px;
 }
 .response-group > header .header-dropdown-trigger:hover, .response-group > header .header-dropdown-trigger.active {
-  border: 1px solid #cdd7dc;
+  border: 1px solid var(--main-color-shaded);
 }
 .response-group > .header-dropdown {
   display: none;
@@ -138,7 +148,7 @@ ul {
   left: -16px;
   width: calc(100% + 32px);
   padding: 15px 1px;
-  background: #ebeff1;
+  background: var(--main-color-shaded);
 }
 .response-group > .header-dropdown.expand {
   display: block;
@@ -149,7 +159,7 @@ ul {
 .response-group > .header-dropdown li {
   padding: 1em 15px;
   cursor: pointer;
-  border-bottom: 1px solid #ebeff1;
+  border-bottom: 1px solid var(--main-color-shaded);
 }
 .response-group > .header-dropdown li h2 {
   display: inline-block;
@@ -174,8 +184,8 @@ ul {
   width: 100%;
   height: 0.75em;
   border-radius: 2px;
-  background-color: #ebeff1;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+  background-color: var(--main-color-shaded);
+  box-shadow: 0 1px 1px var(--aux-color) inset;
 }
 
 .progress__complete {
@@ -183,9 +193,9 @@ ul {
   top: 0;
   width: 50%;
   height: 0.75em;
-  background-color: #5fbc71;
+  background-color: var(--aux-color);
   border-radius: 2px;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 1px var(--aux-color-shaded);
 }
 
 .response {
@@ -200,8 +210,8 @@ ul {
   font-size: 1.2em;
   font-weight: 700;
   text-align: center;
-  color: #89989c;
-  border: 2px solid #cdd7dc;
+  color: var(--main-color-shaded);
+  border: 2px solid var(--main-border-color);
   border-radius: 50%;
 }
 
@@ -218,9 +228,9 @@ ul {
   position: relative;
   padding: 15px 15px 0 80px;
   margin-bottom: 50px;
-  border: 1px solid #ebeff1;
+  border: 1px solid var(--main-color-shaded);
   border-bottom: none;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 1px var(--aux-color);
 }
 
 .post__author {
@@ -236,8 +246,8 @@ ul {
   height: 40px;
   width: calc(100% + 95px);
   margin-left: -80px;
-  background-color: #ebeff1;
-  border-top: 1px solid #ebeff1;
+  background-color: var(--main-color-shaded);
+  border-top: 1px solid var(--main-color-shaded);
 }
 .post__actions .button {
   float: left;
@@ -246,7 +256,7 @@ ul {
   line-height: 40px;
   text-align: center;
   vertical-align: top;
-  border-right: 1px solid #cdd7dc;
+  border-right: 1px solid var(--main-color-shaded);
 }
 .post__actions .button i.solid {
   display: none;
@@ -255,7 +265,7 @@ ul {
   transform: scale(1.2);
 }
 .post__actions .button:not(.comment-trigger):hover, .post__actions .button:not(.comment-trigger).active {
-  background-color: #FFF;
+  background-color: var(--main-color);
   cursor: pointer;
 }
 .post__actions .button:not(.comment-trigger):hover i.solid, .post__actions .button:not(.comment-trigger).active i.solid {
@@ -265,10 +275,10 @@ ul {
   display: none;
 }
 .post__actions .button:not(.comment-trigger):hover.button--approve, .post__actions .button:not(.comment-trigger).active.button--approve {
-  color: #5fbc71;
+  color: var(--aux-color);
 }
 .post__actions .button:not(.comment-trigger):hover.button--deny, .post__actions .button:not(.comment-trigger).active.button--deny {
-  color: #f26f54;
+  color: var(--aux-color);
 }
 .post__actions .button--flag {
   width: 60px;
@@ -284,7 +294,7 @@ ul {
   text-align: left;
   font-size: 16px;
   font-weight: 400;
-  color: #89989c;
+  color: var(--aux-color);
 }
 
 .post__comments {
@@ -314,9 +324,9 @@ ul {
   height: 4em;
   margin-bottom: 10px;
   font-size: 16px;
-  border: 1px solid #cdd7dc;
+  border: 1px solid var(--main-color-shaded);
   border-radius: 2px;
-  box-shadow: 0 1px 1px #ebeff1 inset;
+  box-shadow: 0 1px 1px var(--aux-color) inset;
 }
 .comment-form textarea:focus {
   outline: none;
@@ -334,20 +344,20 @@ ul {
   float: none;
 }
 .comment-form .comment-form__actions .button--confirm {
-  border-color: #5fbc71;
-  color: #5fbc71;
+  border-color: var(--aux-color);
+  color: var(--aux-color);
 }
 .comment-form .comment-form__actions .button--confirm:hover {
-  background-color: #5fbc71;
-  color: #FFF;
+  background-color: var(--aux-color);
+  color: var(--main-color);
 }
 .comment-form .comment-form__actions .button--light {
   border-color: transparent;
-  color: #89989c;
+  color: var(--main-color-shaded);
 }
 .comment-form .comment-form__actions .button--light:hover {
-  background-color: #89989c;
-  color: #FFF;
+  background-color: var(--main-color-shaded);
+  color: var(--aux-text-color);
 }
 
 .post--commenting .post__actions {
@@ -359,5 +369,5 @@ ul {
 .post--commenting .post__comments {
   display: block;
   margin-top: 40px;
-  border-top: 1px solid #cdd7dc;
+  border-top: 1px solid var(--main-border-color);
 }

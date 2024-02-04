@@ -47,8 +47,6 @@ button
     transition: background-color 0.5s;
 }
 
-
-
 button:hover
 {
     background-color: var(--aux-color-shaded);
@@ -67,6 +65,13 @@ button:hover
     align-items: center;
     justify-content: center;
     border-radius: 0 0 7vh 7vh;
+	box-shadow: 1px 1px 15px var(--aux-color-shaded); 
+    width: 100%;
+}
+
+.headerPage
+{
+    font-size: 16px;
 }
 
 .header-text
@@ -131,9 +136,40 @@ button:hover
 
 .selection_box
 {
-    background-color: var(--main-color-shaded);
     border-radius: 2em;
     margin-top: 1em;
+    border: 4px solid var(--aux-color);
+	box-shadow: 1px 1px 10px var(--aux-color-shaded); 
+    padding: 20px;
+    padding-top: 0px;
+    text-align: justify;
+}
+
+.eventName
+{
+    font-weight: bold;
+    font-size: 28px;
+    margin-top: 20px;
+    width: 100%;
+    border-bottom: 2px solid var(--aux-color);
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.eventDetail
+{
+    font-weight: bold;
+    font-size: 18px;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 2px solid var(--aux-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.eventBtn
+{
+    margin-top: 30px;
 }
 
 .row::after

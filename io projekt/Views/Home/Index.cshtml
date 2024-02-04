@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main_style.css">
+    <link rel="stylesheet" href="~/css/main_style.css">
 </head>
 <body>
+    <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome!</span></span></div>
     <div class="row content welcome_content">
         <div class="col-2"></div>
         <div class="col-8">
@@ -30,7 +31,7 @@
             
             <!-- Button to open the modal login form -->
             <br><br>
-            <button onclick="document.getElementById('id_1').style.display='block'">LOG IN</button>
+            <button onclick="document.getElementById('id_1').style.display='block'">LOG IN</button><br><br>
             <button onclick="document.getElementById('id_2').style.display='block'">REGISTER</button>
         </div>
         <div class="col-2"></div>
@@ -39,17 +40,17 @@
     <!-- The Modal for Login -->
     <div id="id_1" class="modal">
         <span onclick="document.getElementById('id_1').style.display='none'"
-              class="close" title="Close Modal">&times;</span>
+              class="close" title="Close Form">&times;</span>
 
         <!-- Modal Content -->
-        <form class="Login_form" method="post" action="/Home/Login">
+        <form class="login_form modal-content animate" method="post" action="/Home/Login">
             <div class="col-2"></div>
 
             <div class="container col-8">
                 <div class="row centered_container">
                     <div class="col-6 form_fields">
                         <label for="uname"><b>Username</b></label><br><br>
-                        <input type="text" placeholder="Enter Username" name="uname" required><br><br>
+                        <input type="text" placeholder="Enter Username" name="uname" id="uname" required><br><br>
                         <label>
                             <input type="checkbox" name="remember"> Remember me
                         </label>
@@ -58,8 +59,8 @@
                     </div>
                     <div class="col-6 form_fields">
                         <label for="psw"><b>Password</b></label><br><br>
-                        <input type="password" placeholder="Enter Password" name="psw" required><br><br>
-                        <span class="psw">Forgot <a href="#">password?</a></span><br><br>
+                        <input type="password" placeholder="Enter Password" name="psw" id="psw" required><br><br>
+                        <span>Forgot <a href="#">password?</a></span><br><br>
                         <button type="button" onclick="document.getElementById('id_1').style.display='none'" class="Login_cancel">Cancel</button>
                     </div>
                 </div>
@@ -71,7 +72,7 @@
     <!-- The Modal for Registration -->
     <div id="id_2" class="modal">
         <span onclick="document.getElementById('id_2').style.display='none'"
-              class="close" title="Close Modal">&times;</span>
+              class="close" title="Close Form">&times;</span>
 
         <!-- Modal Content -->
         <form class="modal-content animate register_form row" method="post" action="/Home/Register">
@@ -80,16 +81,16 @@
             <div class="container col-8">
                 <div class="row centered_container">
                     <div class="col-6 form_fields">
-                        <label for="name"><b>Name</b></label><br><br>
-                        <input type="text" placeholder="Your name" name="name" required><br><br>
-                        <label for="surname"><b>Surname</b></label><br><br>
-                        <input type="text" placeholder="Your Surname" name="surname" required><br><br>
-                        <label for="email"><b>Email</b></label><br><br>
-                        <input type="email" placeholder="Email address" name="email" required><br><br>
-                        <label for="regname"><b>Username</b></label><br><br>
-                        <input type="text" placeholder="Enter Username" name="regname" required><br><br>
-                        <label for="regpass"><b>Password</b></label><br><br>
-                        <input type="password" placeholder="Your password" name="regpass" required><br><br>
+                        <label for="name"><b>Name</b></label><br>
+                        <input type="text" placeholder="Your name" name="name" id="name" autocomplete="on" required><br><br>
+                        <label for="surname"><b>Surname</b></label><br>
+                        <input type="text" placeholder="Your Surname" name="surname" id="surname" required><br><br>
+                        <label for="email"><b>Email</b></label><br>
+                        <input type="email" placeholder="Email address" name="email" id="email" autocomplete="on" required><br><br>
+                        <label for="regname"><b>Username</b></label><br>
+                        <input type="text" placeholder="Enter Username" name="regname" id="regname" required><br><br>
+                        <label for="regpass"><b>Password</b></label><br>
+                        <input type="password" placeholder="Your password" name="regpass" id="regpass" required><br><br><br>
                         <button type="submit" class="cancelbtn formBtn">Register</button>
                     </div>
                 </div>

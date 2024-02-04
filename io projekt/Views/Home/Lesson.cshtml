@@ -14,6 +14,7 @@
 </head>
 <body>
    
+    <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Lesson</span></span></div>
 
     @{
         var id = ViewBag.LessonId;
@@ -22,23 +23,17 @@
         var URL = model.getVideoURL();
 
 	}
-    <div style="clear: both;">
-        <div id="courseDescriprion" style="float: left;
-                                       width: 50%;
-                                       height: 360px;
-                                       border: 1px solid black;">
-            <span>@text</span>
+    <div class="row lessonRow">
+        <div class="col-2"></div>
+        <div class="col-6 lessonText">
+            @text
         </div>
-
-        <div id="courseAuthor" style="float: left;
-                                  width: 50%;
-                                  height: 360px;
-                                  border: 1px solid black;">
-            
-
-            <iframe width="640" height="360"
+        <div class="col-2 lessonVid">
+            <iframe style="width: 100%; min-height: 240px;"
                     src="@URL">
             </iframe>
+        </div>
+        <div class="col-2"></div>
     </div>
 
  
