@@ -14,7 +14,7 @@ namespace io_projekt.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ISession _session;
         private int currentUserID;
-
+        private string whoIsLogged;  // sprawdzanie kto jest zalogowany - rozne funkcje dla roznych kont
         public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
@@ -22,7 +22,15 @@ namespace io_projekt.Controllers
         }
 
         public IActionResult Index()
-        {   
+        {
+            //TU DODAC DO IS LOGGED IN 
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (currentUserID != 0)
+            {
+                whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+                ViewBag.UserName = MainUser.GetUserById(currentUserID).user.getName();
+                ViewBag.IsLoggedIn = whoIsLogged;
+            }
             return View();
         }
 
@@ -47,6 +55,12 @@ namespace io_projekt.Controllers
        
         public IActionResult Events()
         {
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (currentUserID != 0)
+            {
+                whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+                ViewBag.IsLoggedIn = whoIsLogged;           
+            }
             return View();
         }
         
@@ -81,7 +95,18 @@ namespace io_projekt.Controllers
             if (pswCorrect)
             {
                 currentUserID = MainUser.GetUserIdByLogin(uname);
+
                 _session.SetInt32("currentUserID", currentUserID);
+                whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+                Console.WriteLine(whoIsLogged);
+                ViewBag.IsLoggedIn = whoIsLogged;
+                // ViewBag.IsLoggedIn = true;
+                Console.WriteLine("ZALOGOWANO");
+            }
+            else
+            {
+                Console.WriteLine("NIE ZALOGOWANO");
+
             }
             return RedirectToAction("Index"); // Przekierowanie po zalogowaniu
 
@@ -91,8 +116,9 @@ namespace io_projekt.Controllers
         public IActionResult Register(string name, string surname, string email, string regname, string regpass, int age, string accountType, int skill)
         {
        
-            MainUser.AddNewUser(regname, regpass, name, surname, age, accountType, skill);
-
+            MainUser.AddNewUser(regname, regpass, name, surname, age, accountType, skill, email);
+            //odrazu go zaloguj 
+            Login(regname, regpass,false);
             return RedirectToAction("Index"); // Przekierowanie po zarejestrowaniu
         }
 
@@ -150,6 +176,7 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult AddEvent(string Event_name, DateTime Event_date, string Event_description, string Event_location, string Event_creator)
         {
+            //dodawanie eventu 
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             
             var result = Event.AddNewEvet(Event_name, Event_date, Event_description, Event_location, currentUserID);
@@ -165,10 +192,26 @@ namespace io_projekt.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult LogOut() {
+            currentUserID = 0;
+            _session.SetInt32("currentUserID", currentUserID);
+            Console.WriteLine("wylogowanie");
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        public IActionResult ForgotPassword(string user)
+        {
+            MainUser.RecoverPassword(user);        
+            Console.WriteLine("odzyskiwanie hasla");
+            return RedirectToAction("Index");
+        }
 
         public IActionResult Privacy()
         {
-
+            MainUser.RecoverPassword("maks02inf@gmail.com");
 
             Console.WriteLine("-----------------------");
             foreach (var i in Misc.GetUserStyle(1))
