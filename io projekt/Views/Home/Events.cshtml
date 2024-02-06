@@ -10,7 +10,14 @@
     <div class="row content welcome_content eventBtn">
         <div class="col-1"></div>
         <div class="col-10">
+
+        @*  Show add new event button only when pro is logged *@
+        @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn) && (ViewBag.IsLoggedIn == "pro" || ViewBag.IsLoggedIn == "admin"))
+        {
+            Console.WriteLine(ViewBag.IsLoggedIn);
             <button onclick="document.getElementById('id03').style.display='block'">ADD NEW EVENT</button>
+        }
+            
         </div>
         <div class="col-1"></div>
     </div>
@@ -64,6 +71,7 @@
             <div class="col-2"></div>
         </form>
     </div>
+
 
     <div class="col-2"></div>
 </body>

@@ -6,8 +6,23 @@
     <link rel="stylesheet" href="~/css/main_style.css">
 </head>
 <body>
-    <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome!</span></span></div>
+    @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
+    {
+        <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome! @ViewBag.UserName</span></span></div>
+        Console.WriteLine("UKRYJ REJESTRACJE");
+        Console.WriteLine("POKAZ WYLOGUJ");
+        @* TUTAJ DODAĆ UKRYWANIE PRZYCISKU REJESTRADCJI!!! *@
+    }
+    else
+    {
+        <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome!</span></span></div>
+        Console.WriteLine("POKAZ REJESTRACJE");
+        Console.WriteLine("UKRYJ WYLOGUJ");
+        @* TUTAJ DODAĆ WYSWIETLANIE PRZYCISKU REJESTRADCJI!!! *@
+    }
     <div class="row content welcome_content">
+
+
         <div class="col-2"></div>
         <div class="col-8">
             <p class="highlight">
@@ -33,6 +48,13 @@
             <br><br>
             <button onclick="document.getElementById('id_1').style.display='block'">LOG IN</button><br><br>
             <button onclick="document.getElementById('id_2').style.display='block'">REGISTER</button>
+
+            @* !!!PRZYCISK WYLOGOWANIA - DODAĆ UKRYWANIE/ POKAZYWANIE JAK WYZEJ ZAZNACZONO- TERAZ POKAZYWANY JEST CIAGLE -  *@ 
+            @* !!!TUTAJ TYLKO JAK GO OBSLUGIWAC *@
+            @using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
+            {
+                <button type="submit">Log Out</button>
+            }
         </div>
         <div class="col-2"></div>
     </div>
@@ -62,7 +84,7 @@
                         <input type="password" placeholder="Enter Password" name="psw" id="psw" required><br><br>
                         <span>Forgot <a href="#">password?</a></span><br><br>
                         <button type="button" onclick="document.getElementById('id_1').style.display='none'" class="Login_cancel">Cancel</button>
-                    </div>
+                    </div>                   
                 </div>
             </div>
             <div class="col-2"></div>
@@ -117,5 +139,9 @@
             <div class="col-2"></div>
         </form>
     </div>
+
+
+
+
 </body>
 </html>

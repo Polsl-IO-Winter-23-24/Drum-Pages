@@ -3,6 +3,11 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Data.SqlClient;
 using System.Net.Security;
 using System.Reflection.Metadata.Ecma335;
+using System.IO;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+
 
 namespace io_projekt.Models
 {
@@ -17,6 +22,7 @@ namespace io_projekt.Models
         private int age;
         private string accountType;
         private int skills;
+        private string email;
 
         private const string connectionString = "Data Source=(local)\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False";
         private static IMemoryCache _cache; // Pole statyczne przechowujące pamięć podręczną
@@ -24,7 +30,7 @@ namespace io_projekt.Models
         // Konstruktor prywatny, aby zapobiec utworzeniu wielu instancji tej klasy
         private MainUser() { }
 
-        private MainUser(int id, string login, string password, string name, string lastName, int age, string type, int skills ) { 
+        private MainUser(int id, string login, string password, string name, string lastName, int age, string type, int skills, string email ) { 
             this.id = id;
             this.login = login;     
             this.password = password;
@@ -33,7 +39,7 @@ namespace io_projekt.Models
             this.age = age;
             this.accountType = type;
             this.skills = skills;
-        
+            this.email = email;
         }
 
         
@@ -82,6 +88,10 @@ namespace io_projekt.Models
         public int getSkills()
         {
             return skills;
+        }
+        public string getEmial()
+        {
+            return email;
         }
 
 
@@ -135,8 +145,9 @@ namespace io_projekt.Models
                                     int dataAge = reader.GetInt32(5);
                                     string dataAccountType = reader.GetString(6);
                                     int dataSkills = reader.GetInt32(7);
+                                    string dataEmial = reader.GetString(8);
                                     //stworzenie noego obiekty typu user i wpisanie go do cache
-                             MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills);
+                             MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills, dataEmial);
                             //                        cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills));
                             //                        var cacheEntryOptions = new MemoryCacheEntryOptions
                             //                        {
@@ -201,9 +212,10 @@ namespace io_projekt.Models
                                     int dataAge = reader.GetInt32(5);
                                     string dataAccountType = reader.GetString(6);
                                     int dataSkills = reader.GetInt32(7);
+                                    string dataEmail = reader.GetString(8);
                                     Console.WriteLine("Imie:  " + dataName);
                                     //stworzenie nowego obiektu typu user i wpisanie go do cache
-                                    cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills));
+                                    cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills, dataEmail));
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
                                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //uzytkownikow do pamieci na 10 min
@@ -226,7 +238,7 @@ namespace io_projekt.Models
         }
 
 
-        public static (string message, bool boolean) AddNewUser(string login, string password, string name, string lastName, int age, string type, int skills)
+        public static (string message, bool boolean) AddNewUser(string login, string password, string name, string lastName, int age, string type, int skills, string email)
         {
             if (ValidateLogin(login) && ValidatePassword(password))
             {
@@ -238,7 +250,7 @@ namespace io_projekt.Models
                         using (SqlConnection connection = new SqlConnection(connectionString))
                         {
                             connection.Open();
-                            string query = "INSERT INTO master.dbo.Uzytkownicy (login, haslo, imie, nazwisko, wiek, rodzajKonta, umiejetnosci) VALUES (@login, @password,@name,@lastName,@age,@type,@skills)";
+                            string query = "INSERT INTO master.dbo.Uzytkownicy (login, haslo, imie, nazwisko, wiek, rodzajKonta, umiejetnosci, email) VALUES (@login, @password,@name,@lastName,@age,@type,@skills,@email)";
                             SqlCommand command = new SqlCommand(query, connection);
 
                             command.Parameters.AddWithValue("@login", login);
@@ -248,6 +260,7 @@ namespace io_projekt.Models
                             command.Parameters.AddWithValue("@age", age);
                             command.Parameters.AddWithValue("@type", type);
                             command.Parameters.AddWithValue("@skills", skills);
+                            command.Parameters.AddWithValue("@email", email);
                             command.ExecuteNonQuery();
                         }
 
@@ -258,7 +271,7 @@ namespace io_projekt.Models
                             usersFromCache = new List<MainUser>();
                         }
 
-                        usersFromCache.Add(new MainUser(newUserId, login, password, name, lastName, age, type, skills));
+                        usersFromCache.Add(new MainUser(newUserId, login, password, name, lastName, age, type, skills,email));
                         var cacheEntryOptions = new MemoryCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
@@ -345,8 +358,38 @@ namespace io_projekt.Models
         }
 
 
+        public static int GetUserIdByMail(string email)
+        {
+            int userId = -1; // Domyślna wartość, jeśli nie znajdzie użytkownika
 
-     
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $"SELECT uzytkownikId FROM master.dbo.Uzytkownicy WHERE email = @email";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@email", email);
+
+                    // Wykonanie zapytania i odczytanie ID użytkownika
+                    object result = command.ExecuteScalar();
+
+                    // Sprawdzenie czy wynik zapytania jest niepusty i jest liczbą całkowitą
+                    if (result != null && result != DBNull.Value && int.TryParse(result.ToString(), out int id))
+                    {
+                        userId = id;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd podczas pobierania maila użytkownika: " + ex.Message);
+            }
+            return userId;
+        }
+
+
+
         private static bool updateQuery(int userId, string toUpdate ,string newValue)
         {
             //aktualizacja pamieci
@@ -390,6 +433,9 @@ namespace io_projekt.Models
                                 break;
                             case "rodzajKonta":
                                 userToUpdate.accountType = newValue;
+                                break;
+                            case "email":
+                                userToUpdate.email = newValue;
                                 break;
                         }
                         var cacheEntryOptions = new MemoryCacheEntryOptions
@@ -562,6 +608,55 @@ namespace io_projekt.Models
             return maxUserId;
         }
 
+        //Narazie wstepnie zrobione - brak wiekszych zabezpieczen - oraz tylko wysyłanie na gmail
+        public static bool RecoverPassword(string login)
+        {
+            var userId = GetUserIdByLogin(login);
+            var user = GetUserById(userId).user;
+            string email =user.getEmial();
+
+            //Pagedrum123 - haslo
+           
+            string newPassword = genereteNewPassword();
+            Console.WriteLine("odzyskiwanie:" + newPassword);
+            string to = email; //To address              
+            string from = "pagesdrum5@gmail.com"; //From address
+            
+            MailMessage message = new MailMessage(from, to);
+
+            string mailbody = "Witaj " + user.getName() + ", twoje hasło zostalo zresetowane.  Oto nowe hasło:   " + newPassword;
+            message.Subject = "DrumPages - odzyskiwanie hasla";
+            message.Body = mailbody;
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
+            System.Net.NetworkCredential basicCredential1 = new
+            System.Net.NetworkCredential("pagesdrum5@gmail.com", "sqmr xadv tgcs ejaj");
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = basicCredential1;
+            try
+            {
+               client.Send(message);
+               Console.WriteLine("git");
+               EditAccount(userId,"haslo" , newPassword);                         
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+
+        private static string genereteNewPassword()
+        {           
+            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
 
     }
 }
