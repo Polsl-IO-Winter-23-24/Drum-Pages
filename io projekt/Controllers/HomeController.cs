@@ -70,27 +70,62 @@ namespace io_projekt.Controllers
             return View();
         }
         
+         
         public IActionResult Courses()
         {
-			currentUserID = _session.GetInt32("currentUserID") ?? 0;
-			if (currentUserID != 0)
-			{
-				whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
-				ViewBag.IsLoggedIn = whoIsLogged;
-			}
-			return View();
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (currentUserID != 0)
+            {
+                whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+                ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.UserID = currentUserID;
+            }
+            return View();
+            
         }
         
         public IActionResult Course(int courseID)
         {
 	        ViewBag.courseId = courseID;
-	        return View();
+            ViewBag.UserId = currentUserID;
+
+            return View();
         }
+
+        [HttpPost]
+        public IActionResult AddCourse(String title, String description, String difficulty)
+        {
+            Course course = new Course();
+            course.setTitle(title);
+            course.setDescription(description);
+            course.setAuthorID(1);
+            course.setDifficulty(int.Parse(difficulty));
+            course.setRating(0);
+            course.writeToDB();
+
+            return RedirectToAction("Courses");
+        }
+
+        [HttpPost]
+        public IActionResult AddLesson(String title, String content, String videoURL, String courseID)
+        {
+            Lesson lesson = new Lesson();
+            lesson.setTitle(title);
+            lesson.setContent(content);
+            lesson.setCourseID(int.Parse(courseID));
+            lesson.setVideoURL(videoURL);
+            lesson.setRating(0);
+            lesson.writeToDB();
+
+            return RedirectToAction("Course", new { courseID = courseID });
+        }
+
 
         public IActionResult Lesson(int classID)
         {
 	        ViewBag.LessonId = classID;
-	        return View();
+            ViewBag.UserId = currentUserID;
+            return View();
         }
         public IActionResult AdminPanel()
         {
