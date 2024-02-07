@@ -70,7 +70,41 @@ namespace io_projekt.Models
 
 		}
 
-    
+        public void writeToDB()
+        {
+            try
+            {
+                String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+                // SQL query to insert a new row into the Kursy table
+                string query = "INSERT INTO Lekcje (tytul, tresc, kursId, wideoURL, ocena) VALUES (@tytul, @tresc, @kursId, @wideoURL, @ocena)";
+
+                // Create and open a connection to the database
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Create a SqlCommand object with the query and connection
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Add parameters to the SqlCommand object
+                        command.Parameters.AddWithValue("@tytul", title);
+                        command.Parameters.AddWithValue("@tresc", content);
+                        command.Parameters.AddWithValue("@kursId", courseID);
+                        command.Parameters.AddWithValue("@wideoURL", videoURL);
+                        command.Parameters.AddWithValue("@ocena", rating);
+
+                        // Execute the query
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
 
 
         public int getID() { return id; }
