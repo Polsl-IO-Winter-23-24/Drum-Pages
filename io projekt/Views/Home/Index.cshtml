@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/main_style.css">
+    <script type="text/javascript">
+    function hide1(){
+        document.getElementById("id_1").style.display = "none";
+        document.getElementById("id_2").style.display = "none";
+        document.getElementById("id_3").style.display = "block";
+    }
+    function hide2(){
+        document.getElementById("id_1").style.display = "block";
+        document.getElementById("id_2").style.display = "block";
+        document.getElementById("id_3").style.display = "none";
+    }
+</script>
 </head>
 <body>
     @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
@@ -53,7 +65,7 @@
             @* !!!TUTAJ TYLKO JAK GO OBSLUGIWAC *@
             @using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
             {
-                <button type="submit">Log Out</button>
+                <button type="submit" onclick="hide2();">Log Out</button>
             }
         </div>
         <div class="col-2"></div>
@@ -77,7 +89,7 @@
                             <input type="checkbox" name="remember"> Remember me
                         </label>
                         <br><br>
-                        <button type="submit" class="LoginInto">Login</button>
+                        <button type="submit" class="LoginInto" onclick= "hide1();">Login</button>
                     </div>
                     <div class="col-6 form_fields">
                         <label for="psw"><b>Password</b></label><br><br>
