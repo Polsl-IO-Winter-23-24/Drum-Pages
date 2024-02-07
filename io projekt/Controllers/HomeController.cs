@@ -113,7 +113,13 @@ namespace io_projekt.Controllers
             lesson.setTitle(title);
             lesson.setContent(content);
             lesson.setCourseID(int.Parse(courseID));
-            lesson.setVideoURL(videoURL);
+            if (string.IsNullOrEmpty(videoURL))
+	    {
+   		 lesson.setVideoURL("None");
+	    }
+	    else {
+    		 lesson.setVideoURL(videoURL);
+	    }
             lesson.setRating(0);
             lesson.writeToDB();
 
