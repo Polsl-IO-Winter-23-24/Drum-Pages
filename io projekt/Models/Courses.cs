@@ -10,7 +10,7 @@ namespace io_projekt.Models
 
         public List<Course> courses = new List<Course>();
         public List<Course> Topcourses = new List<Course>();
-
+        public List<Course> Usercourses = new List<Course>();
         
         public void connectToDataBase()
         {
@@ -77,7 +77,47 @@ namespace io_projekt.Models
         }
 
 
+ public void loadUserCourses(int userId)
+ {
+     try
+     {
 
+         String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+
+         using (SqlConnection connection = new SqlConnection(connectionString))
+         {
+             Console.WriteLine("tabela: ");
+             connection.Open();
+             String query = "select * from Kursy where autorId =" + userId;
+
+             using (SqlCommand command = new SqlCommand(query, connection))
+             {
+                 using (SqlDataReader reader = command.ExecuteReader())
+                 {
+
+                     while (reader.Read())
+                     {
+                         Course course = new Course();
+                         course.setID(reader.GetInt32(0));
+                         course.setTitle(reader.GetString(1));
+                         course.setDescription(reader.GetString(2));
+                         course.setAuthorID(reader.GetInt32(3));
+                         course.setDifficulty(reader.GetInt32(4));
+                         course.setRating(reader.GetInt32(5));
+
+                         Usercourses.Add(course);
+                     }
+                 }
+             }
+         }
+
+     }
+     catch (Exception ex)
+     {
+         Console.WriteLine(ex.Message);
+     }
+
+ }
 
 
 
