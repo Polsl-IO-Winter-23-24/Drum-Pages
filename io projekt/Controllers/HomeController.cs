@@ -98,7 +98,7 @@ namespace io_projekt.Controllers
             Course course = new Course();
             course.setTitle(title);
             course.setDescription(description);
-            course.setAuthorID(1);
+            course.setAuthorID(currentUserID);
             course.setDifficulty(int.Parse(difficulty));
             course.setRating(0);
             course.writeToDB();
