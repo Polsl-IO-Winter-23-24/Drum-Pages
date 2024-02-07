@@ -18,30 +18,30 @@
 			<nav class="nav"> 
 				<div class="nav-upper-options"> 
 					<div class="nav-option option1"> 
-						<img src="~/images/dashboard.png"
+						<img src="~/images/posts.png"
 							class="nav-img"
-							alt="dashboard"> 
-						<h3> Dashboard</h3> 
+							alt="forum"> 
+						<h3> Forum</h3> 
 					</div> 
 
 					<div class="option2 nav-option"> 
 						<img src="~/images/posts.png"
 							class="nav-img"
-							alt="posts"> 
-						<h3> Posts</h3> 
+							alt="users"> 
+						<h3> Users</h3> 
 					</div> 
 
 					<div class="nav-option option3"> 
 						<img src="~/images/report.png"
 							class="nav-img"
-							alt="report"> 
-						<h3> Report</h3> 
+							alt="request"> 
+						<h3> Requests</h3> 
 					</div> 
 					<div class="nav-option option5"> 
 						<img src="~/images/profile.png"
 							 class="nav-img"
-							alt="blog"> 
-						<h3> Profile</h3> 
+							alt="lesson"> 
+						<h3> Lessons</h3> 
 					</div> 
 
 					<div class="nav-option option6"> 
@@ -56,7 +56,7 @@
 							class="nav-img"
 							alt="logout"> 
 						<h3>Logout</h3> 
-					</div> 
+					</div>  
 
 				</div> 
 			</nav> 
@@ -92,7 +92,7 @@
 
 					<div class="box col-5"> 
 						<div class="text"> 
-							<span class="topic-heading">320</span> 
+							<span class="topic-heading">@Post.GetAllPosts().Count()</span>
 							<span class="topic">Comments</span> 
 						</div> 
 
@@ -104,8 +104,8 @@
 
 					<div class="box col-5"> 
 						<div class="text"> 
-							<span class="topic-heading">70</span> 
-							<span class="topic">Published</span> 
+							<span class="topic-heading">@Thread.GetAllThreads().Count()</span>
+							<span class="topic">Threads Published</span> 
 						</div> 
 
 						<img src="~/images/Ok.png" alt="published">
@@ -125,76 +125,25 @@
 
 					<div class="report-body"> 
 						<div class="report-topic-heading row"> 
-							<h3 class="t-op col-3">Post</h3> 
-							<h3 class="t-op col-3">Views</h3> 
-							<h3 class="t-op col-3">Comments</h3> 
-							<h3 class="t-op col-3">Status</h3> 
+							<h3 class="t-op col-3">Thread</h3> 
+							<h3 class="t-op col-3">Comments</h3>
+							<h3 class="t-op col-3">Author</h3> 
+							<h3 class="t-op col-3">Publish date</h3> 
+							<h3 class="t-op col-3">Action</h3>
 						</div> 
 
 						<div class="items"> 
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3 col-3">Post 9</h3> 
-								<h3 class="t-op-nextlvl col-3">2.9k</h3> 
-								<h3 class="t-op-nextlvl col-3">210</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 8</h3> 
-								<h3 class="t-op-nextlvl col-3">1.5k</h3> 
-								<h3 class="t-op-nextlvl col-3">360</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 7</h3> 
-								<h3 class="t-op-nextlvl col-3">1.1k</h3> 
-								<h3 class="t-op-nextlvl col-3">150</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 6</h3> 
-								<h3 class="t-op-nextlvl col-3">1.2k</h3> 
-								<h3 class="t-op-nextlvl col-3">420</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 5</h3> 
-								<h3 class="t-op-nextlvl col-3">2.6k</h3> 
-								<h3 class="t-op-nextlvl col-3">190</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 4</h3> 
-								<h3 class="t-op-nextlvl col-3">1.9k</h3> 
-								<h3 class="t-op-nextlvl col-3">390</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 3</h3> 
-								<h3 class="t-op-nextlvl col-3">1.2k</h3> 
-								<h3 class="t-op-nextlvl col-3">580</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 2</h3> 
-								<h3 class="t-op-nextlvl col-3">3.6k</h3> 
-								<h3 class="t-op-nextlvl col-3">160</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
-							<div class="item1 row"> 
-								<h3 class="t-op-nextlvl col-3">Post 1</h3> 
-								<h3 class="t-op-nextlvl col-3">1.3k</h3> 
-								<h3 class="t-op-nextlvl col-3">220</h3> 
-								<h3 class="t-op-nextlvl col-3 label-tag">Published</h3> 
-							</div> 
-
+							@* tu petla wyswietlacjaca te posty  *@
+							@foreach (var i in Thread.GetAllThreads())
+							{
+								<div class="item1 row">
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
+									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
+									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
+									<h3 class="t-op-nextlvl col-3 label-tag">Delete button</h3>
+								</div>
+							}						
 						</div> 
 					</div> 
 				</div>
