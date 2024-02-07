@@ -12,7 +12,7 @@
         <div class="col-10">
 
         @*  Show add new event button only when pro is logged *@
-        @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn) && (ViewBag.IsLoggedIn == "pro" || ViewBag.IsLoggedIn == "admin"))
+        @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn) && (ViewBag.IsLoggedIn == "Pro" || ViewBag.IsLoggedIn == "Admin"))
         {
             Console.WriteLine(ViewBag.IsLoggedIn);
             <button onclick="document.getElementById('id03').style.display='block'">ADD NEW EVENT</button>
