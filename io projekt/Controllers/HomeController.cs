@@ -23,7 +23,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Index()
         {
-            //TU DODAC DO IS LOGGED IN 
+            
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
@@ -37,8 +37,14 @@ namespace io_projekt.Controllers
 
         public IActionResult Forum()
         {
-            // Retrieve entries for the specified threadId from your data source
-            List<Thread> threads = Thread.GetAllThreads();
+			currentUserID = _session.GetInt32("currentUserID") ?? 0;
+			if (currentUserID != 0)
+			{
+				whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+				ViewBag.IsLoggedIn = whoIsLogged;
+			}
+			// Retrieve entries for the specified threadId from your data source
+			List<Thread> threads = Thread.GetAllThreads();
             List<Tuple<Thread, List<Post>>> threadDataList = new List<Tuple<Thread, List<Post>>>();
 
             foreach (var thread in threads)
@@ -66,7 +72,13 @@ namespace io_projekt.Controllers
         
         public IActionResult Courses()
         {
-	        return View();
+			currentUserID = _session.GetInt32("currentUserID") ?? 0;
+			if (currentUserID != 0)
+			{
+				whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+				ViewBag.IsLoggedIn = whoIsLogged;
+			}
+			return View();
         }
         
         public IActionResult Course(int courseID)
@@ -102,6 +114,10 @@ namespace io_projekt.Controllers
                 ViewBag.IsLoggedIn = whoIsLogged;
                 // ViewBag.IsLoggedIn = true;
                 Console.WriteLine("ZALOGOWANO");
+                if (whoIsLogged == "Admin")
+                {
+                    return RedirectToAction("AdminPanel");
+                }
             }
             else
             {
@@ -211,7 +227,8 @@ namespace io_projekt.Controllers
 
         public IActionResult Privacy()
         {
-            MainUser.RecoverPassword("maks02inf@gmail.com");
+
+
 
             Console.WriteLine("-----------------------");
             foreach (var i in Misc.GetUserStyle(1))
@@ -219,12 +236,6 @@ namespace io_projekt.Controllers
                 Console.WriteLine("Id: " + i.ID + " Nazwa: " + i.NAME);
             }
             Console.WriteLine("-----------------------");
-            Misc.EditStyle(5, "Edit");
-            if (!Misc.EditStyle(100, "Edit"))
-            {
-                Console.WriteLine("wszystko ok ");
-            }
-
             return View();
         }
 
