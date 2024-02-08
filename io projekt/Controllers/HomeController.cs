@@ -112,44 +112,46 @@ namespace io_projekt.Controllers
  	public IActionResult deleteCourse(int courseID)
 {
 
-    try
-    {
-        String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
-        // SQL query to delete a record from the "Kursy" table with the given ID
-        string query = "DELETE FROM Kursy WHERE kursId = @kursId";
+            //try
+            //{
+            //    String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+            //    SQL query to delete a record from the "Kursy" table with the given ID
+            //    string query = "DELETE FROM Kursy WHERE kursId = @kursId";
 
-        // Create and open a connection to the database
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+            //    Create and open a connection to the database
+            //    using (SqlConnection connection = new SqlConnection(connectionString))
+            //    {
+            //        connection.Open();
 
-            // Create a command with the query and connection
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                // Add parameter for the kursId
-                command.Parameters.AddWithValue("@kursId", courseID);
+            //        Create a command with the query and connection
+            //using (SqlCommand command = new SqlCommand(query, connection))
+            //        {
+            //            Add parameter for the kursId
+       
+            //           command.Parameters.AddWithValue("@kursId", courseID);
 
-                // Execute the command to delete the record
-                int rowsAffected = command.ExecuteNonQuery();
+            //            Execute the command to delete the record
+       
+            //           int rowsAffected = command.ExecuteNonQuery();
 
-                // Check if any rows were affected
-                if (rowsAffected > 0)
-                {
-                    Console.WriteLine("Record deleted successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("No record found with the provided ID: " + courseID);
-                }
-            }
-        }
-    }
+            //            Check if any rows were affected
+            //    if (rowsAffected > 0)
+            //            {
+            //                Console.WriteLine("Record deleted successfully.");
+            //            }
+            //            else
+            //            {
+            //                Console.WriteLine("No record found with the provided ID: " + courseID);
+            //            }
+            //        }
+            //    }
+            //}
 
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-    }
-    return RedirectToAction("Courses");
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+            return RedirectToAction("Courses");
 }
 
 
@@ -179,43 +181,43 @@ namespace io_projekt.Controllers
  	 public IActionResult deleteLesson(int lessonID, int courseID)
  {
 
-     try
-     {
-         String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
-         // SQL query to delete a record from the "Kursy" table with the given ID
-         string query = "DELETE FROM Lekcje WHERE lekcjaId = @lekcjaId";
+     //try
+     //{
+     //    String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+     //    // SQL query to delete a record from the "Kursy" table with the given ID
+     //    string query = "DELETE FROM Lekcje WHERE lekcjaId = @lekcjaId";
 
-         // Create and open a connection to the database
-         using (SqlConnection connection = new SqlConnection(connectionString))
-         {
-             connection.Open();
+     //    // Create and open a connection to the database
+     //    using (SqlConnection connection = new SqlConnection(connectionString))
+     //    {
+     //        connection.Open();
 
-             // Create a command with the query and connection
-             using (SqlCommand command = new SqlCommand(query, connection))
-             {
-                 // Add parameter for the kursId
-                 command.Parameters.AddWithValue("@lekcjaId", lessonID);
+     //        // Create a command with the query and connection
+     //        using (SqlCommand command = new SqlCommand(query, connection))
+     //        {
+     //            // Add parameter for the kursId
+     //            command.Parameters.AddWithValue("@lekcjaId", lessonID);
 
-                 // Execute the command to delete the record
-                 int rowsAffected = command.ExecuteNonQuery();
+     //            // Execute the command to delete the record
+     //            int rowsAffected = command.ExecuteNonQuery();
 
-                 // Check if any rows were affected
-                 if (rowsAffected > 0)
-                 {
-                     Console.WriteLine("Record deleted successfully.");
-                 }
-                 else
-                 {
-                     Console.WriteLine("No lesson found with the provided ID: " + lessonID);
-                 }
-             }
-         }
-     }
+     //            // Check if any rows were affected
+     //            if (rowsAffected > 0)
+     //            {
+     //                Console.WriteLine("Record deleted successfully.");
+     //            }
+     //            else
+     //            {
+     //                Console.WriteLine("No lesson found with the provided ID: " + lessonID);
+     //            }
+     //        }
+     //    }
+     //}
 
-     catch (Exception ex)
-     {
-         Console.WriteLine(ex.Message);
-     }
+     //catch (Exception ex)
+     //{
+     //    Console.WriteLine(ex.Message);
+     //}
      return RedirectToAction("Course", new { courseID = courseID });
  }
 

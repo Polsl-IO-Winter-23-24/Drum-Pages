@@ -18,6 +18,8 @@
 	
     <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Admin Panel</span></span></div>
 
+
+
 	<div class="main-container row"> 
 		<div class="navcontainer col-2"> 
 			<nav class="nav"> 
@@ -125,7 +127,65 @@
 					<div class="col-1"></div>
 				</div>
 
-			</div> 
+			</div>
+
+			<form method="post" asp-controller="Admin" asp-action="EditThread">
+				
+			<div>
+				<label for="threadId">Thread Id:</label>
+				<select name="threadId">
+					@foreach (var i in Thread.GetAllThreads())
+					{
+						<option value="@i.getID()">
+							@i.getID()
+						</option>				
+					}
+
+				</select>				
+				<button type="submit">Submit</button>				
+			</div>
+
+			<div>
+				<label for="editAction">Change:</label>
+				<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
+					<option value="t_name">Thread name</option>
+					<option value="author">Author</option>
+				</select>
+			</div>
+
+				<div id="t_name_input_div">
+					<label for="t_name_input">New Name:</label>
+				<input type="text" id="t_name_input" name="t_name_input">
+			</div>
+
+			<div id="user_id_input_div" style="display:none;">
+				<label for="user_id_input">Select User New User:</label>
+				<select name="user_id_input">
+					@foreach(var i in MainUser.GetAllUsers())
+					{
+						<option value="@i.getId()">
+							@i.getId()
+						</option>
+					}
+				</select>
+			</div>
+			</form>
+
+			<script>
+				function toggleInputFields() {
+					var editActionSelector = document.getElementById("editActionSelector");
+					var tNameInput = document.getElementById("t_name_input_div");
+					var userIdInputDiv = document.getElementById("user_id_input_div");
+
+					if (editActionSelector.value === "t_name") {
+						tNameInput.style.display = "block";
+						userIdInputDiv.style.display = "none";
+					} else if (editActionSelector.value === "author") {
+						tNameInput.style.display = "none";
+						userIdInputDiv.style.display = "block";
+					}
+				}
+			</script>
 
 			<div class="report-container row"> 
 				<div class="col-12">
