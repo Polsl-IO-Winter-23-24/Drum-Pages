@@ -71,8 +71,10 @@ namespace io_projekt.Models
                                     int id = reader.GetInt32(0);
                                     String theme = reader.GetString(1);
                                     DateTime date = reader.GetDateTime(2);
-                                    int userID = reader.GetInt32(3);
-                                    cachedThreads.Add(new Thread(id, theme, date, userID));
+                                    //int userID = reader.GetInt32(3);
+									int? userIDNullable = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
+									int userID = userIDNullable ?? 0;
+									cachedThreads.Add(new Thread(id, theme, date, userID));
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
                                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
@@ -366,7 +368,7 @@ namespace io_projekt.Models
                                     string content = reader.GetString(1);
                                     DateTime creationDate = reader.GetDateTime(2);
                                     int threadId = reader.GetInt32(3);
-                                    int userId = reader.GetInt32(3);
+                                    int userId = reader.GetInt32(4);
 
                                     //stworzenie nowego obiektu typu user i wpisanie go do cache
                                     cachedPosts.Add(new Post(postId, content, creationDate, threadId, userId));
@@ -415,7 +417,9 @@ namespace io_projekt.Models
                                     string content = reader.GetString(1);
                                     DateTime date = reader.GetDateTime(2);
                                     int threadID = reader.GetInt32(3);
-                                    int userId = reader.GetInt32(4);
+									int? userIDNullable = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
+									int userId = userIDNullable ?? 0;
+									//int userId = reader.GetInt32(4);
 
                                     //stworzenie noego obiekty typu user i wpisanie go do cache
                                     cachedPosts.Add(new Post(postId, content, date, threadID, userId));

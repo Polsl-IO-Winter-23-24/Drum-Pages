@@ -107,6 +107,13 @@ namespace io_projekt.Models
    
         public static (MainUser ?user, String message) GetUserById(int id)
         {
+        if(id == 0)
+        {
+                MainUser a = new MainUser(0, "deletedUser", "1", "deletedUser", "deletedUser", 0, "deletedUser", 0, "deletedUser");
+                return (a, "Deleted User");
+		}
+
+
             //Mozna tak czytac 
             //---------
            // List<MainUser> users = GetAllUsers();

@@ -251,9 +251,10 @@ namespace io_projekt.Controllers
 
         [HttpPost]
         public IActionResult LogOut() {
-            currentUserID = 0;
+			Console.WriteLine("=+=+=++=+=+=++=+=+=+WYLOGOWANIE=+=+=++=+=+=++=+=+=+");
+			currentUserID = 0;
             _session.SetInt32("currentUserID", currentUserID);
-            Console.WriteLine("wylogowanie");
+            
             return RedirectToAction("Index");
         }
 
@@ -269,10 +270,11 @@ namespace io_projekt.Controllers
 
 		public IActionResult Privacy()
         {
+            
 
 
 
-            Console.WriteLine("-----------------------");
+			Console.WriteLine("-----------------------");
             foreach (var i in Misc.GetUserStyle(1))
             {
                 Console.WriteLine("Id: " + i.ID + " Nazwa: " + i.NAME);
