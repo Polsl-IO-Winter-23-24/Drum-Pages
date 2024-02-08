@@ -93,6 +93,116 @@ namespace io_projekt.Models
             }
             return cachedThreads;
         }
+
+        public static (string message, bool boolean, int positiveRatings, int negativeRatings) GetThreadRatings(int threadId) {
+            IMemoryCache cache = GetCacheInstance();
+
+            int positiveRatings = 0;
+            int negativeRatings = 0;
+
+            if (!cache.TryGetValue($"Thread_{threadId}_Ratings", out Tuple<int, int> cachedRatings))
+            {
+                try
+                {
+                   using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        // Zapytanie do obliczenia sumy ocen pozytywnych i negatywnych
+                        string positiveRatingsQuery = $"SELECT count(*) from master.dbo.OcenyWpisy o where o.ocena = 1 and o.idWatku = {threadId}";
+
+                        using (SqlCommand command = new SqlCommand(positiveRatingsQuery, connection))
+                        {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    positiveRatings = reader.GetInt32(0);
+                                }
+                            }
+                        }
+                        positiveRatingsQuery = $"SELECT count(*) from master.dbo.OcenyWpisy o where o.ocena = 0 and o.idWatku = {threadId}";
+
+                        using (SqlCommand command = new SqlCommand(positiveRatingsQuery, connection))
+                        {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    negativeRatings = reader.GetInt32(0);
+                                }
+
+                                var cacheEntryOptions = new MemoryCacheEntryOptions
+                                {
+                                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) // Zapisujemy na 10 minut
+                                };
+                                cache.Set($"Thread_{threadId}_Ratings", new Tuple<int, int>(positiveRatings, negativeRatings), cacheEntryOptions);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception in reading thread ratings: " + ex.ToString());
+                    return (Constants.readRatingsError, false, positiveRatings, negativeRatings);
+                }
+            }
+            else
+            {
+                positiveRatings = cachedRatings.Item1;
+                negativeRatings = cachedRatings.Item2;
+            }
+
+            return (Constants.readRatingsSucces, true, positiveRatings, negativeRatings);
+        }
+        public static (string message, bool boolean) AddThreadRatings(int rating, int threadId, int userID)
+        {
+            MainUser? organizer = MainUser.GetUserById(userID).user;
+
+            if (organizer == null)
+            {
+                return (Constants.noUserFound, false);
+            }
+            else
+            {
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string query = "INSERT INTO master.dbo.OcenyWpisy(ocena, idWatku, uzytkownikId) VALUES (@rating, @threadId, @UserID);";
+
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@rating", rating);
+                            command.Parameters.AddWithValue("@threadId", threadId);
+                            command.Parameters.AddWithValue("@UserID", userID);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Update cache after adding a new rating
+                    IMemoryCache cache = GetCacheInstance();
+                    if (cache.TryGetValue($"Thread_{threadId}_Ratings", out Tuple<int, int> cachedRatings))
+                    {
+                        // If cache entry exists, update it
+                        int updatedPositiveRatings = cachedRatings.Item1 + ((rating == 1) ? 1 : 0);
+                        int updatedNegativeRatings = cachedRatings.Item2 + ((rating == 0) ? 1 : 0);
+                        Tuple<int, int> updatedRatings = new Tuple<int, int>(updatedPositiveRatings, updatedNegativeRatings);
+                        cache.Set($"Thread_{threadId}_Ratings", updatedRatings, TimeSpan.FromMinutes(10)); // Update cache entry
+                    }
+
+                    return (Constants.addNewRatingSucces, true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception in adding a new thread to the database: " + ex.ToString());
+                    // Handle the exception as needed
+                    return (Constants.addNewRatingError, false);
+                }
+            }
+        }
+
         public static (string message, bool boolean, int threadId) AddNewThread(string theme, DateTime date, int userID)
         {
             MainUser? organizor = MainUser.GetUserById(userID).user;

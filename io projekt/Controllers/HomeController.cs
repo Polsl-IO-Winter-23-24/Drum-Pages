@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using System.Diagnostics;
 using System.Threading;
+using System.Data.SqlClient;
 using Thread = io_projekt.Models.Thread;
 
 namespace io_projekt.Controllers
@@ -299,6 +300,24 @@ namespace io_projekt.Controllers
             (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
             return RedirectToAction("Forum");
         }
+        [HttpPost]
+        public IActionResult addPositiveRatingForThread(int threadId)
+        {
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            (String msg, bool ifWorked) = Thread.AddThreadRatings(1, threadId, currentUserID);
+
+            return RedirectToAction("Forum");
+        }
+
+        [HttpPost]
+        public IActionResult addNegativeRatingForThread(int threadId)
+        {
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            (String msg, bool ifWorked) = Thread.AddThreadRatings(0, threadId, currentUserID);
+
+            return RedirectToAction("Forum");
+        }
+
 
         [HttpPost]
         public IActionResult AddPost(string newPostContent, int threadId)

@@ -21,27 +21,9 @@
             <div class="response-group">
                 <header>
                     <h2>
-                        <strong>Lesson Title</strong><i class="fa fa-angle-right"></i><span class="header-dropdown-trigger">Activity Title</span>
+                        <strong>Threads list</strong>
                     </h2>
                 </header>
-                <div class="header-dropdown">
-                    <div class="panel">
-                        <ul>
-                            @for (int i = 1; i <= 4; i++)
-                            {
-                                <li>
-                                    <h2>
-                                        Activity Title
-                                    </h2>
-                                    <span>2/4</span>
-                                    <div class="progress">
-                                        <div class="progress__complete"></div>
-                                    </div>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
                 @{
                     int threadCounter = 0;
                     var sortedModel = Model.OrderBy(thread => thread.Item1.getDate()).ToList();
@@ -62,7 +44,7 @@
 
                                 (MainUser user, String msg) = MainUser.GetUserById(threadData.Item2[0].getUserID());
                                 int numberOfReplies = threadData.Item2.Count - 1;
-
+                                (String msg2, bool boolean, int positiveRatings, int negativeRatings) = Thread.GetThreadRatings(threadData.Item1.getID());
 
                                 <div class="post">
                                     <div class="post__avatar"></div>
@@ -76,12 +58,16 @@
                                         @threadData.Item2[0].getContent();
                                     </p>
                                     <div class="post__actions">
-                                        <div class="button button--approve">
-                                            <i class="fa fa-thumbs-o-up"></i><i class="fa fa-thumbs-up solid"></i>
-                                        </div>
-                                        <div class="button button--deny">
-                                            <i class="fa fa-thumbs-o-down"></i><i class="fa fa-thumbs-down solid"></i>
-                                        </div>
+                                        <form id="approveForm_@threadCounter" asp-controller="Home" asp-action="addPositiveRatingForThread" method="post">
+                                            <div class="button button--approve">
+                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">@positiveRatings <i class="fa fa-thumbs-o-up"></i><i class="fa fa-thumbs-up solid"></i></button>
+                                            </div>
+                                        </form>
+                                        <form id="denyForm_@threadCounter" asp-controller="Home" asp-action="addNegativeRatingForThread" method="post">
+                                            <div class="button button--deny">
+                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">@negativeRatings <i class="fa fa-thumbs-o-down"></i><i class="fa fa-thumbs-down solid"></i></button>
+                                            </div>
+                                        </form>
                                         <div class="button button--fill comment-trigger">
                                             <span>Comment...</span>
                                         </div>
@@ -92,7 +78,7 @@
                                             <div class="comment-group">
                                                 @for (int i = 1; i < threadData.Item2.Count; i++) // Adjust the loop count as needed
                                                 {
-                                                    (MainUser user2, String msg2) = MainUser.GetUserById(threadData.Item2[i].getUserID()); 
+                                                    (MainUser user2, String msg3) = MainUser.GetUserById(threadData.Item2[i].getUserID()); 
                                                     
                                                     <div class="comment">
                                                         <div class="comment__avatar"></div>

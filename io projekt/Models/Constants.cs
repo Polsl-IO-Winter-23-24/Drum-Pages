@@ -31,6 +31,12 @@
         public static string deletePostSuccess => "Udało sie usunąć post";
         public static string RemoveThreadError => "Nie udało sie usunąć wątku";
         public static string RemoveThreadSucces => "Udało sie usunąć wątek";
+        public static string readRatingsError => "Nie udało się odczytać ocen wątku";
+        public static string readRatingsSucces => "Udało się odczytać oceny wątku";
+        public static string addNewRatingSucces => "Udało sie dodać ocenę wątku";
+        public static string addNewRatingError => "Nie udało sie dodać oceny wątku";
+
+
     }
 }
 
