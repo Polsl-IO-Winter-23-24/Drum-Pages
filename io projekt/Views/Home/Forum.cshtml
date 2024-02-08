@@ -61,7 +61,7 @@
                             {
 
 
-
+                                int mojeiD = threadData.Item2[0].getUserID();
                                 (MainUser user, String msg) = MainUser.GetUserById(threadData.Item2[0].getUserID());
                                 int numberOfReplies = threadData.Item2.Count - 1;
 
@@ -120,9 +120,12 @@
                                                         <div class="button button--light cancel">
                                                             Cancel
                                                         </div>
-                                                        <button type="submit" class="button button--confirm">
-                                                            Comment
+                                                        @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
+                                                        {
+                                                            <button type="submit" class="button button--confirm">
+                                                                Comment
                                                         </button>
+                                                        }
                                                     </div>
                                                 </form>
                                             </div>
