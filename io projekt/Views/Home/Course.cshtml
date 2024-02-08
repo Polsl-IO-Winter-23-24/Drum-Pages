@@ -116,6 +116,15 @@
     </div>
 
 </div>
- 
+@{
+    if (model.getAuthorID() == ViewBag.UserID)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="deleteCourse" asp-route-courseID="@id">
+            <button>Delete course</button>
+        </a>
+    }
+}
+
+
 </body>
 </html>
