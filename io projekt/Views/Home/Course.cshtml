@@ -24,6 +24,7 @@
 
     @{
         var model = new io_projekt.Models.Course(ViewBag.courseId);
+        var id = model.getID();
         var cont = model.getDescription();
         var author = model.getAuthorName();
         var diff = model.getDifficulty();

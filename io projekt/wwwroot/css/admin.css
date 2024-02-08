@@ -168,6 +168,13 @@ body
 	box-shadow: 3px 3px 10px var(--main-border-color); 
 } 
 
+.profile-settings{
+	width: 100%; 
+	display: flex; 
+	justify-content: space-between; 
+	align-items: center; 
+}
+
 .report-header
 { 
 	min-height: 80px; 

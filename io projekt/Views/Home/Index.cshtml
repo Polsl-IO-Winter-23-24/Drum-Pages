@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/main_style.css">
+    <script type="text/javascript">
+            function hideLogoutButton() {
+                document.getElementById("logoutBtn").style.display = "none";
+                document.getElementById("loginBtn").style.display = "block";
+                document.getElementById("registerBtn").style.display = "block";
+            }
+
+            function hideLoginRegisterButtons() {
+                document.getElementById("logoutBtn").style.display = "block";
+                document.getElementById("loginBtn").style.display = "none";
+                document.getElementById("registerBtn").style.display = "none";
+            }
+        </script>
 </head>
 <body>
     @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
@@ -12,14 +25,7 @@
         Console.WriteLine("UKRYJ REJESTRACJE");
         Console.WriteLine("POKAZ WYLOGUJ");
         @* TUTAJ DODAĆ UKRYWANIE PRZYCISKU REJESTRADCJI!!! *@
-        <script type="text/javascript">
-        function hide1(){
-            document.getElementById("id_1").style.display = "none";
-            document.getElementById("id_2").style.display = "none";
-            document.getElementById("id_3").style.display = "block";
-        }
-        hide1();
-        </script>
+        
     }
     else
     {
@@ -27,13 +33,6 @@
         Console.WriteLine("POKAZ REJESTRACJE");
         Console.WriteLine("UKRYJ WYLOGUJ");
         @* TUTAJ DODAĆ WYSWIETLANIE PRZYCISKU REJESTRADCJI!!! *@
-        <script type="text/javascript">
-                    function hide2(){
-                        document.getElementById("id_1").style.display = "block";
-                        document.getElementById("id_2").style.display = "block";
-                        document.getElementById("id_3").style.display = "none";
-                    }
-        </script>
     }
     <div class="row content welcome_content">
 
@@ -61,8 +60,9 @@
             
             <!-- Button to open the modal login form -->
             <br><br>
-            <button onclick="document.getElementById('id_1').style.display='block'">LOG IN</button><br><br>
-            <button onclick="document.getElementById('id_2').style.display='block'">REGISTER</button>
+            <button id="loginBtn" onclick="document.getElementById('id_1').style.display='block'; hideLogoutButton();">LOG IN</button><br><br>
+            <button id="registerBtn" onclick="document.getElementById('id_2').style.display='block'; hideLogoutButton();">REGISTER</button>
+            <button id="logoutBtn" onclick="hideLoginRegisterButtons();">LOG OUT</button>
 
             @* !!!PRZYCISK WYLOGOWANIA - DODAĆ UKRYWANIE/ POKAZYWANIE JAK WYZEJ ZAZNACZONO- TERAZ POKAZYWANY JEST CIAGLE -  *@ 
             @* !!!TUTAJ TYLKO JAK GO OBSLUGIWAC *@
