@@ -266,7 +266,8 @@ namespace io_projekt.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Privacy()
+
+		public IActionResult Privacy()
         {
 
 
