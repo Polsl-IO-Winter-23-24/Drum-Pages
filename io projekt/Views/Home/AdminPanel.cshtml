@@ -1,174 +1,169 @@
-<!DOCTYPE html> 
-<html lang="en"> 
+<!DOCTYPE html>
+<html lang="en">
 
-<head> 
-	<meta charset="UTF-8"> 
+<head>
+	<meta charset="UTF-8">
 	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0"> 
-	<title>Drum Pages Admin</title> 
-	<link rel="stylesheet"  href="~/css/admin.css">
-	<style>
-			.hidden {
-				display: none;
-			}
-	</style>
-</head> 
+		  content="width=device-width, initial-scale=1.0">
+	<title>Drum Pages Admin</title>
+	<link rel="stylesheet" href="~/css/admin.css">
+</head>
 
-<body> 
-	
-    <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Admin Panel</span></span></div>
+<body>
+
+	<div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Admin Panel</span></span></div>
 
 
 
-	<div class="main-container row"> 
-		<div class="navcontainer col-2"> 
-			<nav class="nav"> 
-				<div class="nav-upper-options"> 
-					<div class="nav-option option1"> 
+	<div class="main-container row">
+		<div class="navcontainer col-2">
+			<nav class="nav">
+				<div class="nav-upper-options">
+					<div class="nav-option option1">
 						<img src="~/images/posts.png"
-							class="nav-img"
-							alt="forum"> 
-						<h3> Forum</h3> 
-					</div> 
+							 class="nav-img"
+							 alt="forum">
+						<h3> Forum</h3>
+					</div>
 
-					<div class="option2 nav-option"> 
+					<div class="option2 nav-option">
 						<img src="~/images/posts.png"
-							class="nav-img"
-							alt="users"> 
-						<h3> Users</h3> 
-					</div> 
+							 class="nav-img"
+							 alt="users">
+						<h3> Users</h3>
+					</div>
 
-					<div class="nav-option option3"> 
+					<div class="nav-option option3">
 						<img src="~/images/report.png"
-							class="nav-img"
-							alt="request"> 
-						<h3> Requests</h3> 
-					</div> 
-					<div class="nav-option option5"> 
+							 class="nav-img"
+							 alt="request">
+						<h3> Requests</h3>
+					</div>
+					<div class="nav-option option5">
 						<img src="~/images/profile.png"
 							 class="nav-img"
-							alt="lesson"> 
-						<h3> Lessons</h3> 
-					</div> 
+							 alt="lesson">
+						<h3> Lessons</h3>
 					</div>
-					<div class="nav-option option6"> 
+
+					<div class="nav-option option6">
 						<img src="~/images/settings.png"
 							 class="nav-img"
-							alt="settings"> 
-						<a href="#" id="profileLink"><h3>Profile</h3></a>
-					</div> 
+							 alt="settings">
+						<h3> Settings</h3>
+					</div>
 					@* !!!!!WYLOGOWANIE SIE - TRZEBA POPRAWIC ZE WZGLEDU NA WYGLAD!!!!!  *@
 					<form method="post" asp-controller="Home" asp-action="LogOut">
 						<div class="nav-option logout" onclick="submitForm()">
 							<img src="~/images/logout.png"
-							class="nav-img"
-							alt="logout"> 
-						<h3>Logout</h3> 
-					</div>
+								 class="nav-img"
+								 alt="logout">
+							<h3>Logout</h3>
+						</div>
 					</form>
 					<script>
 						function submitForm() {
 							document.forms[0].submit();
 						}
 					</script>
-				</div> 
-			</nav> 
-		</div> 
+				</div>
+			</nav>
+		</div>
 		<div class="col-2"></div>
-		<div class="col-8"> 
+		<div class="col-8">
 
-			<div class="row"> 
-				<div class="row"> 
+			<div class="row">
+				<div class="row">
 
-					<div class="box col-5"> 
-						<div class="text"> 
-							<span class="topic-heading">60.5k</span> 
-							<span class="topic">Post Views</span> 
-						</div> 
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">60.5k</span>
+							<span class="topic">Post Views</span>
+						</div>
 
 						<img src="~/images/eye.png"
-							alt="Views"> 
-					</div> 
+							 alt="Views">
+					</div>
 
 					<div class="col-2"></div>
 
-					<div class="box col-5"> 
-						<div class="text"> 
-							<span class="topic-heading">150</span> 
-							<span class="topic">Likes</span> 
-						</div> 
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">150</span>
+							<span class="topic">Likes</span>
+						</div>
 
 						<img src="~/images/like.png"
-							alt="likes"> 
-					</div> 
-				</div><div class="row boxRow"> 
+							 alt="likes">
+					</div>
+				</div><div class="row boxRow">
 
-					<div class="box col-5"> 
-						<div class="text"> 
+					<div class="box col-5">
+						<div class="text">
 							<span class="topic-heading">@Post.GetAllPosts().Count()</span>
-							<span class="topic">Comments</span> 
-						</div> 
+							<span class="topic">Comments</span>
+						</div>
 
 						<img src="~/images/chat.png"
-							alt="comments"> 
-					</div> 
-					
+							 alt="comments">
+					</div>
+
 					<div class="col-2"></div>
 
-					<div class="box col-5"> 
-						<div class="text"> 
+					<div class="box col-5">
+						<div class="text">
 							<span class="topic-heading">@Thread.GetAllThreads().Count()</span>
-							<span class="topic">Threads Published</span> 
-						</div> 
+							<span class="topic">Threads Published</span>
+						</div>
 
 						<img src="~/images/Ok.png" alt="published">
-					</div> 
-					
+					</div>
+
 					<div class="col-1"></div>
 				</div>
 
 			</div>
 
 			<form method="post" asp-controller="Admin" asp-action="EditThread">
-				
-			<div>
-				<label for="threadId">Thread Id:</label>
-				<select name="threadId">
-					@foreach (var i in Thread.GetAllThreads())
-					{
-						<option value="@i.getID()">
-							@i.getID()
-						</option>				
-					}
 
-				</select>				
-				<button type="submit">Submit</button>				
-			</div>
+				<div>
+					<label for="threadId">Thread Id:</label>
+					<select name="threadId">
+						@foreach (var i in Thread.GetAllThreads())
+						{
+							<option value="@i.getID()">
+								@i.getID()
+							</option>
+						}
 
-			<div>
-				<label for="editAction">Change:</label>
-				<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
-					<option value="t_name">Thread name</option>
-					<option value="author">Author</option>
-				</select>
-			</div>
+					</select>
+					<button type="submit">Submit</button>
+				</div>
+
+				<div>
+					<label for="editAction">Change:</label>
+					<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
+						<option value="t_name">Thread name</option>
+						<option value="author">Author</option>
+					</select>
+				</div>
 
 				<div id="t_name_input_div">
 					<label for="t_name_input">New Name:</label>
-				<input type="text" id="t_name_input" name="t_name_input">
-			</div>
+					<input type="text" id="t_name_input" name="t_name_input">
+				</div>
 
-			<div id="user_id_input_div" style="display:none;">
-				<label for="user_id_input">Select User New User:</label>
-				<select name="user_id_input">
-					@foreach(var i in MainUser.GetAllUsers())
-					{
-						<option value="@i.getId()">
-							@i.getId()
-						</option>
-					}
-				</select>
-			</div>
+				<div id="user_id_input_div" style="display:none;">
+					<label for="user_id_input">Select User New User:</label>
+					<select name="user_id_input">
+						@foreach (var i in MainUser.GetAllUsers())
+						{
+							<option value="@i.getId()">
+								@i.getId()
+							</option>
+						}
+					</select>
+				</div>
 			</form>
 
 			<script>
@@ -187,100 +182,45 @@
 				}
 			</script>
 
-			<div class="report-container row"> 
+			<div class="report-container row">
 				<div class="col-12">
-					<div class="report-header"> 
-						<h1 class="recent-Posts">Recent Posts</h1> 
-						<button class="view">View All</button> 
-					</div> 
+					<div class="report-header">
+						<h1 class="recent-Posts">Recent Posts</h1>
+						<button class="view">View All</button>
+					</div>
 
-					<div class="report-body"> 
-						<div class="report-topic-heading row"> 
-							<h3 class="t-op col-3">Thread</h3> 
+					<div class="report-body">
+						<div class="report-topic-heading row">
+							<h3 class="t-op col-3">Thread</h3>
 							<h3 class="t-op col-3">Comments</h3>
-							<h3 class="t-op col-3">Author</h3> 
-							<h3 class="t-op col-3">Publish date</h3> 
+							<h3 class="t-op col-3">Author</h3>
+							<h3 class="t-op col-3">Publish date</h3>
 							<h3 class="t-op col-3">Action</h3>
-						</div> 
+						</div>
 
-						<div class="items"> 
+						<div class="items">
 							@* tu petla wyswietlacjaca te posty  *@
 							@foreach (var i in Thread.GetAllThreads())
 							{
-								 <div class="report-container block"> 
+								<div class="item1 row">
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
 									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
 									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
 									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
 									<form method="post" asp-controller="Admin" asp-action="DeleteThread" asp-route-id="@i.getID()">
 										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
-									</form>								
-								</div> 
-								<div class="profile-settings hidden" > 
-									<div class="report-header"> 
-										<h1 class="Profile-Settings">Profile-Settings</h1> 
-										<button class="view">View All</button> 
-									</div> 
-	
-									<div class="items"> 
-										<div class="item1"> 
-											<h3 class="t-op-nextlvl">Name</h3> 
-											<h3 class="t-op-nextlvl" contenteditable="true">Fetch name in here</h3> 
-										</div> 
-	
-										<div class="items"> 
-											<div class="item1"> 
-												<h3 class="t-op-nextlvl">Surname</h3> 
-												<h3 class="t-op-nextlvl" contenteditable="true">Fetch surname in here</h3> 
-											</div> 
-	
-											<div class="item1"> 
-												<h3 class="t-op-nextlvl">Age</h3> 
-												<h3 class="t-op-nextlvl" contenteditable="true">Fetch age in here</h3> 
-											</div> 
-	
-											<div class="item1"> 
-												<h3 class="t-op-nextlvl">Skills</h3> 
-												<h3 class="t-op-nextlvl" contenteditable="true">Fetch skills in here</h3> 
-											</div> 
-										</div> 
-									</div> 
+									</form>
 								</div>
 							}
-						</div> 
-					</div> 
+						</div>
+					</div>
 				</div>
-			</div> 
-		</div> 
+			</div>
+		</div>
 		<div class="col-2"></div>
-	</div> 
+	</div>
 
-<script src="./JavaAdmin.js"></script> 
-	<script>
-		// Get references to the report-container and profile-settings elements
-		const reportContainer = document.querySelector('.report-container');
-		const profileSettings = document.querySelector('.profile-settings');
 
-   // Get reference to the Profile link
-   const profileLink = document.getElementById('profileLink');
 
-   // Add event listener to the Profile link
-   profileLink.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default behavior of the link
-
-        const reportVisible = reportContainer.classList.contains('block');
-		const profileVisible = profileSettings.classList.contains('hidden');
-
-			if (reportVisible && profileVisible) {
-    		// If report-container is visible and profile-settings is hidden
-   				reportContainer.classList.add('hidden');
-   			 	profileSettings.classList.remove('hidden');
-			} else if (!reportVisible && !profileVisible) {
-    		// If report-container is hidden and profile-settings is visible
-    			reportContainer.classList.remove('hidden');
-    			profileSettings.classList.add('hidden');
-			}
-    });
-   </script>
-</body> 
+</body>
 </html>
