@@ -104,14 +104,22 @@
     }
     <div id="CoursesCurrentSection">
         @{
-            foreach (var item in model.lessons)
-            {
-                <div id="classesBox" class="CourseBlock">
-                    <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="Lesson" asp-route-classID="@item.getID()">
-                        <span class="CourseBlockTag">@item.getTitle()</span>
-                    </a>
-                </div>
-            }
+             foreach (var item in model.lessons)
+ {
+     <div id="classesBox" class="CourseBlock">
+         <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="Lesson" asp-route-classID="@item.getID()">
+             <span class="CourseBlockTag">@item.getTitle()</span>
+         </a>
+
+         <br />
+
+         <a asp-area="" asp-controller="Home" asp-action="deleteLesson" asp-route-lessonID="@item.getID()" asp-route-courseID="@id">
+             <center><button>Delete</button></center>
+         </a>
+
+     </div>
+     
+ }
         }
     </div>
 
