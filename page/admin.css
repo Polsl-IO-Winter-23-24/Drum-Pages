@@ -258,7 +258,15 @@ letter-spacing: 1px;
 font-size: 30px; 
 letter-spacing: 3px; 
 } 
-
+.profile-settings{
+	min-height: 300px; 
+	max-width: 1200px; 
+	margin: 70px auto 0px auto; 
+	background-color: #ffffff; 
+	border-radius: 30px; 
+	box-shadow: 3px 3px 10px rgb(188, 188, 188); 
+	padding: 0px 20px 20px 20px; 
+}
 .report-container { 
 min-height: 300px; 
 max-width: 1200px; 
@@ -283,7 +291,11 @@ font-size: 30px;
 font-weight: 600; 
 color: #5500cb; 
 } 
-
+.Profile-Settings{
+	font-size: 30px; 
+	font-weight: 600; 
+	color: #5500cb; 
+}
 .view { 
 height: 35px; 
 width: 90px; 

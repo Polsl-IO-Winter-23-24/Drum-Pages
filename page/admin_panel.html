@@ -13,10 +13,14 @@
 		href="admin.css"> 
 	<link rel="stylesheet"
 		href="responsive.css"> 
+		<style>
+			.hidden {
+				display: none;
+			}
+		</style>
 </head> 
 
 <body> 
-	
 	<!-- for header part -->
 	<header> 
 
@@ -77,13 +81,10 @@
 						<h3> Report</h3> 
 					</div> 
 					<div class="nav-option option5"> 
-						<img src= "profile.png"							
-                        class="nav-img"
-							alt="blog"> 
-						<a href="Forum.html">
-						
-						<h3> Profile</h3> 
-					</div> 
+						<img src="profile.png" class="nav-img" alt="profile"> 
+						<a href="#" id="profileLink"><h3>Profile</h3></a>
+					</div>
+					
 
 					<div class="nav-option option6"> 
 						<img src= "settings.png"							
@@ -158,7 +159,7 @@
 				</div> 
 			</div> 
 
-			<div class="report-container"> 
+			<div class="report-container block" > 
 				<div class="report-header"> 
 					<h1 class="recent-Posts">Recent Posts</h1> 
 					<button class="view">View All</button> 
@@ -239,9 +240,67 @@
 					</div> 
 				</div> 
 			</div> 
+			<div>
+				<div class="profile-settings hidden" > 
+					<div class="report-header"> 
+						<h1 class="Profile-Settings">Profile-Settings</h1> 
+						<button class="view">View All</button> 
+					</div> 
+	
+					<div class="items"> 
+						<div class="item1"> 
+							<h3 class="t-op-nextlvl">Name</h3> 
+							<h3 class="t-op-nextlvl" contenteditable="true">Fetch name in here</h3> 
+						</div> 
+	
+						<div class="items"> 
+							<div class="item1"> 
+								<h3 class="t-op-nextlvl">Surname</h3> 
+								<h3 class="t-op-nextlvl" contenteditable="true">Fetch surname in here</h3> 
+							</div> 
+	
+							<div class="item1"> 
+								<h3 class="t-op-nextlvl">Age</h3> 
+								<h3 class="t-op-nextlvl" contenteditable="true">Fetch age in here</h3> 
+							</div> 
+	
+							<div class="item1"> 
+								<h3 class="t-op-nextlvl">Skills</h3> 
+								<h3 class="t-op-nextlvl" contenteditable="true">Fetch skills in here</h3> 
+							</div> 
+						</div> 
+					</div> 
+				</div>
+			</div>
 		</div> 
 	</div> 
 
 	<script src="./JavaAdmin.js"></script> 
+	<script>
+		// Get references to the report-container and profile-settings elements
+		const reportContainer = document.querySelector('.report-container');
+		const profileSettings = document.querySelector('.profile-settings');
+
+   // Get reference to the Profile link
+   const profileLink = document.getElementById('profileLink');
+
+   // Add event listener to the Profile link
+   profileLink.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+
+        const reportVisible = reportContainer.classList.contains('block');
+		const profileVisible = profileSettings.classList.contains('hidden');
+
+			if (reportVisible && profileVisible) {
+    		// If report-container is visible and profile-settings is hidden
+   				reportContainer.classList.add('hidden');
+   			 	profileSettings.classList.remove('hidden');
+			} else if (!reportVisible && !profileVisible) {
+    		// If report-container is hidden and profile-settings is visible
+    			reportContainer.classList.remove('hidden');
+    			profileSettings.classList.add('hidden');
+			}
+    });
+   </script>
 </body> 
 </html>
