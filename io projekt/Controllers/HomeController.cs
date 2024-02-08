@@ -106,6 +106,9 @@ namespace io_projekt.Controllers
             return RedirectToAction("Courses");
         }
 
+
+
+
  	public IActionResult deleteCourse(int courseID)
 {
 
@@ -149,6 +152,8 @@ namespace io_projekt.Controllers
     return RedirectToAction("Courses");
 }
 
+
+
         [HttpPost]
         public IActionResult AddLesson(String title, String content, String videoURL, String courseID)
         {
@@ -168,6 +173,51 @@ namespace io_projekt.Controllers
 
             return RedirectToAction("Course", new { courseID = courseID });
         }
+
+
+
+ 	 public IActionResult deleteLesson(int lessonID, int courseID)
+ {
+
+     try
+     {
+         String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+         // SQL query to delete a record from the "Kursy" table with the given ID
+         string query = "DELETE FROM Lekcje WHERE lekcjaId = @lekcjaId";
+
+         // Create and open a connection to the database
+         using (SqlConnection connection = new SqlConnection(connectionString))
+         {
+             connection.Open();
+
+             // Create a command with the query and connection
+             using (SqlCommand command = new SqlCommand(query, connection))
+             {
+                 // Add parameter for the kursId
+                 command.Parameters.AddWithValue("@lekcjaId", lessonID);
+
+                 // Execute the command to delete the record
+                 int rowsAffected = command.ExecuteNonQuery();
+
+                 // Check if any rows were affected
+                 if (rowsAffected > 0)
+                 {
+                     Console.WriteLine("Record deleted successfully.");
+                 }
+                 else
+                 {
+                     Console.WriteLine("No lesson found with the provided ID: " + lessonID);
+                 }
+             }
+         }
+     }
+
+     catch (Exception ex)
+     {
+         Console.WriteLine(ex.Message);
+     }
+     return RedirectToAction("Course", new { courseID = courseID });
+ }
 
 
         public IActionResult Lesson(int classID)
