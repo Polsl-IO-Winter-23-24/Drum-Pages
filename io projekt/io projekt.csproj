@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Nowy folder\**" />
+    <Content Remove="Views\Nowy folder\**" />
+    <EmbeddedResource Remove="Views\Nowy folder\**" />
+    <None Remove="Views\Nowy folder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Views\Home\Index1.cshtml.cs" />
   </ItemGroup>
 
