@@ -1,22 +1,25 @@
 ﻿using io_projekt.Models;
-using Microsoft.AspNetCore.Http;
+using io_projekt.Views.Home;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using System.Diagnostics;
-using System.Threading;
-using Thread = io_projekt.Models.Thread;
-
-
 
 namespace io_projekt.Controllers
 {
-    public class AdminController: Controller
-    {
+	public class AdminController : Controller
+	{
+		public IActionResult Index()
+		{
+			return View();
+		}
 
 
-
-
-
-
-    }
+		[HttpPost]
+		public IActionResult DeleteThread(int id)
+		{
+			//USUWANIE WATKU 
+			Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-USUNIETO Watek-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+			Models.Thread.RemoveThread(id);
+			
+			return RedirectToAction("AdminPanel", "Home");
+		}
+	}
 }
