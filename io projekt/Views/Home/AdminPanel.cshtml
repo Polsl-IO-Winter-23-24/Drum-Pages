@@ -7,6 +7,11 @@
 		content="width=device-width, initial-scale=1.0"> 
 	<title>Drum Pages Admin</title> 
 	<link rel="stylesheet"  href="~/css/admin.css">
+	<style>
+			.hidden {
+				display: none;
+			}
+	</style>
 </head> 
 
 <body> 
@@ -142,7 +147,7 @@
 							@* tu petla wyswietlacjaca te posty  *@
 							@foreach (var i in Thread.GetAllThreads())
 							{
-								 <div class="item1 row">
+								 <div class="report-container block"> 
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
 									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
 									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
@@ -151,6 +156,36 @@
 										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
 									</form>								
 								</div> 
+								<div class="profile-settings hidden" > 
+									<div class="report-header"> 
+										<h1 class="Profile-Settings">Profile-Settings</h1> 
+										<button class="view">View All</button> 
+									</div> 
+	
+									<div class="items"> 
+										<div class="item1"> 
+											<h3 class="t-op-nextlvl">Name</h3> 
+											<h3 class="t-op-nextlvl" contenteditable="true">Fetch name in here</h3> 
+										</div> 
+	
+										<div class="items"> 
+											<div class="item1"> 
+												<h3 class="t-op-nextlvl">Surname</h3> 
+												<h3 class="t-op-nextlvl" contenteditable="true">Fetch surname in here</h3> 
+											</div> 
+	
+											<div class="item1"> 
+												<h3 class="t-op-nextlvl">Age</h3> 
+												<h3 class="t-op-nextlvl" contenteditable="true">Fetch age in here</h3> 
+											</div> 
+	
+											<div class="item1"> 
+												<h3 class="t-op-nextlvl">Skills</h3> 
+												<h3 class="t-op-nextlvl" contenteditable="true">Fetch skills in here</h3> 
+											</div> 
+										</div> 
+									</div> 
+								</div>
 							}
 						</div> 
 					</div> 
@@ -160,6 +195,32 @@
 		<div class="col-2"></div>
 	</div> 
 
-	<script src="~/js/JavaAdmin.js"></script>
+<script src="./JavaAdmin.js"></script> 
+	<script>
+		// Get references to the report-container and profile-settings elements
+		const reportContainer = document.querySelector('.report-container');
+		const profileSettings = document.querySelector('.profile-settings');
+
+   // Get reference to the Profile link
+   const profileLink = document.getElementById('profileLink');
+
+   // Add event listener to the Profile link
+   profileLink.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+
+        const reportVisible = reportContainer.classList.contains('block');
+		const profileVisible = profileSettings.classList.contains('hidden');
+
+			if (reportVisible && profileVisible) {
+    		// If report-container is visible and profile-settings is hidden
+   				reportContainer.classList.add('hidden');
+   			 	profileSettings.classList.remove('hidden');
+			} else if (!reportVisible && !profileVisible) {
+    		// If report-container is hidden and profile-settings is visible
+    			reportContainer.classList.remove('hidden');
+    			profileSettings.classList.add('hidden');
+			}
+    });
+   </script>
 </body> 
 </html>
