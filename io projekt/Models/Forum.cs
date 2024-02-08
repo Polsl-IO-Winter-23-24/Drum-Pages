@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
+ï»¿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -28,7 +28,7 @@ namespace io_projekt.Models
 
         private const String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
 
-        private static IMemoryCache _cache; // Pole statyczne przechowuj¹ce pamiêæ podrêczn¹
+        private static IMemoryCache _cache; // Pole statyczne przechowujÂ¹ce pamiÃªÃ¦ podrÃªcznÂ¹
         private static int maxId;
 
         private Thread() { }
@@ -71,7 +71,9 @@ namespace io_projekt.Models
                                     int id = reader.GetInt32(0);
                                     String theme = reader.GetString(1);
                                     DateTime date = reader.GetDateTime(2);
-                                    int userID = reader.GetInt32(3);
+                                    //int userID = reader.GetInt32(3);
+                                    int? userIDNullable = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
+                                    int userID = userIDNullable ?? 0;
                                     cachedThreads.Add(new Thread(id, theme, date, userID));
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
@@ -266,13 +268,14 @@ namespace io_projekt.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("B³¹d podczas pobierania maksymalnej wartoœci idWatku: " + ex.Message);
+                Console.WriteLine("BÂ³Â¹d podczas pobierania maksymalnej wartoÂœci idWatku: " + ex.Message);
             }
             maxId = maxThreadId;
             return maxThreadId;
         }
 
-        public static List<int> GetThreadIds() {
+        public static List<int> GetThreadIds()
+        {
             List<int> threadIds = new List<int>();
             try
             {
@@ -295,7 +298,7 @@ namespace io_projekt.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("B³¹d podczas pobierania maksymalnej wartoœci idWatku: " + ex.Message);
+                Console.WriteLine("BÂ³Â¹d podczas pobierania maksymalnej wartoÂœci idWatku: " + ex.Message);
             }
             return threadIds;
         }
@@ -320,7 +323,7 @@ namespace io_projekt.Models
 
         private const String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
 
-        private static IMemoryCache _cache; // Pole statyczne przechowuj¹ce pamiêæ podrêczn¹
+        private static IMemoryCache _cache; // Pole statyczne przechowujÂ¹ce pamiÃªÃ¦ podrÃªcznÂ¹
         private static int maxId;
 
         private Post() { }
@@ -366,7 +369,7 @@ namespace io_projekt.Models
                                     string content = reader.GetString(1);
                                     DateTime creationDate = reader.GetDateTime(2);
                                     int threadId = reader.GetInt32(3);
-                                    int userId = reader.GetInt32(3);
+                                    int userId = reader.GetInt32(4);
 
                                     //stworzenie nowego obiektu typu user i wpisanie go do cache
                                     cachedPosts.Add(new Post(postId, content, creationDate, threadId, userId));
@@ -415,7 +418,9 @@ namespace io_projekt.Models
                                     string content = reader.GetString(1);
                                     DateTime date = reader.GetDateTime(2);
                                     int threadID = reader.GetInt32(3);
-                                    int userId = reader.GetInt32(4);
+                                    int? userIDNullable = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
+                                    int userId = userIDNullable ?? 0;
+                                    //int userId = reader.GetInt32(4);
 
                                     //stworzenie noego obiekty typu user i wpisanie go do cache
                                     cachedPosts.Add(new Post(postId, content, date, threadID, userId));
@@ -604,7 +609,8 @@ namespace io_projekt.Models
 
 
 
-        public static int GetThreadIdByPostId(int id) { 
+        public static int GetThreadIdByPostId(int id)
+        {
             int threadId = -1;
             try
             {
@@ -626,7 +632,7 @@ namespace io_projekt.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("B³¹d podczas pobierania maksymalnej wartoœci idWpisu: " + ex.Message);
+                Console.WriteLine("BÂ³Â¹d podczas pobierania maksymalnej wartoÂœci idWpisu: " + ex.Message);
             }
             return threadId;
         }
@@ -654,7 +660,7 @@ namespace io_projekt.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("B³¹d podczas pobierania maksymalnej wartoœci idWpisu: " + ex.Message);
+                Console.WriteLine("BÂ³Â¹d podczas pobierania maksymalnej wartoÂœci idWpisu: " + ex.Message);
             }
             return maxPostId;
         }
