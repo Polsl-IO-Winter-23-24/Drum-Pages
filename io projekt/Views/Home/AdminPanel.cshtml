@@ -136,14 +136,18 @@
 							@* tu petla wyswietlacjaca te posty  *@
 							@foreach (var i in Thread.GetAllThreads())
 							{
-								<div class="item1 row">
+								 <div class="item1 row">
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
 									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
 									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
 									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
 									<h3 class="t-op-nextlvl col-3 label-tag">Delete button</h3>
-								</div>
-							}						
+									<form method="post" asp-controller="Admin" asp-action="DeleteThread" asp-route-id="@i.getID()">
+										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete MAINE button</button>
+									</form>
+								</div> 
+							}
+
 						</div> 
 					</div> 
 				</div>
