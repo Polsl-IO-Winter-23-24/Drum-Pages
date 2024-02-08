@@ -50,14 +50,20 @@
 							alt="settings"> 
 						<h3> Settings</h3> 
 					</div> 
-
-					<div class="nav-option logout"> 
-						<img src="~/images/logout.png"
+					@* !!!!!WYLOGOWANIE SIE - TRZEBA POPRAWIÆ ZE WZGLÊDU NA WYGL¥D!!!!!  *@
+					<form method="post" asp-controller="Home" asp-action="LogOut">
+						<div class="nav-option logout" onclick="submitForm()">
+							<img src="~/images/logout.png"
 							class="nav-img"
 							alt="logout"> 
 						<h3>Logout</h3> 
-					</div>  
-
+					</div>
+					</form>
+					<script>
+						function submitForm() {
+							document.forms[0].submit();
+						}
+					</script>
 				</div> 
 			</nav> 
 		</div> 
@@ -141,13 +147,11 @@
 									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
 									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
 									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
-									<h3 class="t-op-nextlvl col-3 label-tag">Delete button</h3>
 									<form method="post" asp-controller="Admin" asp-action="DeleteThread" asp-route-id="@i.getID()">
-										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete MAINE button</button>
-									</form>
+										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
+									</form>								
 								</div> 
 							}
-
 						</div> 
 					</div> 
 				</div>
