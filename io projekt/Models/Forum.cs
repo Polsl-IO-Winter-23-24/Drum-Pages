@@ -181,7 +181,7 @@ namespace io_projekt.Models
                 return (Constants.RemoveThreadError + ": " + ex.Message, false);
             }
         }
-        private static bool updateQuery(int threadId, string toUpdate, string newValue)
+        public static bool updateQuery(int threadId, string toUpdate, string newValue)
         {
             //zaktualizowanie pamieci cache 
             GetAllThreads();
