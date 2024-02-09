@@ -72,9 +72,9 @@ namespace io_projekt.Models
                                     String theme = reader.GetString(1);
                                     DateTime date = reader.GetDateTime(2);
                                     //int userID = reader.GetInt32(3);
-									int? userIDNullable = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
-									int userID = userIDNullable ?? 0;
-									cachedThreads.Add(new Thread(id, theme, date, userID));
+                                    int? userIDNullable = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
+                                    int userID = userIDNullable ?? 0;
+                                    cachedThreads.Add(new Thread(id, theme, date, userID));
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
                                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
@@ -94,7 +94,8 @@ namespace io_projekt.Models
             return cachedThreads;
         }
 
-        public static (string message, bool boolean, int positiveRatings, int negativeRatings) GetThreadRatings(int threadId) {
+        public static (string message, bool boolean, int positiveRatings, int negativeRatings) GetThreadRatings(int threadId)
+        {
             IMemoryCache cache = GetCacheInstance();
 
             int positiveRatings = 0;
@@ -104,7 +105,7 @@ namespace io_projekt.Models
             {
                 try
                 {
-                   using (SqlConnection connection = new SqlConnection(connectionString))
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         connection.Open();
 
@@ -197,11 +198,69 @@ namespace io_projekt.Models
                 catch (Exception ex)
                 {
                     Console.WriteLine("Exception in adding a new thread to the database: " + ex.ToString());
-                    // Handle the exception as needed
+                    try
+                    {
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+                            string query = $"UPDATE master.dbo.OcenyWpisy SET ocena = {rating} WHERE idWatku = {threadId} and uzytkownikId = {userID}";
+                            SqlCommand command = new SqlCommand(query, connection);
+                            command.ExecuteNonQuery();
+
+                            IMemoryCache cache = GetCacheInstance();
+                            if (cache.TryGetValue($"Thread_{threadId}_Ratings", out Tuple<int, int> cachedRatings))
+                            {
+                                // If cache entry exists, update it
+                                int updatedPositiveRatings = cachedRatings.Item1 + ((rating == 1) ? 1 : 0);
+                                int updatedNegativeRatings = cachedRatings.Item2 + ((rating == 0) ? 1 : 0);
+                                Tuple<int, int> updatedRatings = new Tuple<int, int>(updatedPositiveRatings, updatedNegativeRatings);
+                                cache.Set($"Thread_{threadId}_Ratings", updatedRatings, TimeSpan.FromMinutes(10)); // Update cache entry
+                            }
+                        }
+                        return (Constants.addNewRatingSucces, true);
+                    }
+                    catch
+                    {
+                        return (Constants.addNewRatingError, false);
+                    }
+
+
                     return (Constants.addNewRatingError, false);
                 }
             }
         }
+
+        public static (string message, bool boolean, List<Tuple<int, bool>> ratedThreadsIds) GetThreadIdsAndRatingsByUser(int userID)
+        {
+            List<Tuple<int, bool>> ratedThreadsIds = new List<Tuple<int, bool>>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string queryString = $"select idWatku, ocena from master.dbo.OcenyWpisy where uzytkownikId = {userID}";
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int threadId = reader.GetInt32(0);
+                                bool rating = reader.GetBoolean(1);
+                                ratedThreadsIds.Add(new Tuple<int, bool>(threadId, rating));
+                            }
+                        }
+                    }
+                }
+
+                return ("Success", true, ratedThreadsIds);
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", false, ratedThreadsIds);
+            }
+        }
+     
 
         public static (string message, bool boolean, int threadId) AddNewThread(string theme, DateTime date, int userID)
         {

@@ -1,4 +1,5 @@
-﻿@model List<Tuple<Thread, List<Post>>> 
+﻿@model (List<Tuple<Thread, List<Post>>>, List<Tuple<int, bool>>)
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,8 +26,10 @@
                     </h2>
                 </header>
                 @{
+                    var listOfThreadsWithPosts = Model.Item1;
+                    var listOfThreadsUserRated = Model.Item2;
                     int threadCounter = 0;
-                    var sortedModel = Model.OrderBy(thread => thread.Item1.getDate()).ToList();
+                    var sortedModel = listOfThreadsWithPosts.OrderBy(thread => thread.Item1.getDate()).ToList();
                 }
                 @foreach (var threadData in sortedModel)
                 {
@@ -41,7 +44,7 @@
                         <div class="post-group">
                             @if (threadData.Item2 != null && threadData.Item2.Any())
                             {
-
+                                
                                 (MainUser user, String msg) = MainUser.GetUserById(threadData.Item2[0].getUserID());
                                 int numberOfReplies = threadData.Item2.Count - 1;
                                 (String msg2, bool boolean, int positiveRatings, int negativeRatings) = Thread.GetThreadRatings(threadData.Item1.getID());
@@ -58,16 +61,42 @@
                                         @threadData.Item2[0].getContent();
                                     </p>
                                     <div class="post__actions">
+                                        @{
+                                            bool isLiked = false;
+                                            bool isDisliked = false;
+                                            foreach (var threadTuple in listOfThreadsUserRated){
+                                                int threadId = threadTuple.Item1;
+                                                bool threadRating = threadTuple.Item2;
+
+                                                if (threadId == threadData.Item1.getID()){
+                                                    if (threadRating == true)
+                                                    {
+                                                        isLiked = true;
+                                                    }
+                                                    else 
+                                                    {
+                                                        isDisliked = true;
+                                                    }
+                                                } 
+                                            }
+                                        }
                                         <form id="approveForm_@threadCounter" asp-controller="Home" asp-action="addPositiveRatingForThread" method="post">
-                                            <div class="button button--approve">
-                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">@positiveRatings <i class="fa fa-thumbs-o-up"></i><i class="fa fa-thumbs-up solid"></i></button>
+                                            <div class="button button--approve @if (isLiked) { <text>active</text> }">
+                                                @positiveRatings
+                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">
+                                                    <i class="fa fa-thumbs-up"></i><i class="fa fa-thumbs-up solid"></i>
+                                                </button>
                                             </div>
                                         </form>
                                         <form id="denyForm_@threadCounter" asp-controller="Home" asp-action="addNegativeRatingForThread" method="post">
-                                            <div class="button button--deny">
-                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">@negativeRatings <i class="fa fa-thumbs-o-down"></i><i class="fa fa-thumbs-down solid"></i></button>
+                                            <div class="button button--deny @if (isDisliked) { <text>active</text> }">
+                                                @negativeRatings
+                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">
+                                                    <i class="fa fa-thumbs-down"></i><i class="fa fa-thumbs-down solid"></i>
+                                                </button>
                                             </div>
                                         </form>
+
                                         <div class="button button--fill comment-trigger">
                                             <span>Comment...</span>
                                         </div>

@@ -47,6 +47,13 @@ namespace io_projekt.Controllers
 			// Retrieve entries for the specified threadId from your data source
 			List<Thread> threads = Thread.GetAllThreads();
             List<Tuple<Thread, List<Post>>> threadDataList = new List<Tuple<Thread, List<Post>>>();
+            List<Tuple<int, bool>> ratedThreadIdsAndRatings = new List<Tuple<int, bool>>();
+
+            if (currentUserID != 0)
+            {
+                (String msg, bool boolean, ratedThreadIdsAndRatings) = Thread.GetThreadIdsAndRatingsByUser(currentUserID);
+
+            }
 
             foreach (var thread in threads)
             {
@@ -55,8 +62,9 @@ namespace io_projekt.Controllers
                 threadDataList.Add(threadData);
             }
 
-            // You may need to pass the entries to the view
-            return View(threadDataList);
+            var dataToReturn = (threadDataList, ratedThreadIdsAndRatings);
+            
+            return View(dataToReturn);
         }
 
        
@@ -302,6 +310,9 @@ namespace io_projekt.Controllers
             (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
             return RedirectToAction("Forum");
         }
+
+
+
         [HttpPost]
         public IActionResult addPositiveRatingForThread(int threadId)
         {
