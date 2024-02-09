@@ -192,7 +192,7 @@ namespace io_projekt.Models
                         }
 
         public static List<MainUser> GetAllUsers()
-        {        
+        {
             IMemoryCache cache = GetCacheInstance();
             if (!cache.TryGetValue("AllUsers", out List<MainUser> cachedUsers))
             {
@@ -244,6 +244,8 @@ namespace io_projekt.Models
             return cachedUsers;
         }
 
+
+  
 
         public static (string message, bool boolean) AddNewUser(string login, string password, string name, string lastName, int age, string type, int skills, string email)
         {
@@ -438,7 +440,10 @@ namespace io_projekt.Models
                             case "umiejetnosci":
                                 userToUpdate.skills = int.Parse(newValue);
                                 break;
-                            case "rodzajKonta":
+							case "naziwsko":
+								userToUpdate.lastName = newValue;
+								break;
+							case "rodzajKonta":
                                 userToUpdate.accountType = newValue;
                                 break;
                             case "email":
