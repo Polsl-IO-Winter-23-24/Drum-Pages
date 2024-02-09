@@ -94,12 +94,16 @@ namespace io_projekt.Controllers
         }
         
         public IActionResult Course(int courseID)
-        {
-	        ViewBag.courseId = courseID;
-            ViewBag.UserId = currentUserID;
+	 {
+     		currentUserID = _session.GetInt32("currentUserID") ?? 0;
+     		if (currentUserID != 0)
+     		{
+         		ViewBag.courseId = courseID;
+         		ViewBag.UserId = currentUserID;
+     		}
 
-            return View();
-        }
+     		return View();
+	 }
 
         [HttpPost]
         public IActionResult AddCourse(String title, String description, String difficulty)
