@@ -86,13 +86,14 @@ namespace io_projekt.Controllers
 				case "t_age":
 					if (!string.IsNullOrEmpty(t_age_input))
 					{
+						Console.WriteLine("UPADATE wiek" + t_age_input);
 						MainUser.EditAccount(userId, "wiek", t_age_input);
 			}
 					break;
 				case "t_skill":
 					if (!string.IsNullOrEmpty(skill_input))
 					{
-						Console.WriteLine("UPADATE SKILLL");
+						Console.WriteLine("UPADATE SKILLL" + skill_input);
 						MainUser.EditAccount(userId, "umiejetnosci", skill_input);
 					}
 					break;
