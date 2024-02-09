@@ -202,6 +202,8 @@ namespace io_projekt.Models
                     {
                         using (SqlConnection connection = new SqlConnection(connectionString))
                         {
+                            var list = GetThreadIdsAndRatingsByUser(userID);
+
                             connection.Open();
                             string query = $"UPDATE master.dbo.OcenyWpisy SET ocena = {rating} WHERE idWatku = {threadId} and uzytkownikId = {userID}";
                             SqlCommand command = new SqlCommand(query, connection);
@@ -210,9 +212,35 @@ namespace io_projekt.Models
                             IMemoryCache cache = GetCacheInstance();
                             if (cache.TryGetValue($"Thread_{threadId}_Ratings", out Tuple<int, int> cachedRatings))
                             {
-                                // If cache entry exists, update it
-                                int updatedPositiveRatings = cachedRatings.Item1 + ((rating == 1) ? 1 : 0);
-                                int updatedNegativeRatings = cachedRatings.Item2 + ((rating == 0) ? 1 : 0);
+                                
+                                int oldRating = 0;
+                                foreach (var tuple in list.Item3) {
+                                    int thrID = tuple.Item1;
+                                    bool ifLiked = tuple.Item2;
+
+                                    if (threadId == thrID) {
+                                        oldRating = ifLiked ? 1 : 0;
+                                    }
+                                }
+
+
+                                int updatedPositiveRatings = cachedRatings.Item1;
+                                int updatedNegativeRatings = cachedRatings.Item2;
+
+                                if (rating != oldRating)
+                                {
+                                    if (rating == 1)
+                                    {
+                                        updatedPositiveRatings++;
+                                        updatedNegativeRatings--;
+                                    }
+                                    else if (rating == 0)
+                                    {
+                                        updatedNegativeRatings++;
+                                        updatedPositiveRatings--;
+                                    }
+                                }
+
                                 Tuple<int, int> updatedRatings = new Tuple<int, int>(updatedPositiveRatings, updatedNegativeRatings);
                                 cache.Set($"Thread_{threadId}_Ratings", updatedRatings, TimeSpan.FromMinutes(10)); // Update cache entry
                             }
