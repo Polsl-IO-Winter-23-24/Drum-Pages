@@ -265,6 +265,8 @@ namespace io_projekt.Models
         public void setTitle(string title) { this.title = title; }
         public void setDescription(string description) { this.description = description; }
         public void setAuthorID(int authorID) { this.authorID = authorID; }
+
+        public void setAuthorName(String authorName) { this.authorName = authorName; }
         public void setDifficulty(int difficulty) { this.difficutly = difficulty; }
         public void setRating(int rating) { this.rating = rating; }
 
