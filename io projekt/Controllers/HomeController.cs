@@ -105,19 +105,20 @@ namespace io_projekt.Controllers
      		return View();
 	 }
 
-        [HttpPost]
-        public IActionResult AddCourse(String title, String description, String difficulty)
-        {
-            Course course = new Course();
-            course.setTitle(title);
-            course.setDescription(description);
-            course.setAuthorID(currentUserID);
-            course.setDifficulty(int.Parse(difficulty));
-            course.setRating(0);
-            course.writeToDB();
+          [HttpPost]
+  public IActionResult AddCourse(String title, String description, String difficulty)
+  {
+      Course course = new Course();
+      course.setTitle(title);
+      course.setDescription(description);
+      course.setAuthorID(currentUserID);
+      course.setAuthorName(MainUser.GetUserById(currentUserID).user.getLogin());
+      course.setDifficulty(int.Parse(difficulty));
+      course.setRating(0);
+      course.writeToDB();
 
-            return RedirectToAction("Courses");
-        }
+      return RedirectToAction("Courses");
+  }
 
 
 
