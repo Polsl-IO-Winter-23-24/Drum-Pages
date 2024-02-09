@@ -440,7 +440,7 @@ namespace io_projekt.Models
                             case "umiejetnosci":
                                 userToUpdate.skills = int.Parse(newValue);
                                 break;
-							case "naziwsko":
+							case "nazwisko":
 								userToUpdate.lastName = newValue;
 								break;
 							case "rodzajKonta":
@@ -455,7 +455,7 @@ namespace io_projekt.Models
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
                         };
                         cache.Set("AllUsers", usersFromCache, cacheEntryOptions);
-                        return (true);
+						return (true);
                     }
                     return (true);
                 }
