@@ -255,6 +255,7 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult Login(string uname, string psw, bool remember)
         {
+            Console.WriteLine("LOGIN: "+uname + "  psw: " + psw);
             var cache = MainUser.GetCacheInstance();
             cache.Remove("AllUsers");
 
@@ -269,14 +270,22 @@ namespace io_projekt.Controllers
                 ViewBag.IsLoggedIn = whoIsLogged;
                 // ViewBag.IsLoggedIn = true;
                 Console.WriteLine("ZALOGOWANO");
+                
                 if (whoIsLogged == "Admin")
                 {
-                    return RedirectToAction("AdminPanel");
+                    var dataa = new { mess = "Welcome boss" };
+                    // return RedirectToAction("AdminPanel");
+                    return Json(dataa);
                 }
+                var data = new { mess = "Login correctly" };
+                return Json(data);
             }
             else
             {
                 Console.WriteLine("NIE ZALOGOWANO");
+                var data = new { mess = "Incorrect data" };
+                return Json(data);
+               
 
             }
             return RedirectToAction("Index"); // Przekierowanie po zalogowaniu
