@@ -6,15 +6,15 @@
     <link rel="stylesheet" href="~/css/main_style.css">
     <script type="text/javascript">
             function hideLogoutButton() {
-              document.getElementById("logoutBtn").style.display = "none";
-              document.getElementById("loginBtn").style.display = "block";
-              document.getElementById("registerBtn").style.display = "block";
+            document.getElementById("logoutBtn").style.display = "none";
+            document.getElementById("loginBtn").style.display = "block";
+            document.getElementById("registerBtn").style.display = "block";
             }
 
             function hideLoginRegisterButtons() {
-                document.getElementById("logoutBtn").style.display = "none";
-                document.getElementById("loginBtn").style.display = "none";
-                document.getElementById("registerBtn").style.display = "none";
+            document.getElementById("logoutBtn").style.display = "none";
+            document.getElementById("loginBtn").style.display = "none";
+            document.getElementById("registerBtn").style.display = "none";
             }
         </script>
 </head>
@@ -63,6 +63,9 @@
             <button id="registerBtn" onclick="document.getElementById('id_2').style.display='block'">REGISTER</button>
             @* !!!PRZYCISK WYLOGOWANIA - DODAĆ UKRYWANIE/ POKAZYWANIE JAK WYZEJ ZAZNACZONO- TERAZ POKAZYWANY JEST CIAGLE -  *@ 
             @* !!!TUTAJ TYLKO JAK GO OBSLUGIWAC *@
+
+
+
             @using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
             {
                 <div id="id_3" style.display='none'>
@@ -87,7 +90,7 @@
               class="close" title="Close Form">&times;</span>
 
         <!-- Modal Content -->
-        <form class="login_form modal-content animate" method="post" action="/Home/Login">
+        <form class="login_form modal-content animate">
             <div class="col-2"></div>
 
             <div class="container col-8">
@@ -96,10 +99,10 @@
                         <label for="uname"><b>Username</b></label><br><br>
                         <input type="text" placeholder="Enter Username" name="uname" id="uname" required><br><br>
                         <label>
-                            <input type="checkbox" name="remember"> Remember me
+                            <input type="checkbox" name="remember" id="remeber"> Remember me
                         </label>
                         <br><br>
-                        <button type="submit" class="LoginInto">Login</button>
+                        <button type="button" class="LoginInto" id="finalloginbtn">Login</button>
                     </div>
                     <div class="col-6 form_fields">
                         <label for="psw"><b>Password</b></label><br><br>
@@ -112,11 +115,15 @@
             </div>
             <script>
                 var unameInput = document.getElementById('uname');
+                var password = document.getElementById('psw');
+                var remepber = document.getElementById('remeber');
                 var passwordLink = document.getElementById('forgotPasswordLink');
                 var label = document.getElementById('addLogin');
+                var finallog = document.getElementById('finalloginbtn');
+                var firstRegBtn = document.getElementById('registerBtn');
+
                 passwordLink.disabled = true;
-                unameInput.addEventListener('input', function () {
-                    console.log('COS JEST WPISANE');
+                unameInput.addEventListener('input', function () {       
                     if (unameInput.value.trim() === '') {
                         label.style.display = "block";
                         passwordLink.style.display = "none";
@@ -141,12 +148,51 @@
                         .then(response => response.json())
                         .then(data => {
                             // Obsłuż odpowiedź po stronie klienta
-                            if (data.mess) {
+                            if (data.mess){
                                 alert(data.mess);
                             }            
                         })
                         .catch(error => console.error('Error:', error));
                 });
+
+                finallog.addEventListener('click', function () {
+
+                    var formData = new FormData();
+                    formData.append('uname', unameInput.value);
+                    formData.append('psw', password.value);
+                    formData.append('remember', remepber.value);
+                    console.log(unameInput.value);
+
+                    var unameValue = encodeURIComponent(unameInput.value);
+                    var pswValue = encodeURIComponent(password.value);
+                    var rememberValue = encodeURIComponent(remepber.value);
+                    var body = 'uname=' + unameValue + '&psw=' + pswValue + '&remember=' + rememberValue;
+
+                    fetch('/Home/Login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: body
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                           // UKRYWANIE PRZYCISKOW
+                            if (data.mess) {
+                               alert(data.mess);
+                                if (data.mess === 'Welcome boss') { 
+                                    window.location.href = '/Home/AdminPanel';
+                                    registerBtn.style.display = 'none';
+                                }
+                                else if (data.mess === 'Login correctly') {
+                                    window.location.href = '/Home/Index';
+                                    registerBtn.style.display = 'none';
+                                }
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+
             </script>
 
             <div class="col-2"></div>
