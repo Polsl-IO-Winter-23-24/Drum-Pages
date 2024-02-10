@@ -386,6 +386,10 @@ namespace io_projekt.Models
                             threadsFromCache.RemoveAll(ev => ev.id == id);
                             cache.Set("AllThreads", threadsFromCache);
                         }
+                        else {
+                            threadsFromCache = new List<Thread>();
+                            cache.Set("AllThreads", threadsFromCache);
+                        }
 
                         return (Constants.RemoveThreadSucces, true);
                     }
@@ -648,7 +652,7 @@ namespace io_projekt.Models
                                     {
                                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
                                     };
-                                    cache.Set($"Thread_{threadId}", cachedPosts, cacheEntryOptions);
+                                    cache.Set($"Thread_{threadId}", cachedPosts);
                                 }
                             }
                         }
@@ -706,7 +710,7 @@ namespace io_projekt.Models
                             };
 
                             // Update the cache for the specific thread
-                            cache.Set($"Thread_{threadId}", postsFromCache, cacheEntryOptions);
+                            cache.Set($"Thread_{threadId}", postsFromCache);
 
                             return (Constants.addNewPostSuccess, true);
                         }
@@ -743,7 +747,11 @@ namespace io_projekt.Models
                         if (postsFromCache != null)
                         {
                             postsFromCache.RemoveAll(ev => ev.id == id);
-                            cache.Set("Thread_{threadId}", postsFromCache);
+                            cache.Set($"Thread_{threadId}", postsFromCache);
+                        }
+                        else {
+                            postsFromCache = new List<Post>();
+                            cache.Set($"Thread_{threadId}", postsFromCache);
                         }
 
                         return (Constants.deletePostSuccess, true);
