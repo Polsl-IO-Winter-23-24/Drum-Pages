@@ -386,10 +386,6 @@ namespace io_projekt.Models
                             threadsFromCache.RemoveAll(ev => ev.id == id);
                             cache.Set("AllThreads", threadsFromCache);
                         }
-                        else {
-                            threadsFromCache = new List<Thread>();
-                            cache.Set("AllThreads", threadsFromCache);
-                        }
 
                         return (Constants.RemoveThreadSucces, true);
                     }
@@ -733,7 +729,9 @@ namespace io_projekt.Models
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
+
                     connection.Open();
+                    int threadId = GetThreadIdByPostId(id);
                     string deleteQuery = "DELETE FROM master.dbo.Wpisy WHERE idWpisu = @id";
                     SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
                     deleteCommand.Parameters.AddWithValue("@id", id);
@@ -741,7 +739,6 @@ namespace io_projekt.Models
                     if (rowsAffected > 0)
                     {
                         IMemoryCache cache = GetCacheInstance();
-                        int threadId = GetThreadIdByPostId(id);
 
                         List<Post> postsFromCache = cache.Get<List<Post>>($"Thread_{threadId}");
                         if (postsFromCache != null)
@@ -749,10 +746,7 @@ namespace io_projekt.Models
                             postsFromCache.RemoveAll(ev => ev.id == id);
                             cache.Set($"Thread_{threadId}", postsFromCache);
                         }
-                        else {
-                            postsFromCache = new List<Post>();
-                            cache.Set($"Thread_{threadId}", postsFromCache);
-                        }
+                        
 
                         return (Constants.deletePostSuccess, true);
                     }
@@ -845,11 +839,11 @@ namespace io_projekt.Models
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string queryString = "SELECT idWatku FROM master.dbo.Wpisy WHERE idWpisu = @id";
+                    string queryString = $"SELECT idWatku FROM master.dbo.Wpisy WHERE idWpisu = {id}";
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
                     {
-                        object result = command.ExecuteScalar();
+                        var result = command.ExecuteScalar();
 
                         if (result != DBNull.Value)
                         {
