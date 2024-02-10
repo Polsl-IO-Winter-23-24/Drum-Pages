@@ -239,11 +239,27 @@ namespace io_projekt.Models
                                         updatedNegativeRatings++;
                                         updatedPositiveRatings--;
                                     }
+                                    Tuple<int, int> updatedRatings = new Tuple<int, int>(updatedPositiveRatings, updatedNegativeRatings);
+                                    cache.Set($"Thread_{threadId}_Ratings", updatedRatings, TimeSpan.FromMinutes(10)); // Update cache entry
                                 }
+                                else {
 
-                                Tuple<int, int> updatedRatings = new Tuple<int, int>(updatedPositiveRatings, updatedNegativeRatings);
-                                cache.Set($"Thread_{threadId}_Ratings", updatedRatings, TimeSpan.FromMinutes(10)); // Update cache entry
+                                    query = $"DELETE FROM master.dbo.OcenyWpisy WHERE idWatku = {threadId} and uzytkownikId = {userID};";
+                                    command = new SqlCommand(query, connection);
+                                    command.ExecuteNonQuery();
+                                    if (rating == 1)
+                                    {
+                                        updatedPositiveRatings--;
+                                    }
+                                    else if (rating == 0)
+                                    {
+                                        updatedNegativeRatings--;
+                                    }
+                                    Tuple<int, int> updatedRatings = new Tuple<int, int>(updatedPositiveRatings, updatedNegativeRatings);
+                                    cache.Set($"Thread_{threadId}_Ratings", updatedRatings, TimeSpan.FromMinutes(10)); // Update cache entry
+                                }
                             }
+                            connection.Close();
                         }
                         return (Constants.addNewRatingSucces, true);
                     }
