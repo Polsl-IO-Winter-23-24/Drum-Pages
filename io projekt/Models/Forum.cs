@@ -880,7 +880,7 @@ namespace io_projekt.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("B³¹d podczas pobierania maksymalnej wartoci idWpisu: " + ex.Message);
+                Console.WriteLine("Blad podczas pobierania maksymalnej wartoci idWpisu: " + ex.Message);
             }
             return maxPostId;
         }

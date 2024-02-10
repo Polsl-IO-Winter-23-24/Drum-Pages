@@ -293,11 +293,11 @@
 				</div>
 
 			</div>
-
-			<form method="post" asp-controller="Admin" asp-action="EditThread">
+			@* DO ZROBIENIA DYNAMICZNIE WYSWIETLANIE KOMENTARZY W ZALEZNOSCI OD WYBRANEGO WATKU *@
+			<form method="post" asp-controller="Admin" asp-action="DeleteComment">
 				<div>
 					<label for="comthreadId">Thread Id:</label>
-					<select name="comthreadId" onchange="showCom()">
+					<select name="comthreadId" id="comthreadIdSelect">
 						@foreach (var i in Thread.GetAllThreads())
 						{
 							<option value="@i.getID()">
@@ -306,50 +306,19 @@
 						}
 
 					</select>
-					<button type="submit">Submit</button>
-				</div>
-
-				<div>
-					<label for="editAction">Change:</label>
-					<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
-						<option value="t_name">Thread name</option>
-						<option value="author">Author</option>
-					</select>
-				</div>
-
-				<div id="t_name_input_div">
-					<label for="t_name_input">New Name:</label>
-					<input type="text" id="t_name_input" name="t_name_input">
-				</div>
-
-				<div id="com_id_input_div" style="display:none;">
-					<label for="com_id_input">Select New User:</label>
-					<select name="com_id_input">
-						@foreach (var i in MainUser.GetAllUsers())
+					<label for="comId">Com Id:</label>
+					<select name="comId" id="comIdSelect">
+						 @foreach (var i in Post.GetPostsByThreadId(Thread.GetAllThreads().FirstOrDefault().getID()))
 						{
-							<option value="@i.getId()">
-								@i.getId()
+							<option value="@i.getID()">
+								@i.getID()
 							</option>
-						}
+						} 
+
 					</select>
-				</div>
+					<button type="submit" id="deletecombutton">Delete Comment</button>
+				</div>			
 			</form>
-
-			<script>
-				function toggleInputFields() {
-					var editActionSelector = document.getElementById("editActionSelector");
-					var tNameInput = document.getElementById("t_name_input_div");
-					var userIdInputDiv = document.getElementById("user_id_input_div");
-
-					if (editActionSelector.value === "t_name") {
-						tNameInput.style.display = "block";
-						userIdInputDiv.style.display = "none";
-					} else if (editActionSelector.value === "author") {
-						tNameInput.style.display = "none";
-						userIdInputDiv.style.display = "block";
-					}
-				}
-			</script>
 
 			<div class="report-container row">
 				<div class="col-12">
@@ -360,22 +329,70 @@
 
 					<div class="report-body">
 						<div class="report-topic-heading row">
-							<h3 class="t-op col-3">komentarz</h3>
+							<h3 class="t-op col-3">ID</h3>
+							<h3 class="t-op col-3">Content</h3>
+							<h3 class="t-op col-3">Author ID</h3>
+							<h3 class="t-op col-3">Date</h3>
 						</div>
 
-						@* DO ZROBIENIA DYNAMICZNIE WYSWIETLANIE KOMENTARZY W ZALEZNOSCI OD WYBRANEGO WATKU *@
-						<div class="items">
+					
+						<div class="items" id="postsContainer">
 							@* tu petla wyswietlacjaca te posty  *@
 							@foreach (var i in Model)
 							{
 								<div class="item1 row">
-									<h3 class="t-op-nextlvl col-3 col-3">@i.getContent()</h3>								
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getID()</h3>
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getContent()</h3>
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getUserID()</h3>
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getCreationDate()</h3>
 								</div>
 							}
 						</div>
 					</div>
 				</div>
 			</div>
+			<script>
+				var comthreadIdSelect = document.getElementById('comthreadIdSelect');
+				var postsContainer = document.getElementById('postsContainer');
+				var comPicker = document.getElementById('comIdSelect');
+				var delButton = document.getElementById('deletecombutton');
+				
+			
+			
+				// Dodaj obs³ugê zdarzenia onchange dla select
+				comthreadIdSelect.addEventListener('change', function () {
+					// Pobierz wartoœæ wybran¹ w select
+					var selectedThreadId = comthreadIdSelect.value;
+
+					// Wyœlij zapytanie AJAX, aby pobraæ nowe dane na podstawie wybranego ID w¹tku
+					fetch('/Admin/testA?threadId=' + selectedThreadId)
+						.then(response => response.json())
+						.then(data => {
+							comPicker.innerHTML = '';
+							postsContainer.innerHTML = ''; 
+							if (data.length === 0)
+								{
+								delButton.style.display = 'none';
+							}
+							else {
+								delButton.style.display = 'inline';
+							}																		
+							data.forEach(post => {
+								postsContainer.innerHTML += `
+														<div class="item1 row">
+														<h3 class="t-op-nextlvl col-3 col-3">${post.id}</h3>
+														<h3 class="t-op-nextlvl col-3 col-3">${post.content}</h3>
+														<h3 class="t-op-nextlvl col-3 col-3">${post.uid}</h3>
+														<h3 class="t-op-nextlvl col-3 col-3">${post.datum}</h3>
+														</div>
+													`;
+								comPicker.add(new Option(post.id, post.id), undefined);
+							});
+						})
+						.catch(error => console.error('Error:', error));
+				});
+			</script>
+
 		</div>
 
 

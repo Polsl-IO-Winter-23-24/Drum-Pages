@@ -42,6 +42,41 @@ namespace io_projekt.Controllers
 		}
 
 
+		[HttpGet]
+		public IActionResult testA(int threadId)
+		{
+			Console.WriteLine("AJAXXXXXXXXX");
+			// Tutaj pobierz listę postów na podstawie threadId
+			//tablica postow  
+			List<Post> posts = Post.GetPostsByThreadId(threadId);
+			//List<string> wpis = new List<string>();
+			string[] com = posts.Select(c => c.getContent()).ToArray();
+			Console.WriteLine(posts.Count());
+
+			var data = posts.Select(post => new
+			{	
+				Content = post.getContent(),
+				Id = post.getID(),
+				Datum = post.getCreationDate(),
+				Uid = post.getUserID()
+				
+
+			});	
+			return Json(data);
+		}
+
+
+		[HttpPost]
+		public IActionResult DeleteComment(int comId)
+		{
+			//USUWANIE WATKU 
+			Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-USUNIETO KOMENTARZ NA FORUM-=-=-=-=-=-=-=-=-=-=-=-=-=-" + comId);
+			var a =Post.RemovePost(comId);
+			Console.WriteLine(a.message);
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+
 		[HttpPost]
 		public IActionResult DeleteUser(int id)
 		{
