@@ -52,7 +52,7 @@
                                 <div class="post">
                                     <div class="post__avatar"></div>
                                     <h3 class="post__author">
-                                         @user.getName();
+                                        @(user != null ? user.getName() : "Account Deleted")
                                     </h3>
                                     <h4 class="post__timestamp">
                                         @threadData.Item2[0].getCreationDate();
@@ -112,7 +112,7 @@
                                                     <div class="comment">
                                                         <div class="comment__avatar"></div>
                                                         <h3 class="comment__author">
-                                                            @user2.getName();
+                                                            @(user2 != null ? user2.getName() : "Account Deleted")
                                                         </h3>
                                                         <h4 class="comment__timestamp">
                                                             @threadData.Item2[i].getCreationDate()
