@@ -1,3 +1,4 @@
+@model List<Post>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,42 +26,52 @@
 						<img src="~/images/posts.png"
 							 class="nav-img"
 							 alt="forum">
-						<h3> Forum</h3>
+						<h3>Forum</h3>
 					</div>
 					</form>
+
+					@* PRZYCISK KOMENTARZE *@
+					<form>
+						<div class="nav-option option2" onclick="showusersscript('comm')">
+							<img src="~/images/posts.png"
+								 class="nav-img"
+								 alt="forum">
+							<h3>Comments</h3>
+						</div>
+					</form>
+
 					 @* PRZYCISK UZYTKOWNICY  *@
 					<form>
-						<div class="option2 nav-option" onclick="showusersscript('user')">
+						<div class="option3 nav-option" onclick="showusersscript('user')">
 						<img src="~/images/posts.png"
 							 class="nav-img"
 							 alt="users">
-						<h3> Users</h3>
+						<h3>Users</h3>
 					</div>
 					</form>
 
 
-
+					@* PRZYCISK OCZEKUJACY PRO  *@
 					<form>
-						<div class="nav-option option3" onclick="showusersscript('requestbutton')">
+						<div class="nav-option option4" onclick="showusersscript('requestbutton')">
 						<img src="~/images/report.png"
 							 class="nav-img"
 							 alt="request">
-						<h3> Requests</h3>
+						<h3>Requests</h3>
 					</div>
 					</form>
+
+
+
+
 					<div class="nav-option option5">
 						<img src="~/images/profile.png"
 							 class="nav-img"
 							 alt="lesson">
-						<h3> Lessons</h3>
+						<h3>Lessons</h3>
 					</div>
 
-					<div class="nav-option option6">
-						<img src="~/images/settings.png"
-							 class="nav-img"
-							 alt="settings">
-						<h3> Settings</h3>
-					</div>
+
 					@* !!!!!WYLOGOWANIE SIE - TRZEBA POPRAWIC ZE WZGLEDU NA WYGLAD!!!!!  *@
 					<form method="post" asp-controller="Home" asp-action="LogOut">
 						<div class="nav-option logout" onclick="submitForm()">
@@ -80,6 +91,7 @@
 		</div>
 		<div class="col-2"></div>
 
+		@* FORUM *@
 		<div class="col-8" id="forum1">
 
 			<div class="row">
@@ -227,8 +239,150 @@
 			</div>
 		</div>
 
-		@* ZAKLADKA MODYFIKACJI USERA*@
-		<div class="col-8" id="forum2" style="display: none;">
+		@* ZAKLADKA KOMENTARZE *@
+		<div class="col-8" id="commentv" style="display: none;">
+
+			<div class="row">
+				<div class="row">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">60.5k</span>
+							<span class="topic">Total Comments</span>
+						</div>
+
+						<img src="~/images/eye.png"
+							 alt="Views">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">150</span>
+							<span class="topic">Likes</span>
+						</div>
+
+						<img src="~/images/like.png"
+							 alt="likes">
+					</div>
+				</div><div class="row boxRow">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">@Post.GetAllPosts().Count()</span>
+							<span class="topic">Comments</span>
+						</div>
+
+						<img src="~/images/chat.png"
+							 alt="comments">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">@Thread.GetAllThreads().Count()</span>
+							<span class="topic">Threads Published</span>
+						</div>
+
+						<img src="~/images/Ok.png" alt="published">
+					</div>
+
+					<div class="col-1"></div>
+				</div>
+
+			</div>
+
+			<form method="post" asp-controller="Admin" asp-action="EditThread">
+				<div>
+					<label for="comthreadId">Thread Id:</label>
+					<select name="comthreadId" onchange="showCom()">
+						@foreach (var i in Thread.GetAllThreads())
+						{
+							<option value="@i.getID()">
+								@i.getID()
+							</option>
+						}
+
+					</select>
+					<button type="submit">Submit</button>
+				</div>
+
+				<div>
+					<label for="editAction">Change:</label>
+					<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
+						<option value="t_name">Thread name</option>
+						<option value="author">Author</option>
+					</select>
+				</div>
+
+				<div id="t_name_input_div">
+					<label for="t_name_input">New Name:</label>
+					<input type="text" id="t_name_input" name="t_name_input">
+				</div>
+
+				<div id="com_id_input_div" style="display:none;">
+					<label for="com_id_input">Select New User:</label>
+					<select name="com_id_input">
+						@foreach (var i in MainUser.GetAllUsers())
+						{
+							<option value="@i.getId()">
+								@i.getId()
+							</option>
+						}
+					</select>
+				</div>
+			</form>
+
+			<script>
+				function toggleInputFields() {
+					var editActionSelector = document.getElementById("editActionSelector");
+					var tNameInput = document.getElementById("t_name_input_div");
+					var userIdInputDiv = document.getElementById("user_id_input_div");
+
+					if (editActionSelector.value === "t_name") {
+						tNameInput.style.display = "block";
+						userIdInputDiv.style.display = "none";
+					} else if (editActionSelector.value === "author") {
+						tNameInput.style.display = "none";
+						userIdInputDiv.style.display = "block";
+					}
+				}
+			</script>
+
+			<div class="report-container row">
+				<div class="col-12">
+					<div class="report-header">
+						<h1 class="recent-Posts">Recent Posts</h1>
+						<button class="view">View All</button>
+					</div>
+
+					<div class="report-body">
+						<div class="report-topic-heading row">
+							<h3 class="t-op col-3">komentarz</h3>
+						</div>
+
+						@* DO ZROBIENIA DYNAMICZNIE WYSWIETLANIE KOMENTARZY W ZALEZNOSCI OD WYBRANEGO WATKU *@
+						<div class="items">
+							@* tu petla wyswietlacjaca te posty  *@
+							@foreach (var i in Model)
+							{
+								<div class="item1 row">
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getContent()</h3>								
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		@*ZAKLADKA MODYFIKACJI USERA*@
+		<div class="col-8" id="usr" style="display: none;">
 			<div class="row">
 				<div class="row">
 
@@ -452,6 +606,7 @@
 				</div>
 			</div>
 		</div>
+
 		@* ZAKLADKA ZMIANA STATUSU *@
 		<div class="col-8" id="requestUser" style="display: none;">
 
@@ -460,7 +615,7 @@
 
 					<div class="box col-5">
 						<div class="text">
-							<span class="topic-heading">2</span>
+							<span class="topic-heading">@MainUser.GetAllUsers().Where(user => user.getAccountType() == "NPro").ToList().Count()</span>
 							<span class="topic">Pending Users</span>
 						</div>
 
@@ -472,7 +627,7 @@
 
 					<div class="box col-5">
 						<div class="text">
-							<span class="topic-heading">150</span>
+							<span class="topic-heading">@MainUser.GetAllUsers().Where(user => user.getAccountType() == "Pro").ToList().Count()</span>
 							<span class="topic">Total Pros</span>
 						</div>
 
@@ -486,63 +641,7 @@
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="EditThread">
-				<div>
-					<label for="threadId">Thread Id:</label>
-					<select name="threadId">
-						@foreach (var i in Thread.GetAllThreads())
-						{
-							<option value="@i.getID()">
-								@i.getID()
-							</option>
-						}
-
-					</select>
-					<button type="submit">Submit</button>
-				</div>
-
-				<div>
-					<label for="editAction">Change:</label>
-					<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
-						<option value="t_name">Thread name</option>
-						<option value="author">Author</option>
-					</select>
-				</div>
-
-				<div id="t_name_input_div">
-					<label for="t_name_input">New Name:</label>
-					<input type="text" id="t_name_input" name="t_name_input">
-				</div>
-
-				<div id="user_id_input_div" style="display:none;">
-					<label for="user_id_input">Select New User:</label>
-					<select name="user_id_input">
-						@foreach (var i in MainUser.GetAllUsers())
-						{
-							<option value="@i.getId()">
-								@i.getId()
-							</option>
-						}
-					</select>
-				</div>
-			</form>
-
-			<script>
-				function toggleInputFields() {
-					var editActionSelector = document.getElementById("editActionSelector");
-					var tNameInput = document.getElementById("t_name_input_div");
-					var userIdInputDiv = document.getElementById("user_id_input_div");
-
-					if (editActionSelector.value === "t_name") {
-						tNameInput.style.display = "block";
-						userIdInputDiv.style.display = "none";
-					} else if (editActionSelector.value === "author") {
-						tNameInput.style.display = "none";
-						userIdInputDiv.style.display = "block";
-					}
-				}
-			</script>
-
+ 
 			<div class="report-container row">
 				<div class="col-12">
 					<div class="report-header">
@@ -552,24 +651,24 @@
 
 					<div class="report-body">
 						<div class="report-topic-heading row">
-							<h3 class="t-op col-3">Thread</h3>
-							<h3 class="t-op col-3">Comments</h3>
-							<h3 class="t-op col-3">Author</h3>
-							<h3 class="t-op col-3">Publish date</h3>
-							<h3 class="t-op col-3">Action</h3>
-						</div>
+							<h3 class="t-op col-3">User Id</h3>
+							<h3 class="t-op col-3">Login</h3>
+							<h3 class="t-op col-3">Type</h3>
+							<h3 class="t-op col-3">E-mail</h3>
+							<h3 class="t-op col-3">Set to Pro</h3>
+					</div>
 
 						<div class="items">
 							@* tu petla wyswietlacjaca te posty  *@
-							@foreach (var i in Thread.GetAllThreads())
+							@foreach (var i in MainUser.GetAllUsers().Where(user => user.getAccountType() == "NPro").ToList())
 							{
 								<div class="item1 row">
-									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
-									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
-									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
-									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
-									<form method="post" asp-controller="Admin" asp-action="DeleteThread" asp-route-id="@i.getID()">
-										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getId()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getLogin()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getAccountType()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getEmial()</h3>
+									<form method="post" asp-controller="Admin" asp-action="SetToPro" asp-route-id="@i.getId()">
+										<button type="submit" class="t-op-nextlvl col-3 label-tag">Accept</button>
 									</form>
 								</div>
 							}
@@ -582,24 +681,34 @@
 
 	<script>
 		function showusersscript(buttonId) {
-			var curretView = document.getElementById('forum1');
-			var curretView1 = document.getElementById('forum2');
-			var curretView2 = document.getElementById('requestUser');
-
+			var forumView = document.getElementById('forum1');
+			var usrView = document.getElementById('usr');
+			var reqView = document.getElementById('requestUser');
+			var comView = document.getElementById('commentv');
+			
 			  if (buttonId === 'forum') {
-			  	curretView1.style.display = "none";
-			  	curretView.style.display = "block";
-				  curretView2.style.display = "none";
+				usrView.style.display = "none";
+				forumView.style.display = "block";
+				reqView.style.display = "none";
+				comView.style.display = "none";
 			  }else if (buttonId === 'user')
-			  {					 
-			  	curretView.style.display = "none";
-			  	curretView1.style.display = "block";
-				curretView2.style.display = "none";
+			  {
+				forumView.style.display = "none";
+			  	usrView.style.display = "block";
+				reqView.style.display = "none";
+				comView.style.display = "none";
 			  }
 			else if (buttonId === 'requestbutton') {
-				curretView.style.display = "none";
-				curretView1.style.display = "none";
-				curretView2.style.display = "block";
+				forumView.style.display = "none";
+				usrView.style.display = "none";
+				reqView.style.display = "block";
+				comView.style.display = "none";
+			}
+			else if (buttonId === 'comm') {
+				forumView.style.display = "none";
+				usrView.style.display = "none";
+				reqView.style.display = "none";
+				comView.style.display = "block";
 			}
 
 

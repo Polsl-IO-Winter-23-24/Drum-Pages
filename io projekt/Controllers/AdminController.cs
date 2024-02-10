@@ -52,6 +52,18 @@ namespace io_projekt.Controllers
 			return RedirectToAction("AdminPanel", "Home");
 		}
 
+
+		[HttpPost]
+		public IActionResult SetToPro(int id)
+		{
+			//USUWANIE WATKU 
+			Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-UPdate statusu Usera-=-=-=-=-=-=-=-=-=-=-=-=-=-" + id);
+			MainUser.EditAccount(id, "rodzajKonta", "Pro");
+
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+
 		[HttpPost]
 		public IActionResult EditUser([FromForm] int userId,
 				[FromForm] string editAction,

@@ -244,7 +244,11 @@ namespace io_projekt.Controllers
         }
         public IActionResult AdminPanel()
         {
-            return View();
+            
+            var threads = Thread.GetAllThreads();
+			int firstThreadId = threads.Count > 0 ? threads[0].getID() : 0;
+			List<Post> posts = Post.GetPostsByThreadId(firstThreadId);
+			return View(posts);
         }
 
         [HttpPost]
