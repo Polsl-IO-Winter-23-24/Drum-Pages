@@ -338,7 +338,7 @@
 					
 						<div class="items" id="postsContainer">
 							@* tu petla wyswietlacjaca te posty  *@
-							@foreach (var i in Model)
+							@* @foreach (var i in Model)
 							{
 								<div class="item1 row">
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getID()</h3>
@@ -346,7 +346,7 @@
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getUserID()</h3>
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getCreationDate()</h3>
 								</div>
-							}
+							} *@
 						</div>
 					</div>
 				</div>
@@ -359,12 +359,12 @@
 				
 			
 			
-				// Dodaj obs³ugê zdarzenia onchange dla select
+				// Dodaj obsï¿½ugï¿½ zdarzenia onchange dla select
 				comthreadIdSelect.addEventListener('change', function () {
-					// Pobierz wartoœæ wybran¹ w select
+					// Pobierz wartoï¿½ï¿½ wybranï¿½ w select
 					var selectedThreadId = comthreadIdSelect.value;
 
-					// Wyœlij zapytanie AJAX, aby pobraæ nowe dane na podstawie wybranego ID w¹tku
+					// Wyï¿½lij zapytanie AJAX, aby pobraï¿½ nowe dane na podstawie wybranego ID wï¿½tku
 					fetch('/Admin/testA?threadId=' + selectedThreadId)
 						.then(response => response.json())
 						.then(data => {

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Data.SqlClient;
 using Thread = io_projekt.Models.Thread;
+using Microsoft.Extensions.Hosting;
 
 namespace io_projekt.Controllers
 {
@@ -396,9 +397,21 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(string user)
         {
-            MainUser.RecoverPassword(user);        
-            Console.WriteLine("odzyskiwanie hasla");
-            return RedirectToAction("Index");
+            if (MainUser.GetUserIdByLogin(user) == -1)
+            {
+                // return RedirectToAction("Index");
+                var data = new { mess = "No User Found" };
+                return Json(data);
+            }
+            else
+            {
+                MainUser.RecoverPassword(user);
+                Console.WriteLine("odzyskiwanie hasla" + user);
+                //  return Json(new { NotFoundMessage = "Nie znaleziono użytkownika." });
+                var data = new { mess = "A new password has been sent to an e-mail" };
+                return Json(data);
+            }
+           // return RedirectToAction("Index");
         }
 
 
