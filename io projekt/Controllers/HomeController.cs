@@ -25,7 +25,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Index()
         {
-            
+
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
@@ -39,14 +39,14 @@ namespace io_projekt.Controllers
 
         public IActionResult Forum()
         {
-			currentUserID = _session.GetInt32("currentUserID") ?? 0;
-			if (currentUserID != 0)
-			{
-				whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
-				ViewBag.IsLoggedIn = whoIsLogged;
-			}
-			// Retrieve entries for the specified threadId from your data source
-			List<Thread> threads = Thread.GetAllThreads();
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (currentUserID != 0)
+            {
+                whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
+                ViewBag.IsLoggedIn = whoIsLogged;
+            }
+            // Retrieve entries for the specified threadId from your data source
+            List<Thread> threads = Thread.GetAllThreads();
             List<Tuple<Thread, List<Post>>> threadDataList = new List<Tuple<Thread, List<Post>>>();
             List<Tuple<int, bool>> ratedThreadIdsAndRatings = new List<Tuple<int, bool>>();
 
@@ -64,23 +64,23 @@ namespace io_projekt.Controllers
             }
 
             var dataToReturn = (threadDataList, ratedThreadIdsAndRatings);
-            
+
             return View(dataToReturn);
         }
 
-       
+
         public IActionResult Events()
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
-                ViewBag.IsLoggedIn = whoIsLogged;           
+                ViewBag.IsLoggedIn = whoIsLogged;
             }
             return View();
         }
-        
-         
+
+
         public IActionResult Courses()
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
@@ -91,9 +91,13 @@ namespace io_projekt.Controllers
                 ViewBag.UserID = currentUserID;
             }
             return View();
-            
+
         }
-        
+
+        public IActionResult Profile() {
+            return View();
+        }
+
         public IActionResult Course(int courseID)
 	 {
      		currentUserID = _session.GetInt32("currentUserID") ?? 0;
