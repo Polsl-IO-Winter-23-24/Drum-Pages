@@ -111,6 +111,8 @@
                         </div>
                         <div class="user-details">
                             <strong>
+                                
+                                <img src=@currentUser.getImage() alt="Italian Trulli">
                                 <p>Name: <span class="name">@currentUser.getName()</span></p>
                                 <p>Surname: <span class="surname">@currentUser.getLastName()</span></p>
                                 <p>Age: <span class="age">@currentUser.getAge()</span></p>
@@ -118,6 +120,7 @@
                                 <p>Style: <span class="style">@styleString</span></p>
                                 <p>Gear: <span class="gear">@gearString</span></p>
                                 <p>E-mail address: <span class="email">@currentUser.getEmial()</span></p>
+                                
                             </strong>
                         </div>
                     </div>
@@ -166,12 +169,54 @@
                                 <br />
                                 <input type="text" name="email" class="email" value="@currentUser.getEmial()" /><br />
                                 <input type="password" name="password" class="password" value="@currentUser.getPassword()" /><br />
+
+
                             </div>
                         
                                 <div class="confirm-button hidden">
                                     <button type = "submit" id="confirmProfileChanges">Confirm changes</button>
                                 </div>
                         </form>
+
+                       @*  DODANIE ZDJECIA PROFILOWEGO *@
+                        <form id="uploadForm" method="post" enctype="multipart/form-data">
+                            <!-- Inne pola formularza -->
+
+                            <div>
+                                <label for="fileInput">Select Profile Picture:</label>
+                                <input type="file" id="fileInput" name="fileInput" accept="image/*">
+                            </div>
+
+                            <button type="button" onclick="uploadImage()">Upload Image</button>
+                        </form>
+                        <script>
+                            function uploadImage() {
+                                var fileInput = document.getElementById('fileInput');
+                                var selectedFile = fileInput.files[0];
+
+                                var formData = new FormData();
+                                formData.append('fileInput', selectedFile);
+
+                                fetch('/Home/AddImage', {
+                                    method: 'POST',
+                                    body: formData,
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Obs³u¿ odpowiedŸ po stronie klienta, jeœli to konieczne
+                                        console.log(data);
+                                        if (data.success) {
+                                            // Przekieruj do strony Index
+                                            window.location.href = '/Home/Profile';
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            }
+
+
+                        </script>
+
+
                     </div>
 
                 </div>

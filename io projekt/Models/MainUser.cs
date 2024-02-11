@@ -24,13 +24,15 @@ namespace io_projekt.Models
         private int skills;
         private string email;
 
+        private string image;
+
         private const string connectionString = "Data Source=(local)\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False";
         private static IMemoryCache _cache; // Pole statyczne przechowujące pamięć podręczną
         private static int maxId;
         // Konstruktor prywatny, aby zapobiec utworzeniu wielu instancji tej klasy
         private MainUser() { }
 
-        private MainUser(int id, string login, string password, string name, string lastName, int age, string type, int skills, string email ) { 
+        private MainUser(int id, string login, string password, string name, string lastName, int age, string type, int skills, string email, string image = "/images/default.png") { 
             this.id = id;
             this.login = login;     
             this.password = password;
@@ -40,6 +42,16 @@ namespace io_projekt.Models
             this.accountType = type;
             this.skills = skills;
             this.email = email;
+            if (image == "zdj")
+            {
+                this.image = "/images/default.png";
+
+			}
+            else
+            {
+				this.image = image;
+			}
+           
         }
 
         
@@ -92,6 +104,11 @@ namespace io_projekt.Models
         public string getEmial()
         {
             return email;
+        }
+        public string getImage() {
+
+            Console.WriteLine("TO jest zdjecie: " + image);
+            return image;
         }
 
 
@@ -153,8 +170,9 @@ namespace io_projekt.Models
                                     string dataAccountType = reader.GetString(6);
                                     int dataSkills = reader.GetInt32(7);
                                     string dataEmial = reader.GetString(8);
+                                    string dataImage = reader.GetString(9);
                                     //stworzenie noego obiekty typu user i wpisanie go do cache
-                             MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills, dataEmial);
+                             MainUser newUser = new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills, dataEmial, dataImage);
                             //                        cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills));
                             //                        var cacheEntryOptions = new MemoryCacheEntryOptions
                             //                        {
@@ -220,9 +238,10 @@ namespace io_projekt.Models
                                     string dataAccountType = reader.GetString(6);
                                     int dataSkills = reader.GetInt32(7);
                                     string dataEmail = reader.GetString(8);
+                                    string dataImage = reader.GetString(9);
                                     Console.WriteLine("Imie:  " + dataName);
                                     //stworzenie nowego obiektu typu user i wpisanie go do cache
-                                    cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills, dataEmail));
+                                    cachedUsers.Add(new MainUser(dataId, dataLogin, dataPassword, dataName, dataLastName, dataAge, dataAccountType, dataSkills, dataEmail, dataImage));
                                     var cacheEntryOptions = new MemoryCacheEntryOptions
                                     {
                                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //uzytkownikow do pamieci na 10 min
@@ -247,7 +266,7 @@ namespace io_projekt.Models
 
   
 
-        public static (string message, bool boolean) AddNewUser(string login, string password, string name, string lastName, int age, string type, int skills, string email)
+        public static (string message, bool boolean) AddNewUser(string login, string password, string name, string lastName, int age, string type, int skills, string email, string image = "/images/default.png")
         {
             if (ValidateLogin(login) && ValidatePassword(password))
             {
@@ -259,7 +278,7 @@ namespace io_projekt.Models
                         using (SqlConnection connection = new SqlConnection(connectionString))
                         {
                             connection.Open();
-                            string query = "INSERT INTO master.dbo.Uzytkownicy (login, haslo, imie, nazwisko, wiek, rodzajKonta, umiejetnosci, email) VALUES (@login, @password,@name,@lastName,@age,@type,@skills,@email)";
+                            string query = "INSERT INTO master.dbo.Uzytkownicy (login, haslo, imie, nazwisko, wiek, rodzajKonta, umiejetnosci, email, image) VALUES (@login, @password,@name,@lastName,@age,@type,@skills,@email,@image)";
                             SqlCommand command = new SqlCommand(query, connection);
 
                             command.Parameters.AddWithValue("@login", login);
@@ -270,7 +289,8 @@ namespace io_projekt.Models
                             command.Parameters.AddWithValue("@type", type);
                             command.Parameters.AddWithValue("@skills", skills);
                             command.Parameters.AddWithValue("@email", email);
-                            command.ExecuteNonQuery();
+							command.Parameters.AddWithValue("@image", image);
+							command.ExecuteNonQuery();
                         }
 
                         IMemoryCache cache = GetCacheInstance();
@@ -280,7 +300,7 @@ namespace io_projekt.Models
                             usersFromCache = new List<MainUser>();
                         }
 
-                        usersFromCache.Add(new MainUser(newUserId, login, password, name, lastName, age, type, skills,email));
+                        usersFromCache.Add(new MainUser(newUserId, login, password, name, lastName, age, type, skills,email,image));
                         var cacheEntryOptions = new MemoryCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
@@ -401,6 +421,7 @@ namespace io_projekt.Models
 
         private static bool updateQuery(int userId, string toUpdate ,string newValue)
         {
+            Console.WriteLine("EDYCJA USERA!!!");
             //aktualizacja pamieci
             GetAllUsers();
             try
@@ -449,7 +470,11 @@ namespace io_projekt.Models
                             case "email":
                                 userToUpdate.email = newValue;
                                 break;
-                        }
+							case "image":
+                                Console.WriteLine("DODANIE ZDJECIA!!!");
+                                userToUpdate.image = newValue;
+								break;
+						}
                         var cacheEntryOptions = new MemoryCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)

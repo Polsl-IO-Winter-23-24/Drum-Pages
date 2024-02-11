@@ -24,6 +24,8 @@ namespace io_projekt.Controllers
             _session = httpContextAccessor.HttpContext.Session;
         }
 
+
+
         public IActionResult Index()
         {
 
@@ -33,6 +35,7 @@ namespace io_projekt.Controllers
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.UserName = MainUser.GetUserById(currentUserID).user.getName();
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
             }
             return View();
         }
@@ -51,6 +54,7 @@ namespace io_projekt.Controllers
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
             }
             // Retrieve entries for the specified threadId from your data source
             List<Thread> threads = Thread.GetAllThreads();
@@ -83,6 +87,7 @@ namespace io_projekt.Controllers
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
             }
             return View();
         }
@@ -190,14 +195,18 @@ namespace io_projekt.Controllers
           [HttpPost]
   public IActionResult AddCourse(String title, String description, String difficulty)
   {
-      Course course = new Course();
-      course.setTitle(title);
-      course.setDescription(description);
-      course.setAuthorID(currentUserID);
-      course.setAuthorName(MainUser.GetUserById(currentUserID).user.getLogin());
-      course.setDifficulty(int.Parse(difficulty));
-      course.setRating(0);
-      course.writeToDB();
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (currentUserID != 0)
+            {
+                Course course = new Course();
+                course.setTitle(title);
+                course.setDescription(description);
+                course.setAuthorID(currentUserID);
+                course.setAuthorName(MainUser.GetUserById(currentUserID).user.getLogin());
+                course.setDifficulty(int.Parse(difficulty));
+                course.setRating(0);
+                course.writeToDB();
+            }
 
       return RedirectToAction("Courses");
   }
@@ -208,45 +217,46 @@ namespace io_projekt.Controllers
  	public IActionResult deleteCourse(int courseID)
 {
 
-            //try
-            //{
-            //    String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
-            //    SQL query to delete a record from the "Kursy" table with the given ID
-            //    string query = "DELETE FROM Kursy WHERE kursId = @kursId";
+            try
+            {
+                String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+               // SQL query to delete a record from the "Kursy" table with the given ID
+                string query = "DELETE FROM Kursy WHERE kursId = @kursId";
 
-            //    Create and open a connection to the database
-            //    using (SqlConnection connection = new SqlConnection(connectionString))
-            //    {
-            //        connection.Open();
+               // Create and open a connection to the database
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
 
-            //        Create a command with the query and connection
-            //using (SqlCommand command = new SqlCommand(query, connection))
-            //        {
-            //            Add parameter for the kursId
+                   // Create a command with the query and connection
+        
+            using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                       // Add parameter for the kursId
        
-            //           command.Parameters.AddWithValue("@kursId", courseID);
+                       command.Parameters.AddWithValue("@kursId", courseID);
 
-            //            Execute the command to delete the record
+                      //  Execute the command to delete the record
        
-            //           int rowsAffected = command.ExecuteNonQuery();
+                       int rowsAffected = command.ExecuteNonQuery();
 
-            //            Check if any rows were affected
-            //    if (rowsAffected > 0)
-            //            {
-            //                Console.WriteLine("Record deleted successfully.");
-            //            }
-            //            else
-            //            {
-            //                Console.WriteLine("No record found with the provided ID: " + courseID);
-            //            }
-            //        }
-            //    }
-            //}
+                      //  Check if any rows were affected
+                if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("Record deleted successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("No record found with the provided ID: " + courseID);
+                        }
+                    }
+                }
+            }
 
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return RedirectToAction("Courses");
 }
 
@@ -277,43 +287,43 @@ namespace io_projekt.Controllers
  	 public IActionResult deleteLesson(int lessonID, int courseID)
  {
 
-     //try
-     //{
-     //    String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
-     //    // SQL query to delete a record from the "Kursy" table with the given ID
-     //    string query = "DELETE FROM Lekcje WHERE lekcjaId = @lekcjaId";
+     try
+     {
+         String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+         // SQL query to delete a record from the "Kursy" table with the given ID
+         string query = "DELETE FROM Lekcje WHERE lekcjaId = @lekcjaId";
 
-     //    // Create and open a connection to the database
-     //    using (SqlConnection connection = new SqlConnection(connectionString))
-     //    {
-     //        connection.Open();
+         // Create and open a connection to the database
+         using (SqlConnection connection = new SqlConnection(connectionString))
+         {
+             connection.Open();
 
-     //        // Create a command with the query and connection
-     //        using (SqlCommand command = new SqlCommand(query, connection))
-     //        {
-     //            // Add parameter for the kursId
-     //            command.Parameters.AddWithValue("@lekcjaId", lessonID);
+             // Create a command with the query and connection
+             using (SqlCommand command = new SqlCommand(query, connection))
+             {
+                 // Add parameter for the kursId
+                 command.Parameters.AddWithValue("@lekcjaId", lessonID);
 
-     //            // Execute the command to delete the record
-     //            int rowsAffected = command.ExecuteNonQuery();
+                 // Execute the command to delete the record
+                 int rowsAffected = command.ExecuteNonQuery();
 
-     //            // Check if any rows were affected
-     //            if (rowsAffected > 0)
-     //            {
-     //                Console.WriteLine("Record deleted successfully.");
-     //            }
-     //            else
-     //            {
-     //                Console.WriteLine("No lesson found with the provided ID: " + lessonID);
-     //            }
-     //        }
-     //    }
-     //}
+                 // Check if any rows were affected
+                 if (rowsAffected > 0)
+                 {
+                     Console.WriteLine("Record deleted successfully.");
+                 }
+                 else
+                 {
+                     Console.WriteLine("No lesson found with the provided ID: " + lessonID);
+                 }
+             }
+         }
+     }
 
-     //catch (Exception ex)
-     //{
-     //    Console.WriteLine(ex.Message);
-     //}
+     catch (Exception ex)
+     {
+         Console.WriteLine(ex.Message);
+     }
      return RedirectToAction("Course", new { courseID = courseID });
  }
 
@@ -349,6 +359,7 @@ namespace io_projekt.Controllers
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 Console.WriteLine(whoIsLogged);
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
                 // ViewBag.IsLoggedIn = true;
                 Console.WriteLine("ZALOGOWANO");
                 
@@ -409,6 +420,41 @@ namespace io_projekt.Controllers
 
             (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
             return RedirectToAction("Forum");
+        }
+
+        [HttpPost]
+        public IActionResult AddImage(IFormFile fileInput)
+        {        
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (fileInput != null && fileInput.Length > 0)
+            {
+                try
+                {
+                    string uploadPath = "wwwroot\\images";
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + fileInput.FileName;
+
+                    string filePath = Path.Combine(uploadPath, uniqueFileName);
+                    Console.WriteLine("up: " + uploadPath + " uni: " + uniqueFileName + " file path: " + filePath);
+                    Console.WriteLine(MainUser.EditAccount(currentUserID, "image", "/images/" + uniqueFileName).message);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        fileInput.CopyTo(fileStream);
+                       
+
+                    }                 
+                    return Json(new { success = true, message = "Image uploaded successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Error uploading image: " + ex.Message });
+                }
+            
+            
+            }
+            else
+            {
+                return Json(new { success = false, message = "No image selected for upload" });
+            }
         }
 
 
