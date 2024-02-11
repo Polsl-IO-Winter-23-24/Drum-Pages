@@ -670,5 +670,20 @@ namespace io_projekt.Models
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        public static List<MainUser> searchUsersByNameOrSurname(string data) {
+            List<MainUser> allUsers = GetAllUsers();
+            List<MainUser> matchedUsers = new List<MainUser>();
+            foreach (var user in allUsers)
+            {
+                if (user.getName().Contains(data)) {
+                    matchedUsers.Add(user);
+                } else if (user.getLastName().Contains(data)) {
+                    matchedUsers.Add(user);
+                }
+
+            }
+            return matchedUsers;
+        }
+
     }
 }

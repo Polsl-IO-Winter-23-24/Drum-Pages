@@ -1,0 +1,108 @@
+@model List<MainUser>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/main_style.css">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            font-size: 23px;
+        }
+
+        .user-profile {
+            border-radius: 35px;
+            margin-left: 35vw;
+            margin-right: 35vw;
+            margin-top: 10vh;
+            background-color: #ff9b05;
+            color: white;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-direction: column; /* Stack items vertically */
+        }
+
+        .searchData {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width: 300px; /* Adjust width as needed */
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        
+
+            
+    </style>
+</head>
+<body>
+    <div class="user-profile">
+        <div class="search-container">
+            <form method="post" action="@Url.Action("SearchProfile", "Home")">
+                <input type="text" name="searchData" class="searchData" value="Search for other user by name or surname" />
+                <div class="search-button">
+                    <button type="submit" id="searchButton"><span>Search</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @{
+        List<MainUser> foundUsers = Model;
+    }
+    @if (foundUsers != null)
+    {
+        foreach (var profile in foundUsers)
+        {
+            var userStyles = Misc.GetUserStyle(profile.getId());
+            var userGears = Misc.GetUserGear(profile.getId());
+            string styleString = "";
+            string gearString = "";
+
+            foreach (var style in userStyles)
+            {
+                styleString += style.NAME;
+                styleString += ", ";
+            }
+            foreach (var gear in userGears)
+            {
+                gearString += gear.NAME;
+                gearString += ", ";
+            }
+
+            <div class="user-profile">
+                <div class="container">
+                    <div class="row">
+                        <div>
+                            <div>
+                                <br>
+
+
+                                <div>
+                                    <h3>User Profile</h3>
+                                </div>
+                                <div>
+                                    <h3><i></i>General Information</h3>
+                                </div>
+                                <div class="user-details">
+                                    <strong>
+                                        <p>Name: <span class="name">@profile.getName()</span></p>
+                                        <p>Surname: <span class="surname">@profile.getLastName()</span></p>
+                                        <p>Age: <span class="age">@profile.getAge()</span></p>
+                                        <p>Advancement level: <span class="skill">@profile.getSkills()</span></p>
+                                        <p>Style: <span class="style">@styleString</span></p>
+                                        <p>Gear: <span class="gear">@gearString</span></p>
+                                        <p>E-mail address: <span class="email">@profile.getEmial()</span></p>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        }
+    }
+</body>
+</html>

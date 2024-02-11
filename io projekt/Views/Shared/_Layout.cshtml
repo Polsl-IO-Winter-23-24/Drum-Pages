@@ -40,6 +40,9 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Events">Events</a>
                 </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SearchProfile">Search User</a>
+                    </li>
 
                     
                     @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn) && ViewBag.IsLoggedIn == "Admin")

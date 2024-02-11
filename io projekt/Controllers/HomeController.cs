@@ -38,6 +38,12 @@ namespace io_projekt.Controllers
         }
 
 
+        
+        public IActionResult SearchProfile(List<MainUser> users)
+        {
+            return View(users);
+        }
+
         public IActionResult Forum()
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
@@ -95,6 +101,14 @@ namespace io_projekt.Controllers
 
         }
 
+
+        [HttpPost]
+        public IActionResult SearchProfile(string searchData)
+        {
+            List<MainUser> foundUsers = MainUser.searchUsersByNameOrSurname(searchData);
+            return View(foundUsers);
+        }
+
         public IActionResult Profile() {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             (MainUser user, string msg) = MainUser.GetUserById(currentUserID);
@@ -102,6 +116,7 @@ namespace io_projekt.Controllers
 
             return View(user);
         }
+
         [HttpPost]
         public IActionResult EditProfile(string name, string surname, string email, int age,  int skill, string password, string style, string gear) {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
