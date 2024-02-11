@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\responsive.css" />
-    <None Include="wwwroot\images\th-2656106475.jpg" />
     <None Include="wwwroot\js\JavaAdmin.js" />
   </ItemGroup>
 
