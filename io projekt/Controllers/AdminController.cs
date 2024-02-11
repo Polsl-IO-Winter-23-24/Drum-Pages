@@ -100,6 +100,59 @@ namespace io_projekt.Controllers
 		}
 
 
+
+		[HttpPost]
+		public IActionResult EditGear(string editAction, int gearId, string t_name_input)
+		{
+			if (editAction == "t_new")
+			{
+				Misc.AddGear(t_name_input);
+			}
+			else if(editAction =="t_name")
+			{
+				Misc.EditGear(gearId, t_name_input);
+			}
+			Console.WriteLine("Edytowanie sprzetu " + gearId + t_name_input + editAction);
+			//Misc.EditGear(gearId, t_name_input);
+
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+		[HttpPost]
+		public IActionResult DeleteGear(int id)
+		{
+			Console.WriteLine("kasowanie sprzetu " + id);
+			//Misc.RemoveGear(id);
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+
+
+		[HttpPost]
+		public IActionResult EditStyle(string editAction, int gearId, string t_name_input)
+		{
+			if (editAction == "t_new")
+			{
+				Misc.AddStyle(t_name_input);
+			}
+			else if (editAction == "t_name")
+			{
+				Misc.EditStyle(gearId, t_name_input);
+			}
+			Console.WriteLine("Edytowanie styla " + gearId + t_name_input + editAction);
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+		[HttpPost]
+		public IActionResult DeleteStyle(int id)
+		{
+			Console.WriteLine("kasowanie styla :) " + id);
+			Misc.RemoveStyle(id);
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+
+
 		[HttpPost]
 		public IActionResult EditUser([FromForm] int userId,
 				[FromForm] string editAction,
@@ -161,6 +214,58 @@ namespace io_projekt.Controllers
 			return RedirectToAction("AdminPanel", "Home");
 		}
 
+		[HttpPost]
+		public IActionResult EditEvent([FromForm] int eventId,
+				[FromForm] string editActionEvent,
+				[FromForm] string event_name_input,
+				[FromForm] string event_date_input,
+				[FromForm] string event_desc_input,
+				[FromForm] string event_place_input)
+		{
+			Console.WriteLine("EDYCJA Eventu: id:" +eventId +" akcja: "+ editActionEvent + "wynik: " + event_place_input);
+
+
+			switch (editActionEvent)
+			{
+				case "t_name":
+					if (!string.IsNullOrEmpty(event_name_input))
+					{
+						Event.EditEvent(eventId,"nazwa",event_name_input);
+					}
+					break;
+				case "t_date":
+					if (!string.IsNullOrEmpty(event_date_input))
+					{
+						Event.EditEvent(eventId, "data", event_date_input);
+					}
+					break;
+				case "t_description":
+					if (!string.IsNullOrEmpty(event_desc_input))
+					{
+						Event.EditEvent(eventId, "opis", event_desc_input);
+					}
+					break;
+				case "t_place":
+					if (!string.IsNullOrEmpty(event_place_input))
+					{
+						Event.EditEvent(eventId, "lokalizacja", event_place_input);
+					}
+					break;
+
+			}
+			return RedirectToAction("AdminPanel", "Home");
+		}
+
+
+		[HttpPost]
+		public IActionResult DeleteEvent(int id)
+		{
+			//USUWANIE WATKU 
+			Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-USUNIETO EVENT-=-=-=-=-=-=-=-=-=-=-=-=-=-" + id);
+			Event.RemoveEvent(id);
+
+			return RedirectToAction("AdminPanel", "Home");
+		}
 
 	}
 }
