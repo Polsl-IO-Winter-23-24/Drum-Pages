@@ -73,19 +73,13 @@
 
 
 					@* !!!!!WYLOGOWANIE SIE - TRZEBA POPRAWIC ZE WZGLEDU NA WYGLAD!!!!!  *@
-					<form method="post" asp-controller="Home" asp-action="LogOut">
-						<div class="nav-option logout" onclick="submitForm()">
+						<div class="nav-option logout" id="logoutBtn">
 							<img src="~/images/logout.png"
 								 class="nav-img"
 								 alt="logout">
 							<h3>Logout</h3>
 						</div>
-					</form>
-					<script>
-						function submitForm() {
-							document.forms[0].submit();
-						}
-					</script>
+
 				</div>
 			</nav>
 		</div>
@@ -357,8 +351,29 @@
 				var comPicker = document.getElementById('comIdSelect');
 				var delButton = document.getElementById('deletecombutton');
 				
-			
-			
+				var logoutButton = document.getElementById('logoutBtn');
+
+				logoutButton.addEventListener('click', function () {
+					fetch('/Home/LogOut', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body: '' // Dodaj tutaj ewentualne dane do przesłania
+					})
+						.then(response => {
+							if (response.ok) {
+								// Przekieruj do strony index po poprawnym wylogowaniu
+								window.location.href = '/Home/Index';
+							} else {
+								console.error('Błąd podczas wylogowywania');
+							}
+						})
+						.catch(error => console.error('Error:', error));
+				});
+
+
+
 				// Dodaj obs�ug� zdarzenia onchange dla select
 				comthreadIdSelect.addEventListener('change', function () {
 					// Pobierz warto�� wybran� w select
@@ -734,7 +749,7 @@
 		window.onload = function () {
 			var selectedTab = localStorage.getItem('selectedTab');
 			if (selectedTab) {
-				showusersscript(selectedTab);
+			showusersscript(selectedTab);
 			}
 		}
 	</script>
