@@ -1,6 +1,9 @@
+@model MainUser
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="~/css/main_style.css">
     <style>
         body {
             font-family: 'Lato', sans-serif;
@@ -16,11 +19,59 @@
             color: white;
         }
 
-
-        p1, p2 {
-            display: inline;
+        .edit-button {
+            margin-top: 20px;
+            text-align: center;
         }
 
+            .edit-button button {
+                background-color: #808080;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 12px;
+            }
+
+                .edit-button button:hover {
+                    background-color: #FFA500;
+                }
+
+        .confirm-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+            .confirm-button button {
+                background-color: #808080;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 12px;
+            }
+
+                .confirm-button button:hover {
+                    background-color: #FFA500;
+                }
+        
+        .hidden {
+            display: none;
+        }
+
+        .edit-inputs {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -30,63 +81,112 @@
                 <div>
                     <div>
                         <br>
+                        @{
+                            MainUser currentUser = Model;
+                            var userStyles = Misc.GetUserStyle(currentUser.getId());
+                            var userGears = Misc.GetUserGear(currentUser.getId());
+                            string styleString = "";
+                            string gearString = "";
+
+                            foreach (var style in userStyles)
+                            {
+                                styleString += style.NAME;
+                                styleString += ", ";
+                            }
+                            foreach (var gear in userGears)
+                            {
+                                gearString += gear.NAME;
+                                gearString += ", ";
+                            }
+                        }
                         <div>
-                            <h3>Test User</h3>
-                        </div>
-                        <div>
-                            <p><strong>User ID:</strong>321000001</p>
+                            <h3>User Profile</h3>
                         </div>
                         <div>
                             <h3><i></i>General Information</h3>
                         </div>
-                        <div>
+                        <div class="user-details">
                             <strong>
-                                <p1>Name:</p1>
-                                <p2 contenteditable="true">
-                                    Gregory
-                                </p2>
-                                <br>
-                                <br>
-                                <p1>Surname:</p1>
-                                <p2 contenteditable="true">
-                                    Brzêczyszczykiewicz
-                                </p2>
-                                <br>
-                                <br>
-                                <p1>Age:</p1>
-                                <p2 contenteditable="true">
-                                    24
-                                </p2>
-                                <br>
-                                <br>
-                                <p1> Advancement level:</p1>
-                                <p2 contenteditable="true">
-                                    3
-                                </p2>
-                                <br>
-                                <br>
-                                <p1>E-mail address:</p1>
-                                <p2 contenteditable="true">
-                                    gregory.brzêczyszczykiewicz@gmail.com
-                                </p2>
+                                <p>Name: <span class="name">@currentUser.getName()</span></p>
+                                <p>Surname: <span class="surname">@currentUser.getLastName()</span></p>
+                                <p>Age: <span class="age">@currentUser.getAge()</span></p>
+                                <p>Advancement level: <span class="skill">@currentUser.getSkills()</span></p>
+                                <p>Style: <span class="style">@styleString</span></p>
+                                <p>Gear: <span class="gear">@gearString</span></p>
+                                <p>E-mail address: <span class="email">@currentUser.getEmial()</span></p>
                             </strong>
                         </div>
                     </div>
-                    <div></div>
-                    <div>
-                        <div>
-                            <h3>Other Information</h3>
-                        </div>
-                        <div>
-                            <strong>
-                                <p>SS Officers hate my guts.</p>
-                            </strong>
-                            <br>
-                        </div>
+                    <div class="edit-button">
+
+                        <button id="editProfileButton">Edit Profile</button>
+                        <form method="post" action="@Url.Action("EditProfile", "Home")">
+                            <div class="edit-inputs hidden">
+                                <input type="text" name="name" class="name" value="@currentUser.getName()" /><br />
+                                <input type="text" name="surname" class="surname" value="@currentUser.getLastName()" /><br />
+                                <input type="text" name="age" class="age" value="@currentUser.getAge()" /><br />
+
+                                <label for="skill"><b>Skill level <br />(1 - beginner, 5 - advanced)</b></label><br>
+                                <select name="skill" id="skill" multiple>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <br />
+                                <label for="style"><b>Style</b></label><br>
+                                
+                                <select name="style" id="style" multiple>
+                                    @{
+                                        var styles = Misc.GetAllStyles();
+                                    }
+                                    @foreach(var style in styles)
+                                    {
+                                        <option value=@style.ID>@style.NAME</option>
+                                    }
+                                    <option value=RESET>Reset chosen styles</option>
+                                </select>
+                                <br />
+                                <label for="gear"><b>Gear</b></label><br>
+                                <select name="gear" id="gear" multiple>
+                                    @{
+                                        var gears = Misc.GetAllGear();
+                                    }
+                                    @foreach (var gear in gears)
+                                    {
+                                        <option value=@gear.ID>@gear.NAME</option>
+                                    }
+                                    <option value=RESET>Reset chosen gear</option>
+                                </select>
+                                <br />
+                                <input type="text" name="email" class="email" value="@currentUser.getEmial()" /><br />
+                                <input type="password" name="password" class="password" value="@currentUser.getPassword()" /><br />
+                            </div>
+                        
+                                <div class="confirm-button hidden">
+                                    <button type = "submit" id="confirmProfileChanges">Confirm changes</button>
+                                </div>
+                        </form>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var editButton = document.getElementById("editProfileButton");
+            var editInputs = document.querySelector(".edit-inputs");
+            var confirmButton = document.querySelector(".confirm-button");
+
+            editButton.addEventListener("click", function () {
+                editInputs.classList.toggle("hidden");
+                confirmButton.classList.toggle("hidden");
+            });
+        });
+    </script>
+
 </body>
 </html>

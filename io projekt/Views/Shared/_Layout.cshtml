@@ -52,12 +52,14 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </li>
+                    @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
+                    {
                     <li class="nav-item">
                         <a class="nav-link profile-button" href="@Url.Action("Profile", "Home", new { area = "" })">
                             <img src="~/images/user_icon.png" alt="Profile" />
                         </a>
                     </li>
-
+                    }
                 </ul>
                 
         </div>

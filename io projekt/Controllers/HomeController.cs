@@ -8,6 +8,7 @@ using System.Threading;
 using System.Data.SqlClient;
 using Thread = io_projekt.Models.Thread;
 using Microsoft.Extensions.Hosting;
+using System.Text.RegularExpressions;
 
 namespace io_projekt.Controllers
 {
@@ -95,7 +96,63 @@ namespace io_projekt.Controllers
         }
 
         public IActionResult Profile() {
-            return View();
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            (MainUser user, string msg) = MainUser.GetUserById(currentUserID);
+
+
+            return View(user);
+        }
+        [HttpPost]
+        public IActionResult EditProfile(string name, string surname, string email, int age,  int skill, string password, string style, string gear) {
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            (MainUser user, string msg) = MainUser.GetUserById(currentUserID);
+            if (style == "RESET") {
+                foreach (var userStyle in Misc.GetUserStyle(currentUserID)) {
+                    Misc.RemoveUserStyle(currentUserID, userStyle.ID);
+                }
+            }
+            else {
+                var addStyleResult = Misc.AddUserStyle(currentUserID, Int32.Parse(style));
+            }
+
+            if (gear == "RESET") {
+                foreach (var userGear in Misc.GetUserGear(currentUserID))
+                {
+                    Misc.RemoveUserGear(currentUserID, userGear.ID);
+                }
+            }
+            else {
+                var addGearResult = Misc.AddUserGear(currentUserID, Int32.Parse(gear));
+            }
+            
+
+            if (user.getName() != name)
+            {
+                MainUser.EditAccount(currentUserID, "imie", name);
+            }
+            if (user.getLastName() != surname)
+            {
+                MainUser.EditAccount(currentUserID, "nazwisko", surname);
+            }
+            if (user.getEmial() != email) 
+            {
+                MainUser.EditAccount(currentUserID, "email", email);
+            }
+            if (user.getAge() != age)
+            {
+                MainUser.EditAccount(currentUserID, "wiek", age.ToString());
+            }
+            if (user.getSkills() != skill)
+            {
+                MainUser.EditAccount(currentUserID, "umiejetnosci", skill.ToString());
+            }
+            if (user.getPassword() != password)
+            {
+                MainUser.EditAccount(currentUserID, "haslo", password);
+            }
+
+            
+            return RedirectToAction("Profile", user);
         }
 
         public IActionResult Course(int courseID)
