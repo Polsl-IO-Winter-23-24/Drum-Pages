@@ -63,7 +63,7 @@
 
 
 
-
+					@* PRZYCSIK LEKCJE *@
 					<div class="nav-option option5">
 						<img src="~/images/profile.png"
 							 class="nav-img"
@@ -71,6 +71,35 @@
 						<h3>Lessons</h3>
 					</div>
 
+					@* PRZYCISK SPRZETY *@
+					<form>
+						<div class="nav-option option6" onclick="showusersscript('gearbutton')">
+							<img src="~/images/report.png"
+								 class="nav-img"
+								 alt="gear">
+							<h3>Gear</h3>
+						</div>
+					</form>
+
+					@* PRZYCISK STYLE *@
+					<form>
+						<div class="nav-option option7" onclick="showusersscript('stylebutton')">
+							<img src="~/images/report.png"
+								 class="nav-img"
+								 alt="styles">
+							<h3>Styles</h3>
+						</div>
+					</form>
+
+					@* PRZYCISK EVENTY *@
+					<form>
+						<div class="nav-option option8" onclick="showusersscript('eventbutton')">
+							<img src="~/images/report.png"
+								 class="nav-img"
+								 alt="styles">
+							<h3>Events</h3>
+						</div>
+					</form>
 
 					@* !!!!!WYLOGOWANIE SIE - TRZEBA POPRAWIC ZE WZGLEDU NA WYGLAD!!!!!  *@
 						<div class="nav-option logout" id="logoutBtn">
@@ -164,7 +193,7 @@
 				</div>
 
 				<div id="t_name_input_div">
-					<label for="t_name_input">New Name:</label>
+					<label for="t_name_inputt">New Name:</label>
 					<input type="text" id="t_name_input" name="t_name_input">
 				</div>
 
@@ -195,17 +224,20 @@
 						userIdInputDiv.style.display = "block";
 					}
 				}
+
+
+
 			</script>
 
 			<div class="report-container row">
 				<div class="col-12">
 					<div class="report-header">
-						<h1 class="recent-Posts">Recent Posts</h1>
-						<button class="view">View All</button>
+						<h1 class="recent-Posts">Posts</h1>
 					</div>
 
 					<div class="report-body">
 						<div class="report-topic-heading row">
+							<h3 class="t-op col-3">Id</h3>
 							<h3 class="t-op col-3">Thread</h3>
 							<h3 class="t-op col-3">Comments</h3>
 							<h3 class="t-op col-3">Author</h3>
@@ -218,6 +250,7 @@
 							@foreach (var i in Thread.GetAllThreads())
 							{
 								<div class="item1 row">
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getID()</h3>
 									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
 									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
 									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
@@ -287,7 +320,7 @@
 				</div>
 
 			</div>
-			@* DO ZROBIENIA DYNAMICZNIE WYSWIETLANIE KOMENTARZY W ZALEZNOSCI OD WYBRANEGO WATKU *@
+
 			<form method="post" asp-controller="Admin" asp-action="DeleteComment">
 				<div>
 					<label for="comthreadId">Thread Id:</label>
@@ -317,8 +350,7 @@
 			<div class="report-container row">
 				<div class="col-12">
 					<div class="report-header">
-						<h1 class="recent-Posts">Recent Posts</h1>
-						<button class="view">View All</button>
+						<h1 class="recent-Posts">Comments</h1>
 					</div>
 
 					<div class="report-body">
@@ -596,7 +628,6 @@
 				<div class="col-12">
 					<div class="report-header">
 						<h1 class="recent-Posts">Users List</h1>
-						<button class="view">View All</button>
 					</div>
 
 			
@@ -678,7 +709,6 @@
 				<div class="col-12">
 					<div class="report-header">
 						<h1 class="recent-Posts">Requests for change the status </h1>
-						<button class="view">View All</button>
 					</div>
 
 					<div class="report-body">
@@ -709,6 +739,469 @@
 				</div>
 			</div>
 		</div>
+
+		@* ZAKLADKA SPRZETY *@
+		<div class="col-8" id="gearv">
+
+			<div class="row">
+				<div class="row">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">@Misc.GetAllGear().Count()</span>
+							<span class="topic">Gears</span>
+						</div>
+
+						<img src="~/images/eye.png"
+							 alt="Views">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">PUSTE</span>
+							<span class="topic">PUSTE</span>
+						</div>
+
+						<img src="~/images/like.png"
+							 alt="likes">
+					</div>
+				</div><div class="row boxRow">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">PUSTE</span>
+							<span class="topic">PUSTE</span>
+						</div>
+
+						<img src="~/images/chat.png"
+							 alt="comments">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">PUSTE</span>
+							<span class="topic">PUSTE</span>
+						</div>
+
+						<img src="~/images/Ok.png" alt="published">
+					</div>
+
+					<div class="col-1"></div>
+				</div>
+
+			</div>
+
+			<form method="post" asp-controller="Admin" asp-action="EditGear">
+				@* WYBOR AKCJI *@
+				<div>
+					<label for="editAction">Action:</label>
+					<select name="editAction" id="editActionSelectorr" onchange="toggleInputFieldss()">
+						<option value="t_name">Rename</option>
+						<option value="t_new">Add New</option>						
+					</select>
+				</div>
+				
+				@* WYBOR ID *@
+				<div id="selectiddiv">
+					<label for="threadId">Gear Id:</label>
+					<select name="gearId" id="selectedId">
+						@foreach (var i in Misc.GetAllGear())
+						{
+							<option value="@i.ID">
+								@i.ID
+							</option>
+						}
+					</select>
+					
+				</div>
+
+				@* WPISANIE NAZYWY *@
+				<div id="t_name_input_div">
+					<label for="t_name_input">New Value:</label>
+					<input type="text" id="t_name_input" name="t_name_input">
+				</div>
+				<button type="submit" id="gearsubbmit">Submit</button>
+			</form>
+
+			<script>
+				function toggleInputFieldss() {
+					//AKCAJA
+					var editActionSelector = document.getElementById("editActionSelectorr");
+					//ID
+					var IdInputDiv = document.getElementById("selectiddiv");
+
+					var tNameInput = document.getElementById("t_name_input_div");
+					
+					var labelElement = document.querySelector('label[for="t_name_inputt"]');
+					var submitButton = document.getElementById('gearsubbmit');
+
+					if (editActionSelector.value === "t_name") {
+						IdInputDiv.style.display = 'block';
+						submitButton.textContent = 'Subbmit';
+
+					} else if (editActionSelector.value === "t_new") {
+						IdInputDiv.style.display = "none";
+						submitButton.textContent = 'Add New Gear';
+					}
+				}				
+			</script>
+
+			<div class="report-container row">
+				<div class="col-12">
+					<div class="report-header">
+						<h1 class="recent-Posts">Gear List</h1>					
+					</div>
+
+					<div class="report-body">
+						<div class="report-topic-heading row">
+							<h3 class="t-op col-3">Id</h3>
+							<h3 class="t-op col-3">Name</h3>
+							<h3 class="t-op col-3">Action</h3>
+						</div>
+
+						<div class="items">
+							@* tu petla wyswietlacjaca te posty  *@
+							@foreach (var i in Misc.GetAllGear())
+							{
+								<div class="item1 row">
+									<h3 class="t-op-nextlvl col-3 col-3">@i.ID</h3>
+									<h3 class="t-op-nextlvl col-3">@i.NAME</h3>
+									<form method="post" asp-controller="Admin" asp-action="DeleteGear" asp-route-id="@i.ID">
+										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
+									</form>
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		@* ZAKLADKA STYLE *@
+		<div class="col-8" id="stylev">
+
+			<div class="row">
+				<div class="row">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">@Misc.GetAllStyles().Count()</span>
+							<span class="topic">Styles</span>
+						</div>
+
+						<img src="~/images/eye.png"
+							 alt="Views">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">WYwalic</span>
+							<span class="topic">Likes</span>
+						</div>
+
+						<img src="~/images/like.png"
+							 alt="likes">
+					</div>
+				</div><div class="row boxRow">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">wywalic</span>
+							<span class="topic">Comments</span>
+						</div>
+
+						<img src="~/images/chat.png"
+							 alt="comments">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">wywalic</span>
+							<span class="topic">Threads Published</span>
+						</div>
+
+						<img src="~/images/Ok.png" alt="published">
+					</div>
+
+					<div class="col-1"></div>
+				</div>
+
+			</div>
+
+			<form method="post" asp-controller="Admin" asp-action="EditStyle">
+				@* WYBOR AKCJI *@
+				<div>
+					<label for="editAction">Action:</label>
+					<select name="editAction" id="editActionSelectorrr" onchange="toggleInputFieldsss()">
+						<option value="t_name">Rename</option>
+						<option value="t_new">Add New</option>
+					</select>
+				</div>
+
+				@* WYBOR ID *@
+				<div id="selectiddivv">
+					<label for="threadId">Style Id:</label>
+					<select name="gearId" id="selectedId">
+						@foreach (var i in Misc.GetAllStyles())
+						{
+							<option value="@i.ID">
+								@i.ID
+							</option>
+						}
+					</select>
+
+				</div>
+
+				@* WPISANIE NAZYWY *@
+				<div id="t_name_input_divv">
+					<label for="t_name_input">New Value:</label>
+					<input type="text" id="t_name_input" name="t_name_input">
+				</div>
+				<button type="submit" id="stylesubbmit">Submit</button>
+			</form>
+
+			<script>
+				function toggleInputFieldsss() {
+					//AKCAJA
+					var editActionSelector = document.getElementById("editActionSelectorrr");
+					//ID
+					var IdInputDiv = document.getElementById("selectiddivv");
+
+					var tNameInput = document.getElementById("t_name_input_divv");
+
+					var labelElement = document.querySelector('label[for="t_name_inputt"]');
+					var submitButton = document.getElementById('stylesubbmit');
+
+					if (editActionSelector.value === "t_name") {
+						IdInputDiv.style.display = 'block';
+						submitButton.textContent = 'Subbmit';
+
+					} else if (editActionSelector.value === "t_new") {
+						IdInputDiv.style.display = "none";
+						submitButton.textContent = 'Add New Style';
+					}
+				}
+			</script>
+
+			<div class="report-container row">
+				<div class="col-12">
+					<div class="report-header">
+						<h1 class="recent-Posts">Styles</h1>
+					</div>
+
+					<div class="report-body">
+						<div class="report-topic-heading row">
+							<h3 class="t-op col-3">Id</h3>
+							<h3 class="t-op col-3">Name</h3>
+							<h3 class="t-op col-3">Action</h3>
+						</div>
+
+						<div class="items">
+							@* tu petla wyswietlacjaca te posty  *@
+							@foreach (var i in Misc.GetAllStyles())
+							{
+								<div class="item1 row">
+								<h3 class="t-op-nextlvl col-3 col-3">@i.ID</h3>
+								<h3 class="t-op-nextlvl col-3">@i.NAME</h3>
+								<form method="post" asp-controller="Admin" asp-action="DeleteStyle" asp-route-id="@i.ID">
+									<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
+								</form>
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		@* ZAKLADKA EVENTY *@
+
+		<div class="col-8" id="eventv" style="display: none;">
+			<div class="row">
+				<div class="row">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">@Event.GetAllEvents().Count()</span>
+							<span class="topic">Events</span>
+						</div>
+
+						<img src="~/images/eye.png"
+							 alt="Views">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">PUSTE</span>
+							<span class="topic">PUSTE</span>
+						</div>
+
+						<img src="~/images/like.png"
+							 alt="likes">
+					</div>
+				</div><div class="row boxRow">
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">PUSTE</span>
+							<span class="topic">PUSTE</span>
+						</div>
+
+						<img src="~/images/chat.png"
+							 alt="comments">
+					</div>
+
+					<div class="col-2"></div>
+
+					<div class="box col-5">
+						<div class="text">
+							<span class="topic-heading">PUSTE</span>
+							<span class="topic">PUSTE</span>
+						</div>
+
+						<img src="~/images/Ok.png" alt="published">
+					</div>
+
+					<div class="col-1"></div>
+				</div>
+
+			</div>
+
+			<form method="post" asp-controller="Admin" asp-action="EditEvent">
+				<div>
+					<label for="eventId">Event Id:</label>
+					<select name="eventId">
+						@foreach (var i in Event.GetAllEvents())
+						{
+							<option value="@i.getId()" title="@i.getId()">
+								@i.getId()
+							</option>
+						}
+					</select>
+					<button type="submit" onclick="showusersscript('eventbutton')">Submit</button>
+				</div>
+
+
+				<div>
+					<label for="editActionEvent">Change:</label>
+					<select name="editActionEvent" id="eventEditActionSelector" onchange="toggleEventInputFields()">
+						<option value="t_name">Name</option>
+						<option value="t_date">Date</option>
+						<option value="t_description">Description</option>
+						<option value="t_place">Place</option>
+					</select>
+				</div>
+
+				<div id="event_name_input_div">
+					<label for="event_name_input">New Name:</label>
+					<input type="text" id="event_name_input" name="event_name_input">
+				</div>
+
+				<div id="event_date_input_div" style="display:none;">
+					<label for="event_date_input">New Date:</label>
+					<input type="date" id="event_date_input" name="event_date_input">
+				</div>
+
+				<div id="event_desc_input_div" style="display:none;">
+					<label for="event_desc_input">New Description:</label>
+					<input type="text" id="event_desc_input" name="event_desc_input">
+				</div>
+
+				<div id="event_place_input_div" style="display:none;">
+					<label for="event_place_input">New Place:</label>
+					<input type="text" id="event_place_input" name="event_place_input">
+				</div>
+			</form>
+
+
+			<script>
+				function toggleEventInputFields() {
+					var e_name = document.getElementById('event_name_input_div');
+					var e_date = document.getElementById('event_date_input_div');
+					var e_desc = document.getElementById('event_desc_input_div');
+					var e_place = document.getElementById('event_place_input_div');
+
+					e_name.style.display = "none";
+					e_date.style.display = "none";
+					e_desc.style.display = "none";
+					e_place.style.display = "none";
+
+
+					if (eventEditActionSelector.value === "t_name") {
+						console.log('nazwa');
+						e_name.style.display = "block";
+
+
+					} else if (eventEditActionSelector.value === "t_date") {
+						console.log('data');
+						e_date.style.display = "block";
+
+					}
+					else if (eventEditActionSelector.value === "t_description") {
+						console.log('desc');
+						e_desc.style.display = "block";
+
+					}
+					else if (eventEditActionSelector.value === "t_place") {
+						console.log('place');
+						e_place.style.display = "block";
+
+					}
+					
+				}
+			</script>
+
+			<div class="report-container row">
+				<div class="col-12">
+					<div class="report-header">
+						<h1 class="recent-Posts">Events List</h1>
+					</div>
+
+
+
+					<div class="report-body">
+						<form>
+							<div class="report-topic-heading row">
+								<h3 class="t-op col-3">Id</h3>
+								<h3 class="t-op col-3">Organizator Id</h3>
+								<h3 class="t-op col-3">Name</h3>
+								<h3 class="t-op col-3">Date</h3>
+								<h3 class="t-op col-3">Description</h3>
+								<h3 class="t-op col-3">Place</h3>
+								<h3 class="t-op col-3">Action</h3>
+							</div>
+						</form>
+
+						<div class="items" id="userList">
+							@* tu petla wyswietlacjaca te posty  *@
+							@foreach (var i in Event.GetAllEvents())
+							{
+								<div class="item1 row">
+									<h3 class="t-op-nextlvl col-3 col-3">@i.getId()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getOrganizorId()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getName()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getDescription()</h3>
+									<h3 class="t-op-nextlvl col-3">@i.getPlace()</h3>
+									<form method="post" asp-controller="Admin" asp-action="DeleteEvent" asp-route-id="@i.getId()">
+										<button type="submit" class="t-op-nextlvl col-3 label-tag" onclick="showusersscript('eventbutton')">Delete</button>
+									</form>
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script>
@@ -717,33 +1210,74 @@
 			var usrView = document.getElementById('usr');
 			var reqView = document.getElementById('requestUser');
 			var comView = document.getElementById('commentv');
-			
+			var gearView = document.getElementById('gearv');
+			var styleView = document.getElementById('stylev');
+			var eventView = document.getElementById('eventv');
+
+			//Jak umiesz na petli to popraw :)
 			  if (buttonId === 'forum') {
 				usrView.style.display = "none";
 				forumView.style.display = "block";
 				reqView.style.display = "none";
 				comView.style.display = "none";
+				gearView.style.display = "none";
+				styleView.style.display = "none";
+				eventView.style.display = "none";
 			  }else if (buttonId === 'user')
 			  {
 				forumView.style.display = "none";
 			  	usrView.style.display = "block";
 				reqView.style.display = "none";
 				comView.style.display = "none";
+				gearView.style.display = "none";
+				styleView.style.display = "none";
+				eventView.style.display = "none";
 			  }
 			else if (buttonId === 'requestbutton') {
 				forumView.style.display = "none";
 				usrView.style.display = "none";
 				reqView.style.display = "block";
 				comView.style.display = "none";
+				gearView.style.display = "none";
+				styleView.style.display = "none";
+				eventView.style.display = "none";
 			}
 			else if (buttonId === 'comm') {
 				forumView.style.display = "none";
 				usrView.style.display = "none";
 				reqView.style.display = "none";
 				comView.style.display = "block";
+				gearView.style.display = "none";
+				styleView.style.display = "none";
+				eventView.style.display = "none";
 			}
-
-
+			else if (buttonId === 'gearbutton') {
+				forumView.style.display = "none";
+				usrView.style.display = "none";
+				reqView.style.display = "none";
+				comView.style.display = "none";
+				gearView.style.display = "block"; 
+				styleView.style.display = "none";
+				eventView.style.display = "none";
+			}
+			else if (buttonId === 'stylebutton') {
+				forumView.style.display = "none";
+				usrView.style.display = "none";
+				reqView.style.display = "none";
+				comView.style.display = "none";
+				gearView.style.display = "none";
+				styleView.style.display = "block";
+				eventView.style.display = "none";
+			}
+			else if (buttonId === 'eventbutton') {
+				forumView.style.display = "none";
+				usrView.style.display = "none";
+				reqView.style.display = "none";
+				comView.style.display = "none";
+				gearView.style.display = "none";
+				styleView.style.display = "none";
+				eventView.style.display = "block";
+			}
 			localStorage.setItem('selectedTab', buttonId);
 	}
 		window.onload = function () {
