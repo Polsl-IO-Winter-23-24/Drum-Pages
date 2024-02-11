@@ -112,7 +112,10 @@ namespace io_projekt.Controllers
                 }
             }
             else {
-                var addStyleResult = Misc.AddUserStyle(currentUserID, Int32.Parse(style));
+                if (style != null) {
+                    var addStyleResult = Misc.AddUserStyle(currentUserID, Int32.Parse(style));
+                }
+                
             }
 
             if (gear == "RESET") {
@@ -122,7 +125,9 @@ namespace io_projekt.Controllers
                 }
             }
             else {
-                var addGearResult = Misc.AddUserGear(currentUserID, Int32.Parse(gear));
+                if (gear != null) {
+                    var addGearResult = Misc.AddUserGear(currentUserID, Int32.Parse(gear));
+                }
             }
             
 
