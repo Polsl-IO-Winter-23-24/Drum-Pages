@@ -24,6 +24,8 @@ namespace io_projekt.Controllers
             _session = httpContextAccessor.HttpContext.Session;
         }
 
+
+
         public IActionResult Index()
         {
 
@@ -33,6 +35,7 @@ namespace io_projekt.Controllers
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.UserName = MainUser.GetUserById(currentUserID).user.getName();
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
             }
             return View();
         }
@@ -45,6 +48,7 @@ namespace io_projekt.Controllers
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
             }
             // Retrieve entries for the specified threadId from your data source
             List<Thread> threads = Thread.GetAllThreads();
@@ -77,6 +81,7 @@ namespace io_projekt.Controllers
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
             }
             return View();
         }
@@ -339,6 +344,7 @@ namespace io_projekt.Controllers
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 Console.WriteLine(whoIsLogged);
                 ViewBag.IsLoggedIn = whoIsLogged;
+                ViewBag.CurrentUserID = currentUserID;
                 // ViewBag.IsLoggedIn = true;
                 Console.WriteLine("ZALOGOWANO");
                 
@@ -399,6 +405,41 @@ namespace io_projekt.Controllers
 
             (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
             return RedirectToAction("Forum");
+        }
+
+        [HttpPost]
+        public IActionResult AddImage(IFormFile fileInput)
+        {        
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            if (fileInput != null && fileInput.Length > 0)
+            {
+                try
+                {
+                    string uploadPath = "wwwroot\\images";
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + fileInput.FileName;
+
+                    string filePath = Path.Combine(uploadPath, uniqueFileName);
+                    Console.WriteLine("up: " + uploadPath + " uni: " + uniqueFileName + " file path: " + filePath);
+                    Console.WriteLine(MainUser.EditAccount(currentUserID, "image", "/images/" + uniqueFileName).message);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        fileInput.CopyTo(fileStream);
+                       
+
+                    }                 
+                    return Json(new { success = true, message = "Image uploaded successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Error uploading image: " + ex.Message });
+                }
+            
+            
+            }
+            else
+            {
+                return Json(new { success = false, message = "No image selected for upload" });
+            }
         }
 
 

@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="Views\Nowy folder\**" />
+    <Compile Remove="wwwroot\user_icon\**" />
     <Content Remove="Views\Nowy folder\**" />
+    <Content Remove="wwwroot\user_icon\**" />
     <EmbeddedResource Remove="Views\Nowy folder\**" />
+    <EmbeddedResource Remove="wwwroot\user_icon\**" />
     <None Remove="Views\Nowy folder\**" />
+    <None Remove="wwwroot\user_icon\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Nowy folder\" />
   </ItemGroup>
 
 </Project>

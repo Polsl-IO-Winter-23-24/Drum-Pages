@@ -56,7 +56,8 @@
                     {
                     <li class="nav-item">
                         <a class="nav-link profile-button" href="@Url.Action("Profile", "Home", new { area = "" })">
-                            <img src="~/images/user_icon.png" alt="Profile" />
+                                <img src=@MainUser.GetUserById((int)ViewBag.CurrentUserID).user.getImage() alt="Profile" />
+                           @* <img src="~/images/user_icon.png" alt="Profile" /> *@
                         </a>
                     </li>
                     }
