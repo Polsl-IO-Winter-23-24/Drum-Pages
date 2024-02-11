@@ -401,9 +401,9 @@ namespace io_projekt.Controllers
 			Console.WriteLine("=+=+=++=+=+=++=+=+=+WYLOGOWANIE=+=+=++=+=+=++=+=+=+");
 			currentUserID = 0;
             _session.SetInt32("currentUserID", currentUserID);
-            
-            return RedirectToAction("Index");
-        }
+
+			return RedirectToAction("Index");
+		}
 
 
         [HttpPost]

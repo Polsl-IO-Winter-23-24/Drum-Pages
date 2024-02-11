@@ -4,35 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/main_style.css">
-    <script type="text/javascript">
-            function hideLogoutButton() {
-            document.getElementById("logoutBtn").style.display = "none";
-            document.getElementById("loginBtn").style.display = "block";
-            document.getElementById("registerBtn").style.display = "block";
-            }
-
-            function hideLoginRegisterButtons() {
-            document.getElementById("logoutBtn").style.display = "none";
-            document.getElementById("loginBtn").style.display = "none";
-            document.getElementById("registerBtn").style.display = "none";
-            }
-        </script>
 </head>
 <body>
-    @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
+   @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
     {
-        <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome! @ViewBag.UserName</span></span></div>
-        Console.WriteLine("UKRYJ REJESTRACJE");
-        Console.WriteLine("POKAZ WYLOGUJ");
-        @* TUTAJ DODAĆ UKRYWANIE PRZYCISKU REJESTRADCJI!!! *@       
+        <div class="header">
+            <span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome back! @ViewBag.UserName</span></span>
+            </div>  
     }
     else
     {
         <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome!</span></span></div>
-        Console.WriteLine("POKAZ REJESTRACJE");
-        Console.WriteLine("UKRYJ WYLOGUJ");
-        @* TUTAJ DODAĆ WYSWIETLANIE PRZYCISKU REJESTRADCJI!!! *@
     }
+
     <div class="row content welcome_content">
 
 
@@ -62,26 +46,24 @@
             
             <!-- Button to open the modal login form -->
             <br><br>
-            <button id="loginBtn" onclick="document.getElementById('id_1').style.display='block'">LOG IN</button><br><br>
-            <button id="registerBtn" onclick="document.getElementById('id_2').style.display='block'">REGISTER</button>
-            @* !!!PRZYCISK WYLOGOWANIA - DODAĆ UKRYWANIE/ POKAZYWANIE JAK WYZEJ ZAZNACZONO- TERAZ POKAZYWANY JEST CIAGLE -  *@ 
-            @* !!!TUTAJ TYLKO JAK GO OBSLUGIWAC *@
 
-
-
-            @using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
+            @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
             {
-                <div id="id_3" style.display='none'>
-                    <script type="text/javascript">
-                    function hide2(){
-                        document.getElementById("id_1").style.display = "block";
-                        document.getElementById("id_2").style.display = "block";
-                        document.getElementById("id_3").style.display = "none";
-                    }
-                    </script>
-                    <button id="logoutBtn" onclick="hideLoginRegisterButtons()">Log Out</button>
-                </div>
-                
+                //JEST ZALOGOWANY
+                Console.WriteLine("UKRYJ REJESTRACJE");
+                Console.WriteLine("POKAZ WYLOGUJ");
+                @using (Html.BeginForm("LogOut", "Home", FormMethod.Post))
+                {               
+                        <button id="logoutBtn" onclick="hideLoginRegisterButtons()">Log Out</button>
+                }             
+            }
+            else
+            {
+                //NIE JEST ZALOGOWANY
+                Console.WriteLine("POKAZ REJESTRACJE");
+                Console.WriteLine("UKRYJ WYLOGUJ");
+                <button id="loginBtn" onclick="document.getElementById('id_1').style.display='block'">LOG IN</button><br><br>
+                <button id="registerBtn" onclick="document.getElementById('id_2').style.display='block'">REGISTER</button>
             }
         </div>
         <div class="col-2"></div>
@@ -150,7 +132,6 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            // Obsłuż odpowiedź po stronie klienta
                             if (data.mess){
                                 alert(data.mess);
                             }            
@@ -195,7 +176,6 @@
                         })
                         .catch(error => console.error('Error:', error));
                 });
-
             </script>
 
             <div class="col-2"></div>
