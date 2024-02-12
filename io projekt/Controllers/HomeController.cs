@@ -101,6 +101,7 @@ namespace io_projekt.Controllers
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
                 ViewBag.IsLoggedIn = whoIsLogged;
                 ViewBag.UserID = currentUserID;
+                ViewBag.CurrentUserID = currentUserID;
             }
             return View();
 

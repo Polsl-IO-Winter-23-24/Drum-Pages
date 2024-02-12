@@ -104,6 +104,10 @@
                             }
                         }
                         <div>
+                            @if (!Misc.hasAllSet(currentUser.getId()))
+                            {
+                                <h3>Warning: No Gear or Style has been set</h3>
+                            }
                             <h3>User Profile</h3>
                         </div>
                         <div>

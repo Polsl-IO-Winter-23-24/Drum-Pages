@@ -70,6 +70,20 @@ namespace io_projekt.Models
             }
         }
 
+        public static bool hasAllSet(int id)
+        {
+            int gCount = GetUserGear(id).Count();
+            int sCount = GetUserStyle(id).Count();
+            if (gCount > 0 && sCount > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static List<Style> GetAllStyles()
         {
             List<Style> styleList = new List<Style>();

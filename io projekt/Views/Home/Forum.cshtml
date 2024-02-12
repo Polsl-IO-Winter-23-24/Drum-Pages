@@ -50,7 +50,8 @@
                                 (String msg2, bool boolean, int positiveRatings, int negativeRatings) = Thread.GetThreadRatings(threadData.Item1.getID());
 
                                 <div class="post">
-                                    <div class="post__avatar"></div>
+                                                                     @* ZDJECIE AUTORA WPISU!!!!!!!!!!!!!!  *@
+                                    <div class="post__avatar"><img src=@user.getImage() alt="Avatar" class="post__avatar"></div>
                                     <h3 class="post__author">
                                         @(user != null ? user.getName() : "Account Deleted")
                                     </h3>
@@ -112,6 +113,8 @@
                                                     <div class="comment">
                                                         <div class="comment__avatar"></div>
                                                         <h3 class="comment__author">
+                                                                         @* ZDJECIE KOMENTUJACYCH!!!!!!!!!!!!!!  *@
+                                                            <img src=@(user2 != null ? user2.getImage() : "/images/default.png") alt="Avatar" class="comment-form__avatar">
                                                             @(user2 != null ? user2.getName() : "Account Deleted")
                                                         </h3>
                                                         <h4 class="comment__timestamp">
