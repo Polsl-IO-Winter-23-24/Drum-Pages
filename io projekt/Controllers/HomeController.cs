@@ -388,10 +388,31 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult Register(string name, string surname, string email, string regname, string regpass, int age, string accountType, int skill)
         {
-       
-            MainUser.AddNewUser(regname, regpass, name, surname, age, accountType, skill, email);
-            //odrazu go zaloguj 
-            Login(regname, regpass,false);
+       if(MainUser.ValidateLogin(regname) && MainUser.ValidatePassword(regpass))
+            {
+                MainUser.AddNewUser(regname, regpass, name, surname, age, accountType, skill, email);
+                //odrazu go zaloguj 
+                Login(regname, regpass, false);
+            }
+            return RedirectToAction("Index"); // Przekierowanie po zarejestrowaniu
+        }
+
+        [HttpPost]
+        public IActionResult CheckLogin(string regname)
+        {
+            Console.WriteLine("METODA CHECK LOGIN " + regname);
+            bool isAvailable = false;
+            if (!string.IsNullOrEmpty(regname))
+            {
+                isAvailable = (MainUser.ValidateLogin(regname));
+                
+            }
+            else {
+                isAvailable = false;
+            }
+            Console.WriteLine(isAvailable); 
+            return Json(new { IsAvailable = isAvailable });
+
             return RedirectToAction("Index"); // Przekierowanie po zarejestrowaniu
         }
 

@@ -551,7 +551,7 @@ namespace io_projekt.Models
         //Czy haslo jest poprawne - regex
         public static bool ValidatePassword(string password)
         {
-            if (password.Length >= 3 && password.Length <= 50)
+            if (password.Length >= 5 && password.Length <= 50 && password.Any(char.IsDigit) && password.Any(c => !char.IsLetterOrDigit(c)))
             {
                 Console.WriteLine("HASLO OK");
                 return true;

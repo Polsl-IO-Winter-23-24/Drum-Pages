@@ -219,12 +219,86 @@
                         <label for="regname"><b>Login</b></label><br>
                         <input type="text" placeholder="Podaj login" name="regname" id="regname" required><br><br>
                         <label for="regpass"><b>Hasło</b></label><br>
-                        <input type="password" placeholder="Podaj hasło" name="regpass" id="regpass" required><br><br><br>
-                        <button type="submit" class="cancelbtn formBtn">Register</button>
+                        <input type="password" placeholder="Podaj hasło" name="regpass" id="regpass" required oninput="check()"><br><br><br>
+                        <button type="submit" class="cancelbtn formBtn" id="regbtn">Register</button>
+                    </div>
+                    @* WALIDACJA HASLA *@
+                    <div>
+                        <div id="logincheck"><span></span> </div>
+                        <div id="passVal"> <span>Wymagania hasla</span> </div>
+                        <div id="check0">  <span>Length more than 5</span> </div>
+                        <div id="check1">  <span>Contains numerical character</span> </div>
+                        <div id="check2">  <span>Contains special character</span> </div>
                     </div>
                 </div>
             </div>
             <div class="col-2"></div>
+            <script>
+                function check(){
+                var passInput = document.getElementById('regpass').value;
+                var passLength = passInput.length;
+                var button = document.getElementById('regbtn');
+                var ch0 = document.getElementById('check0');
+                var ch1 = document.getElementById('check1');
+                var ch2 = document.getElementById('check2');
+       
+                    if (passLength >= 5) {
+                        ch0.style.color = "green";
+                        
+                    }
+                    else {
+                        ch0.style.color = "red";
+                    }
+
+                    if (passInput.match(/[0-9]/i)) {
+                        ch1.style.color = "green";
+                    }
+                    else {
+                        ch1.style.color = "red";
+                    }
+
+                    if (passInput.match(/[^A-Za-z0-9-'']/i)) {
+                        ch2.style.color = "green";
+                    }
+                    else {
+                        ch2.style.color = "red";
+                    }
+
+                    if (passLength >= 5 && passInput.match(/[0-9]/i) && passInput.match(/[^A-Za-z0-9-'']/i)) {
+                        button.disabled = false;
+                        button.style.color = "green";
+                    } else {
+                        button.disabled = true;
+                        button.style.color = "red";
+                    }
+                }
+            </script>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+                $(document).ready(function () {
+                    $("#regname").on("input", function () {
+                        var regname = $(this).val();
+
+                        $.ajax({
+                            url: "/Home/CheckLogin",
+                            method: "POST",
+                            data: { regname: regname },
+                            success: function (response) {
+                                console.log(response);
+                                if (response.isAvailable === true || response.IsAvailable === "true") {
+                                    document.getElementById("logincheck").innerHTML = '<span></span>'
+                                    $("#regbtn").prop("disabled", false).css("background-color", "orange");
+                                } else {
+                                    document.getElementById("logincheck").innerHTML = '<span>Login is already used</span>'
+                                    $("#regbtn").prop("disabled", true).css("background-color", "grey");
+                                }
+                            }
+                        });
+                    });
+                });
+
+</script>
+
         </form>
         
     </div>
