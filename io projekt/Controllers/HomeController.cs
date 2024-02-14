@@ -268,7 +268,6 @@ namespace io_projekt.Controllers
             return RedirectToAction("Courses");
 }
 
-[HttpPost]
 public IActionResult rateCourse(int rating, int courseID)
 {
     currentUserID = _session.GetInt32("currentUserID") ?? 0;
@@ -285,20 +284,20 @@ public IActionResult rateCourse(int rating, int courseID)
                 // Construct the SQL command with parameters
                 string sql = @"
                  MERGE INTO OcenyKursy AS target
-                 USING (VALUES (@userID, @courseID, @ocena)) AS source (userID, courseID, ocena)
+                 USING (VALUES (@userID, @courseID, @rating)) AS source (userID, courseID, rating)
                      ON target.userID = source.userID AND target.courseID = source.courseID
                  WHEN MATCHED THEN
-                     UPDATE SET ocena = source.ocena
+                     UPDATE SET rating = source.rating
                  WHEN NOT MATCHED THEN
-                     INSERT (userID, courseID, ocena)
-                     VALUES (source.userID, source.courseID, source.ocena);";
+                     INSERT (userID, courseID, rating)
+                     VALUES (source.userID, source.courseID, source.rating);";
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     // Add parameters to the command
                     command.Parameters.AddWithValue("@userID", currentUserID);
                     command.Parameters.AddWithValue("@courseID", courseID);
-                    command.Parameters.AddWithValue("@ocena", rating);
+                    command.Parameters.AddWithValue("@rating", rating);
 
                     // Execute the command
                     command.ExecuteNonQuery();
@@ -315,7 +314,6 @@ public IActionResult rateCourse(int rating, int courseID)
     }
     return RedirectToAction("Course", new { courseID = courseID });
 }
-
 
         [HttpPost]
         public IActionResult AddLesson(String title, String content, String videoURL, String courseID)
