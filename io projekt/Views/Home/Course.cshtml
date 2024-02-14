@@ -89,7 +89,27 @@
             <div class="courseDescriptionBlock">
                 <div class="row courseDescription"><div class="col-6 courseDescriptionBold courseDescriptionField">Author:</div><div class="col-6 courseDescriptionField">@author</div></div>
                 <div class="row courseDescription"><div class="col-6 courseDescriptionBold courseDescriptionField">Difficulty:</div><div class="col-6 courseDescriptionField">@diff</div></div>
-                <div class="row courseDescription"><div class="col-6 courseDescriptionBold courseDescriptionField">Rating:</div><div class="col-6 courseDescriptionField">@rating</div></div>
+                 <div class="row courseDescription">
+     <div class="col-6 courseDescriptionBold courseDescriptionField">Rating: &nbsp&nbsp&nbsp @rating</div><div class="col-6 courseDescriptionField">
+         @{
+             <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="rateCourse" asp-route-rating="5"  asp-route-courseID="@id">
+                 <span class="star" id="star5">&#9733;</span>
+             </a>
+             <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="rateCourse" asp-route-rating="4" asp-route-courseID="@id">
+                 <span class="star" id="star4">&#9733;</span>
+             </a>
+             <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="rateCourse" asp-route-rating="3"  asp-route-courseID="@id">
+                 <span class="star" id="star3">&#9733;</span>
+             </a>
+             <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="rateCourse" asp-route-rating="2" asp-route-courseID="@id">
+                 <span class="star" id="star2">&#9733;</span>
+             </a>
+             <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="rateCourse" asp-route-rating="1" asp-route-courseID="@id">
+                 <span class="star" id="star1">&#9733;</span>
+             </a>
+         }
+     </div>
+ </div>
             </div>
         </div>
 
