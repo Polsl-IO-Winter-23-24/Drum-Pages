@@ -194,10 +194,9 @@ namespace io_projekt.Controllers
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
      		if (currentUserID != 0)
      		{
-         		ViewBag.courseId = courseID;
          		ViewBag.UserId = currentUserID;
      		}
-
+         	ViewBag.courseId = courseID;
      		return View();
 	 }
 
