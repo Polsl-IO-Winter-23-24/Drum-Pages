@@ -37,6 +37,7 @@ namespace io_projekt.Controllers
                 ViewBag.IsLoggedIn = whoIsLogged;
                 ViewBag.CurrentUserID = currentUserID;
             }
+            ViewBag.CurrentSite = "Home";
             return View();
         }
 
@@ -44,12 +45,14 @@ namespace io_projekt.Controllers
         
         public IActionResult SearchProfile(List<MainUser> users)
         {
+            ViewBag.CurrentSite = "Search Profile";
             return View(users);
         }
 
         public IActionResult Forum()
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            ViewBag.CurrentSite = "Forum";
             if (currentUserID != 0)
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
@@ -82,6 +85,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Events()
         {
+            ViewBag.CurrentSite = "Events";
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
@@ -95,6 +99,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Courses()
         {
+            ViewBag.CurrentSite = "Courses";
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
@@ -111,11 +116,13 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult SearchProfile(string searchData)
         {
+            ViewBag.CurrentSite = "Search Profile";
             List<MainUser> foundUsers = MainUser.searchUsersByNameOrSurname(searchData);
             return View(foundUsers);
         }
 
         public IActionResult Profile() {
+            ViewBag.CurrentSite = "Your Profile";
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             (MainUser user, string msg) = MainUser.GetUserById(currentUserID);
 
@@ -183,7 +190,8 @@ namespace io_projekt.Controllers
 
         public IActionResult Course(int courseID)
 	 {
-     		currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            ViewBag.CurrentSite = "Courses";
+            currentUserID = _session.GetInt32("currentUserID") ?? 0;
      		if (currentUserID != 0)
      		{
          		ViewBag.courseId = courseID;
@@ -331,13 +339,14 @@ namespace io_projekt.Controllers
 
         public IActionResult Lesson(int classID)
         {
-	        ViewBag.LessonId = classID;
+            ViewBag.CurrentSite = "Courses";
+            ViewBag.LessonId = classID;
             ViewBag.UserId = currentUserID;
             return View();
         }
         public IActionResult AdminPanel()
         {
-            
+            ViewBag.CurrentSite = "Admin Panel";
             var threads = Thread.GetAllThreads();
 			int firstThreadId = threads.Count > 0 ? threads[0].getID() : 0;
 			List<Post> posts = Post.GetPostsByThreadId(firstThreadId);
