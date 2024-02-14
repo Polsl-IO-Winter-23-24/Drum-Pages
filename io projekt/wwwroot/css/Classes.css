@@ -153,3 +153,18 @@
     color: var(--aux-text-color) !important;
     word-break: break-word;
 }
+
+.stars {
+    display: inline-block;
+    font-size: 30px;
+}
+
+ .star {
+     color: gray;
+     cursor: pointer;
+ }
+
+    .star:hover ~ .star,
+    .star:hover {
+        color: yellow;
+    }
