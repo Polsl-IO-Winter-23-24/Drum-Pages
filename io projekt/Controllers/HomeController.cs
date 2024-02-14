@@ -444,12 +444,12 @@ namespace io_projekt.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddThread(string newThreadTheme)
+        public IActionResult AddThread(string newThreadTheme, string threadContent)
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             DateTime creationDate = DateTime.Now;
 
-            (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
+            (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, threadContent, creationDate, currentUserID);
             return RedirectToAction("Forum");
         }
 

@@ -19,6 +19,31 @@
     <main class="cd__main">
         <!-- Start DEMO HTML (Use the following code into your project)-->
         <div class="container">
+            @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
+            {
+                <div class="response-group">
+                    <header>
+                        <h2><strong>Create a new thread</strong></h2>
+                    </header>
+                    <div class="post-group">
+                        <div class="post">
+                            <form method="post" action="@Url.Action("AddThread", "Home")">
+                                <div class="form-group">
+                                    <label for="threadTitle">Thread Title:</label>
+                                    <input type="text" name="newThreadTheme" id="newThreadTheme" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="threadContent">Thread Content:</label>
+                                    <textarea name="threadContent" id="threadContent" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="button button--confirm">Create Thread</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
             <div class="response-group">
                 <header>
                     <h2>

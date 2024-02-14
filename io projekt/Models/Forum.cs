@@ -313,7 +313,7 @@ namespace io_projekt.Models
         }
      
 
-        public static (string message, bool boolean, int threadId) AddNewThread(string theme, DateTime date, int userID)
+        public static (string message, bool boolean, int threadId) AddNewThread(string theme, string content, DateTime date, int userID)
         {
             MainUser? organizor = MainUser.GetUserById(userID).user;
             if (organizor == null)
@@ -354,6 +354,7 @@ namespace io_projekt.Models
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) //zapisanie usera na 10 min
                         };
                         cache.Set("AllThreads", threadsFromCache, cacheEntryOptions);
+                        Post.AddNewPost(content, date, newThreadId, userID);
                         return (Constants.addNewThreadSucces, true, newThreadId);
                     }
                 }
