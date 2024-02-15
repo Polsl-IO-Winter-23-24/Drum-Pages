@@ -135,10 +135,11 @@
                                                     (MainUser user2, String msg3) = MainUser.GetUserById(threadData.Item2[i].getUserID()); 
                                                     
                                                     <div class="comment">
-                                                        <div class="comment__avatar"></div>
+                                                        <div class="comment__avatar">
+                                                           
+                                                        </div>
                                                         <h3 class="comment__author">
-                                                                         @* ZDJECIE KOMENTUJACYCH!!!!!!!!!!!!!!  *@
-                                                            <img src=@(user2 != null ? user2.getImage() : "/images/default.png") alt="Avatar" class="comment-form__avatar">
+     
                                                             @(user2 != null ? user2.getName() : "Account Deleted")
                                                         </h3>
                                                         <h4 class="comment__timestamp">
@@ -152,7 +153,24 @@
                                                 }
                                             </div>
                                             <div class="comment-form">
-                                                <div class="comment-form__avatar"></div>
+                                                <div class="comment-form__avatar">
+                                                    @{
+                                                        var currentUserIDvar = ViewBag.CurrentUserID;
+                                                        int currentUserID = 0;
+                                                        if (currentUserIDvar != null)
+                                                        {
+                                                            if (int.TryParse(currentUserIDvar.ToString(), out currentUserID))
+                                                            {
+                                                                // Parsing successful
+                                                                var xd = 0;
+                                                            }
+                                                        }
+                                                        
+                                                        (MainUser currentUser, String msg4) = MainUser.GetUserById(currentUserID);
+                                                    }
+                                                    @* ZDJECIE KOMENTUJACYCH!!!!!!!!!!!!!!  *@
+                                                    <img src=@(currentUser != null ? currentUser.getImage() : "/images/default.png") alt="Avatar" class="comment-form__avatar">
+                                                </div>
                                                 <form method="post" action="@Url.Action("AddPost", "Home")">
                                                     @Html.Hidden("threadId", threadData.Item1.getID())
                                                     <textarea name="newPostContent"></textarea>
