@@ -26,26 +26,6 @@ body
 	color: var(--main-text-color);
 } 
 
-.header
-{
-    background-color: var(--aux-color);
-    color: var(--aux-text-color);
-    font-size: 22px;
-    font-weight: bold;
-    text-align: center;
-    height: 7vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0 0 7vh 7vh;
-	box-shadow: 1px 1px 15px var(--aux-color-shaded); 
-}
-
-.headerPage
-{
-    font-size: 16px;
-}
-
 .main-container
 { 
 	margin-top: 2vh; 
@@ -74,7 +54,7 @@ body
 
 .nav-option
 { 
-	width: 100%; 
+	width: 90%; 
 	height: 5vh; 
 	display: flex; 
 	align-items: center; 
@@ -99,7 +79,7 @@ body
 { 
 	display: flex; 
 	flex-direction: column; 
-	align-items: center; 
+	align-items: stretch; 
 	gap: 30px; 
 } 
 
@@ -210,18 +190,18 @@ body
 	padding: 20px; 
 }
 
-.report-topic-heading, 
+.report-topic-heading,
 .item1
-{ 
-	width: 100%; 
-	display: flex; 
-	justify-content: space-between; 
-	align-items: center; 
+{
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--main-border-color);
 } 
 
 .t-op
 { 
-	font-size: 24px; 
+	font-size: min(24px, 1.5vw); 
 	letter-spacing: 0px; 
 } 
 
@@ -233,12 +213,14 @@ body
 
 .item1
 { 
-	margin-top: 20px; 
+	margin-top: 10px; 
+	padding-bottom: 10px;
+	border-bottom: 1px solid var(--main-border-color);
 } 
 
 .t-op-nextlvl
 { 
-	font-size: 14px; 
+	font-size: min(14px, 1.3vw); 
 	letter-spacing: 0px; 
 	font-weight: bold; 
 } 

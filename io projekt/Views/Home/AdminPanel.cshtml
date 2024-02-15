@@ -12,11 +12,6 @@
 </head>
 
 <body>
-
-	<div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Admin Panel</span></span></div>
-
-
-
 	<div class="main-container row">
 		<div class="navcontainer col-2">
 			<nav class="nav">
@@ -170,44 +165,48 @@
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="EditThread">
-				<div>
-					<label for="threadId">Thread Id:</label>
-					<select name="threadId">
-						@foreach (var i in Thread.GetAllThreads())
-						{
-							<option value="@i.getID()">
-								@i.getID()
-							</option>
-						}
+			<form method="post" asp-controller="Admin" asp-action="EditThread" class="row">
+				<div class="col-8 row">
+					<div class="col-3">
+						<label for="threadId">Thread Id:</label>
+						<select name="threadId" id="threadId">
+							@foreach (var i in Thread.GetAllThreads())
+							{
+								<option value="@i.getID()">
+									@i.getID()
+								</option>
+							}
 
-					</select>
+						</select>
+					</div>
+
+					<div class="col-3">
+						<label for="editAction">Change:</label>
+						<select name="editAction" id="editAction" onchange="toggleInputFields()">
+							<option value="t_name">Thread name</option>
+							<option value="author">Author</option>
+						</select>
+					</div>
+
+					<div id="t_name_input_div" class="col-3">
+						<label for="t_name_input">New Name:</label>
+						<input type="text" id="t_name_input" name="t_name_input">
+					</div>
+
+					<div id="user_id_input_div" class="col-3" style="display:none;">
+						<label for="user_id_input">Select New User:</label>
+						<select name="user_id_input" id="user_id_input">
+							@foreach (var i in MainUser.GetAllUsers())
+							{
+								<option value="@i.getId()">
+									@i.getId()
+								</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="col-4">
 					<button type="submit">Submit</button>
-				</div>
-
-				<div>
-					<label for="editAction">Change:</label>
-					<select name="editAction" id="editActionSelector" onchange="toggleInputFields()">
-						<option value="t_name">Thread name</option>
-						<option value="author">Author</option>
-					</select>
-				</div>
-
-				<div id="t_name_input_div">
-					<label for="t_name_inputt">New Name:</label>
-					<input type="text" id="t_name_input" name="t_name_input">
-				</div>
-
-				<div id="user_id_input_div" style="display:none;">
-					<label for="user_id_input">Select New User:</label>
-					<select name="user_id_input">
-						@foreach (var i in MainUser.GetAllUsers())
-						{
-							<option value="@i.getId()">
-								@i.getId()
-							</option>
-						}
-					</select>
 				</div>
 			</form>
 
@@ -238,12 +237,12 @@
 
 					<div class="report-body">
 						<div class="report-topic-heading row">
-							<h3 class="t-op col-3">Id</h3>
-							<h3 class="t-op col-3">Thread</h3>
-							<h3 class="t-op col-3">Comments</h3>
-							<h3 class="t-op col-3">Author</h3>
-							<h3 class="t-op col-3">Publish date</h3>
-							<h3 class="t-op col-3">Action</h3>
+							<h3 class="t-op col-2">Id</h3>
+							<h3 class="t-op col-2">Thread</h3>
+							<h3 class="t-op col-2">Comments</h3>
+							<h3 class="t-op col-2">Author</h3>
+							<h3 class="t-op col-2">Publish date</h3>
+							<h3 class="t-op col-2">Action</h3>
 						</div>
 
 						<div class="items">
@@ -251,13 +250,13 @@
 							@foreach (var i in Thread.GetAllThreads())
 							{
 								<div class="item1 row">
-									<h3 class="t-op-nextlvl col-3 col-3">@i.getID()</h3>
-									<h3 class="t-op-nextlvl col-3 col-3">@i.getTheme()</h3>
-									<h3 class="t-op-nextlvl col-3">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
-									<h3 class="t-op-nextlvl col-3">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
-									<h3 class="t-op-nextlvl col-3">@i.getDate()</h3>
+									<h3 class="t-op-nextlvl col-2">@i.getID()</h3>
+									<h3 class="t-op-nextlvl col-2">@i.getTheme()</h3>
+									<h3 class="t-op-nextlvl col-2">@Post.GetPostsByThreadId(i.getID()).Count()</h3>
+									<h3 class="t-op-nextlvl col-2">@MainUser.GetUserById(i.getUserID()).user.getLogin()</h3>
+									<h3 class="t-op-nextlvl col-2">@i.getDate()</h3>
 									<form method="post" asp-controller="Admin" asp-action="DeleteThread" asp-route-id="@i.getID()">
-										<button type="submit" class="t-op-nextlvl col-3 label-tag">Delete</button>
+										<button type="submit" class="t-op-nextlvl col-2 label-tag">Delete</button>
 									</form>
 								</div>
 							}
@@ -322,8 +321,8 @@
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="DeleteComment">
-				<div>
+			<form method="post" asp-controller="Admin" asp-action="DeleteComment" class="row">
+				<div class="col-4">
 					<label for="comthreadId">Thread Id:</label>
 					<select name="comthreadId" id="comthreadIdSelect">
 						@foreach (var i in Thread.GetAllThreads())
@@ -334,6 +333,8 @@
 						}
 
 					</select>
+					</div>
+				<div class="col-4">
 					<label for="comId">Com Id:</label>
 					<select name="comId" id="comIdSelect">
 						 @foreach (var i in Post.GetPostsByThreadId(Thread.GetAllThreads().FirstOrDefault().getID()))
@@ -344,6 +345,8 @@
 						} 
 
 					</select>
+					</div>
+				<div class="col-4">
 					<button type="submit" id="deletecombutton">Delete Comment</button>
 				</div>			
 			</form>
@@ -500,8 +503,8 @@
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="EditUser">
-				<div>
+			<form method="post" asp-controller="Admin" asp-action="EditUser" class="row">
+				<div class="col-3">
 					<label for="threadId">User Id:</label>
 					<select name="userId">
 						@foreach (var i in MainUser.GetAllUsers())
@@ -511,11 +514,10 @@
 							</option>
 						}
 					</select>
-					<button type="submit" onclick="showusersscript('user')">Submit</button>
 				</div>
 
 
-				<div>
+				<div class="col-3">
 					<label for="editAction">Change:</label>
 					<select name="editAction" id="usersEditActionSelector" onchange="toggleUsersInputFields()">
 						<option value="t_login">Login</option>
@@ -526,29 +528,29 @@
 						<option value="t_type">Type</option>
 						<option value="t_mail">Mail</option>
 					</select>
-				</div>
+				</div class="col-3">
 
-				<div id="t_login_input_div">
+				<div id="t_login_input_div" class="col-3">
 					<label for="t_login_input">New Login:</label>
 					<input type="text" id="t_login_input" name="t_login_input">
 				</div>
 
-				<div id="t_m_input_div" style="display:none;">
+				<div id="t_m_input_div" style="display:none;" class="col-3">
 					<label for="t_name_input">New Name:</label>
 					<input type="text" id="t_name_input" name="t_name_input">
 				</div>
 
-				<div id="t_lname_input_div" style="display:none;">
+				<div id="t_lname_input_div" style="display:none;" class="col-3">
 					<label for="t_lname_input">New Last Name:</label>
 					<input type="text" id="t_lname_input" name="t_lname_input">
 				</div>
 
-				<div id="t_age_input_div" style="display:none;">
+				<div id="t_age_input_div" style="display:none;" class="col-3">
 					<label for="t_age_input">New Age:</label>
 					<input type="number" min="0" max="120" id="t_age_input" name="t_age_input">
 				</div>
 
-				<div id="type_input_div" style="display:none;">
+				<div id="type_input_div" style="display:none;" class="col-3">
 					<label for="type_input">Select Type:</label>
 					<select name="type_input">
 						<option value="Pro">Pro</option>
@@ -556,7 +558,7 @@
 						<option value="Causal">Casual</option>
 					</select>
 				</div>
-				<div id="skill_input_div" style="display:none;">
+				<div id="skill_input_div" style="display:none;" class="col-3">
 					<label for="skill_input">Select Skill:</label>
 					<select name="skill_input">
 						<option value="1">1</option>
@@ -567,10 +569,11 @@
 					</select>
 				</div>
 
-				<div id="t_email_input_div" style="display:none;">
+				<div id="t_email_input_div" style="display:none;" class="col-3">
 					<label for="t_email_input">New Email:</label>
 					<input type="email" id="t_email_input" name="t_email_input" >
 				</div>
+				<button type="submit" onclick="showusersscript('user')" class="col-3">Submit</button>
 			</form>
 
 
@@ -796,9 +799,9 @@
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="EditGear">
+			<form method="post" asp-controller="Admin" asp-action="EditGear" class="row">
 				@* WYBOR AKCJI *@
-				<div>
+				<div class="col-3">
 					<label for="editAction">Action:</label>
 					<select name="editAction" id="editActionSelectorr" onchange="toggleInputFieldss()">
 						<option value="t_name">Rename</option>
@@ -807,7 +810,7 @@
 				</div>
 				
 				@* WYBOR ID *@
-				<div id="selectiddiv">
+				<div id="selectiddiv" class="col-3">
 					<label for="threadId">Gear Id:</label>
 					<select name="gearId" id="selectedId">
 						@foreach (var i in Misc.GetAllGear())
@@ -821,11 +824,11 @@
 				</div>
 
 				@* WPISANIE NAZYWY *@
-				<div id="t_name_input_div">
+				<div id="t_name_input_div" class="col-3">
 					<label for="t_name_input">New Value:</label>
 					<input type="text" id="t_name_input" name="t_name_input">
 				</div>
-				<button type="submit" id="gearsubbmit">Submit</button>
+				<button type="submit" id="gearsubbmit" class="col-3">Submit</button>
 			</form>
 
 			<script>
@@ -885,7 +888,7 @@
 		@* ZAKLADKA STYLE *@
 		<div class="col-8" id="stylev">
 
-			<div class="row">
+			<div class="row" style="margin-bottom: 10px;">
 				<div class="row">
 
 					<div class="box col-5">
@@ -897,49 +900,13 @@
 						<img src="~/images/eye.png"
 							 alt="Views">
 					</div>
-
-					<div class="col-2"></div>
-
-					<div class="box col-5">
-						<div class="text">
-							<span class="topic-heading">WYwalic</span>
-							<span class="topic">Likes</span>
-						</div>
-
-						<img src="~/images/like.png"
-							 alt="likes">
-					</div>
-				</div><div class="row boxRow">
-
-					<div class="box col-5">
-						<div class="text">
-							<span class="topic-heading">wywalic</span>
-							<span class="topic">Comments</span>
-						</div>
-
-						<img src="~/images/chat.png"
-							 alt="comments">
-					</div>
-
-					<div class="col-2"></div>
-
-					<div class="box col-5">
-						<div class="text">
-							<span class="topic-heading">wywalic</span>
-							<span class="topic">Threads Published</span>
-						</div>
-
-						<img src="~/images/Ok.png" alt="published">
-					</div>
-
-					<div class="col-1"></div>
 				</div>
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="EditStyle">
+			<form method="post" asp-controller="Admin" asp-action="EditStyle" class="row">
 				@* WYBOR AKCJI *@
-				<div>
+				<div class="col-3">
 					<label for="editAction">Action:</label>
 					<select name="editAction" id="editActionSelectorrr" onchange="toggleInputFieldsss()">
 						<option value="t_name">Rename</option>
@@ -948,7 +915,7 @@
 				</div>
 
 				@* WYBOR ID *@
-				<div id="selectiddivv">
+				<div id="selectiddivv" class="col-3">
 					<label for="threadId">Style Id:</label>
 					<select name="gearId" id="selectedId">
 						@foreach (var i in Misc.GetAllStyles())
@@ -962,11 +929,11 @@
 				</div>
 
 				@* WPISANIE NAZYWY *@
-				<div id="t_name_input_divv">
+				<div id="t_name_input_divv" class="col-3">
 					<label for="t_name_input">New Value:</label>
 					<input type="text" id="t_name_input" name="t_name_input">
 				</div>
-				<button type="submit" id="stylesubbmit">Submit</button>
+				<button type="submit" id="stylesubbmit" class="col-3">Submit</button>
 			</form>
 
 			<script>
@@ -1077,8 +1044,8 @@
 
 			</div>
 
-			<form method="post" asp-controller="Admin" asp-action="EditEvent">
-				<div>
+			<form method="post" asp-controller="Admin" asp-action="EditEvent" class="row">
+				<div class="col-3">
 					<label for="eventId">Event Id:</label>
 					<select name="eventId">
 						@foreach (var i in Event.GetAllEvents())
@@ -1088,11 +1055,10 @@
 							</option>
 						}
 					</select>
-					<button type="submit" onclick="showusersscript('eventbutton')">Submit</button>
 				</div>
 
 
-				<div>
+				<div class="col-3">
 					<label for="editActionEvent">Change:</label>
 					<select name="editActionEvent" id="eventEditActionSelector" onchange="toggleEventInputFields()">
 						<option value="t_name">Name</option>
@@ -1102,25 +1068,26 @@
 					</select>
 				</div>
 
-				<div id="event_name_input_div">
+				<div id="event_name_input_div" class="col-3">
 					<label for="event_name_input">New Name:</label>
 					<input type="text" id="event_name_input" name="event_name_input">
 				</div>
 
-				<div id="event_date_input_div" style="display:none;">
+				<div id="event_date_input_div" style="display:none;" class="col-3">
 					<label for="event_date_input">New Date:</label>
 					<input type="date" id="event_date_input" name="event_date_input">
 				</div>
 
-				<div id="event_desc_input_div" style="display:none;">
+				<div id="event_desc_input_div" style="display:none;" class="col-3">
 					<label for="event_desc_input">New Description:</label>
 					<input type="text" id="event_desc_input" name="event_desc_input">
 				</div>
 
-				<div id="event_place_input_div" style="display:none;">
+				<div id="event_place_input_div" style="display:none;" class="col-3">
 					<label for="event_place_input">New Place:</label>
 					<input type="text" id="event_place_input" name="event_place_input">
 				</div>
+				<button type="submit" onclick="showusersscript('eventbutton')" class="col-3">Submit</button>
 			</form>
 
 

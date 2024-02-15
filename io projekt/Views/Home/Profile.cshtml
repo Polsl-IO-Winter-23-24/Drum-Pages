@@ -5,23 +5,6 @@
 <head>
     <link rel="stylesheet" href="~/css/main_style.css">
     <style>
-        body {
-            font-family: 'Lato', sans-serif;
-            font-size: 23px;
-        }
-
-        .user-profile {
-            border-radius: 35px;
-            margin-left: 35vw;
-            margin-right: 35vw;
-            margin-top: 10vh;
-            background-color: #ff9b05;
-            color: white;
-            display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            flex-direction: column; /* Stack items vertically */
-        }
 
         .edit-button {
             margin-top: 20px;
@@ -103,7 +86,7 @@
                                 gearString += ", ";
                             }
                         }
-                        <div>
+                        <div style="text-align: center;">
                             @if (!Misc.hasAllSet(currentUser.getId()))
                             {
                                 <h3>Warning: No Gear or Style has been set</h3>
@@ -136,7 +119,7 @@
                                 <input type="text" name="name" class="name" value="@currentUser.getName()" /><br />
                                 <input type="text" name="surname" class="surname" value="@currentUser.getLastName()" /><br />
                                 <input type="text" name="age" class="age" value="@currentUser.getAge()" /><br />
-
+                                <br />
                                 <label for="skill"><b>Skill level <br />(1 - beginner, 5 - advanced)</b></label><br>
                                 <select name="skill" id="skill" multiple>
                                     <option value="1">1</option>
@@ -145,7 +128,7 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                 </select>
-                                <br />
+                                <br /><br />
                                 <label for="style"><b>Style</b></label><br>
                                 
                                 <select name="style" id="style" multiple>
@@ -158,7 +141,7 @@
                                     }
                                     <option value=RESET>Reset chosen styles</option>
                                 </select>
-                                <br />
+                                <br /><br />
                                 <label for="gear"><b>Gear</b></label><br>
                                 <select name="gear" id="gear" multiple>
                                     @{
@@ -170,8 +153,8 @@
                                     }
                                     <option value=RESET>Reset chosen gear</option>
                                 </select>
-                                <br />
-                                <input type="text" name="email" class="email" value="@currentUser.getEmial()" /><br />
+                                <br /><br />
+                                <input type="text" name="email" class="email" value="@currentUser.getEmial()" /><br /><br />
                                 <input type="password" name="password" class="password" value="@currentUser.getPassword()" /><br />
 
 

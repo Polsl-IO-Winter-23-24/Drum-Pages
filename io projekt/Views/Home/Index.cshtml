@@ -8,13 +8,13 @@
 <body>
    @if (!string.IsNullOrEmpty(ViewBag.IsLoggedIn))
     {
-        <div class="header">
+        <!--<div class="header">
             <span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome back! @ViewBag.UserName</span></span>
-            </div>  
+            </div> -->
     }
     else
     {
-        <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome!</span></span></div>
+        <!--<div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Welcome!</span></span></div>-->
     }
 
     <div class="row content welcome_content">
@@ -79,7 +79,7 @@
                 <div class="row centered_container">
                     <div class="col-6 form_fields">
                         <label for="uname"><b>Username</b></label><br><br>
-                        <input type="text" placeholder="Enter Username" name="uname" id="uname" required><br><br>
+                        <input type="text" placeholder="Enter Username" name="uname" id="uname" required><br><br><br />
                         <label>
                             <input type="checkbox" name="remember" id="remeber"> Remember me
                         </label>
@@ -89,7 +89,7 @@
                     <div class="col-6 form_fields">
                         <label for="psw"><b>Password</b></label><br><br>
                         <input type="password" placeholder="Enter Password" name="psw" id="psw" required><br><br>
-                        <div id="addLogin">Forgot password?<br>Enter Login</div>
+                        <div id="addLogin">Forgot password?</div>
                         <span id="forgotPasswordLink">Reset <a href="#">password</a></span><br><br>
                         <button type="button" onclick="document.getElementById('id_1').style.display='none'" class="Login_cancel">Cancel</button>
                     </div>                   
@@ -190,46 +190,52 @@
 
             <div class="container col-8">
                 <div class="row centered_container">
-                    <div class="col-6 form_fields">
-                        <label for="name"><b>Imie</b></label><br>
-                        <input type="text" placeholder="Podaj imię" name="name" id="name" autocomplete="on" required><br><br>
-                        <label for="surname"><b>Nazwisko</b></label><br>
-                        <input type="text" placeholder="Podaj nazwisko" name="surname" id="surname" required><br><br>
-                        <label for="email"><b>Email</b></label><br>
-                        <input type="email" placeholder="Adres email" name="email" id="email" autocomplete="on" required><br><br>
-                        <label for="regname"><b>Wiek</b></label><br>
-                        <input type="number" placeholder="Podaj swój wiek" name="age" id="age" min="1" max="100" required><br><br>
+                    <div class="col-12 form_fields">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="name"><b>Imie</b></label><br>
+                                <input type="text" placeholder="Podaj imię" name="name" id="name" autocomplete="on" required><br><br>
+                                <label for="surname"><b>Nazwisko</b></label><br>
+                                <input type="text" placeholder="Podaj nazwisko" name="surname" id="surname" required><br><br>
+                                <label for="email"><b>Email</b></label><br>
+                                <input type="email" placeholder="Adres email" name="email" id="email" autocomplete="on" required><br><br>
+                                <label for="regname"><b>Wiek</b></label><br>
+                                <input type="number" placeholder="Podaj swój wiek" name="age" id="age" min="1" max="1000000" required><br><br>
 
-                        <label for="regname"><b>Rodzaj użytkownika</b></label><br>
-                        <select name="accountType" id="accountType" multiple>
-                            <option value="Amator">Zwykły użytkownik</option>
-                            <option value="NPro">Pro</option>
-                        </select>
-                        <br />
-                        <label for="regname"><b>Poziom umiejętności <br />(1 - początkujący, 5 - zaawansowany)</b></label><br>
-                        <select name="skill" id="skill" multiple>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <br />
+                                <label for="regname"><b>Rodzaj użytkownika</b></label><br>
+                                <select name="accountType" id="accountType" multiple>
+                                    <option value="Amator">Zwykły użytkownik</option>
+                                    <option value="NPro">Pro</option>
+                                </select>
+                                <br />
+                            </div>
+                            <div class="col-6">
+                                <label for="regname"><b>Poziom umiejętności <br />(1 - początkujący, 5 - zaawansowany)</b></label><br>
+                                <select name="skill" id="skill" multiple>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <br /><br />
 
-                        <label for="regname"><b>Login</b></label><br>
-                        <input type="text" placeholder="Podaj login" name="regname" id="regname" required><br><br>
-                        <label for="regpass"><b>Hasło</b></label><br>
-                        <input type="password" placeholder="Podaj hasło" name="regpass" id="regpass" required oninput="check()"><br><br><br>
-                        <button type="submit" class="cancelbtn formBtn" id="regbtn">Register</button>
+                                <label for="regname"><b>Login</b></label><br>
+                                <input type="text" placeholder="Podaj login" name="regname" id="regname" required><br><br>
+                                <label for="regpass"><b>Hasło</b></label><br>
+                                <input type="password" placeholder="Podaj hasło" name="regpass" id="regpass" required oninput="check()"><br><br><br>
+                                <button type="submit" class="cancelbtn formBtn" id="regbtn">Register</button>
+                            </div>
+                        </div>
                     </div>
                     @* WALIDACJA HASLA *@
-                    <div>
+                    <!--<div>
                         <div id="logincheck"><span></span> </div>
                         <div id="passVal"> <span>Wymagania hasla</span> </div>
                         <div id="check0">  <span>Length more than 5</span> </div>
                         <div id="check1">  <span>Contains numerical character</span> </div>
                         <div id="check2">  <span>Contains special character</span> </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="col-2"></div>

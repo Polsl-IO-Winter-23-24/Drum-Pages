@@ -60,13 +60,19 @@ button:hover
     font-size: 22px;
     font-weight: bold;
     text-align: center;
-    height: 7vh;
+    min-height: 7vh;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 0 0 7vh 7vh;
 	box-shadow: 1px 1px 15px var(--aux-color-shaded); 
     width: 100%;
+}
+
+ul
+{
+    list-style-type: none;
+    padding: 0px;
 }
 
 .headerPage
@@ -172,6 +178,48 @@ button:hover
     margin-top: 30px;
 }
 
+.user-profile
+{
+    border-radius: 35px;
+    margin-left: 35vw;
+    margin-right: 35vw;
+    margin-top: 30px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--main-color);
+    border: 5px solid var(--aux-color);
+    color: var(--main-text-color);
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack items vertically */
+}
+
+.profileInfo
+{
+    border-bottom: 1px solid var(--main-border-color);
+}
+
+.searchData {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 300px; /* Adjust width as needed */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.search-button
+{
+    width: 100%;
+}
+
+#searchButton
+{
+    width: 100%;
+}
+
 .row::after
 {
     content: "";
@@ -198,11 +246,58 @@ button:hover
     padding: 15px;
 }
 
+.nav-item
+{
+    border-left: 2px solid var(--aux-color-shaded);
+    text-align: center;
+    display: block;
+    margin: 0px !important;
+    width: 16.67%;
+    font-size: min(1.69vw, 18px);
+    transition: background-color 0.3s ease 0s;
+}
+
+.nav-item:last-child
+{
+    border-right: 2px solid var(--aux-color-shaded);
+}
+
+.header-content
+{
+    width: 80%;
+}
+
+.nav-item:hover
+{
+    background-color: var(--aux-color-shaded);
+    transition: background-color 0.5s ease 0s;
+}
+
 @media only screen and (max-width: 768px)
 {
     /* For mobile phones: */
     [class*="col-"] {
       width: 100%;
+    }
+
+    .nav-item
+    {
+        border-right: 2px solid var(--main-border-color);
+        border-left: 2px solid var(--main-border-color);
+        margin-bottom: 5px !important;
+        background-color: var(--aux-color-shaded);
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .nav-item:last-child
+    {
+        border-right: 2px solid var(--main-border-color);
+    }
+
+    .navbar-nav
+    {
+        align-items: center;
     }
 }
 
@@ -268,10 +363,6 @@ button:hover
     justify-content: space-around;
 }
 
-.nav-item {
-    margin: 0 10px; /* Add more space between items */
-}
-
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
@@ -286,13 +377,9 @@ button:hover
 
 /* Responsive Design */
 @media only screen and (max-width: 768px) {
+
     .navbar-nav {
         flex-direction: column;
-        align-items: center;
-    }
-
-    .nav-item {
-        margin: 0.5rem 0;
     }
 }
 

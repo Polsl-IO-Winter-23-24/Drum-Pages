@@ -99,7 +99,7 @@ ul {
 .container {
   width: 90%;
   max-width: 900px;
-  margin: 50px auto 100px;
+  margin: 20px 5% 50px 5%;
 }
 
 .response-group {
@@ -198,8 +198,10 @@ ul {
   box-shadow: 0 2px 1px var(--aux-color-shaded);
 }
 
-.response {
+.response
+{
   position: relative;
+  margin-bottom: 20px;
 }
 
 .response__number {
@@ -217,7 +219,7 @@ ul {
 
 .response__title {
   margin-left: 3.25rem;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .post-group {
@@ -236,10 +238,17 @@ ul {
 .post__author {
   margin-top: 5px;
   margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+.post__body
+{
+    margin: 5px 5px 10px 5px;
 }
 
 .post__timestamp {
-  margin-top: 0;
+    margin-top: 0px;
+    margin-left: 5px;
 }
 
 .post__actions {
@@ -249,14 +258,21 @@ ul {
   background-color: var(--main-color-shaded);
   border-top: 1px solid var(--main-color-shaded);
 }
+
+.thumbBtn
+{
+    font-size: 18px;
+    padding-right: 5px;
+}
+
 .post__actions .button {
-  float: left;
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  text-align: center;
-  vertical-align: top;
-  border-right: 1px solid var(--main-color-shaded);
+    float: left;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    vertical-align: top;
+    border-right: 1px solid var(--main-color-shaded);
 }
 .post__actions .button i.solid {
   display: none;
@@ -322,19 +338,24 @@ ul {
 .comment-form textarea {
   width: 100%;
   height: 4em;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 16px;
   border: 1px solid var(--main-color-shaded);
   border-radius: 2px;
   box-shadow: 0 1px 1px var(--aux-color) inset;
+  margin-top: 10px;
 }
 .comment-form textarea:focus {
   outline: none;
 }
 
-.comment-form__avatar {
+.comment-form__avatar
+{
   height: 35px;
   width: 35px;
+  position: relative;
+  top: 0px;
+  left: 0px;
 }
 
 .comment-form .comment-form__actions {
@@ -353,11 +374,16 @@ ul {
 }
 .comment-form .comment-form__actions .button--light {
   border-color: transparent;
-  color: var(--main-color-shaded);
+  color: var(--main-text-color);
 }
 .comment-form .comment-form__actions .button--light:hover {
-  background-color: var(--main-color-shaded);
+  background-color: var(--aux-color);
   color: var(--aux-text-color);
+}
+
+.comment
+{
+    margin-bottom: 15px;
 }
 
 .post--commenting .post__actions {

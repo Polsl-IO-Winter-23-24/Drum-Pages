@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="~/css/main_style.css">
 </head>
 <body>
-    <div class="header"><span class="header-text">DRUM PAGES<span class="headerPage"><br>Forum</span></span></div>
     <!--$%adsense%$-->
     <main class="cd__main">
         <!-- Start DEMO HTML (Use the following code into your project)-->
@@ -84,7 +83,7 @@
                                         <form id="approveForm_@threadCounter" asp-controller="Home" asp-action="addPositiveRatingForThread" method="post">
                                             <div class="button button--approve @if (isLiked) { <text>active</text> }">
                                                 @positiveRatings
-                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">
+                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()" class="thumbBtn">
                                                     <i class="fa fa-thumbs-up"></i><i class="fa fa-thumbs-up solid"></i>
                                                 </button>
                                             </div>
@@ -92,7 +91,7 @@
                                         <form id="denyForm_@threadCounter" asp-controller="Home" asp-action="addNegativeRatingForThread" method="post">
                                             <div class="button button--deny @if (isDisliked) { <text>active</text> }">
                                                 @negativeRatings
-                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()">
+                                                <button type="submit" name="threadId" value="@threadData.Item1.getID()" class="thumbBtn">
                                                     <i class="fa fa-thumbs-down"></i><i class="fa fa-thumbs-down solid"></i>
                                                 </button>
                                             </div>
