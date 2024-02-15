@@ -188,17 +188,62 @@ namespace io_projekt.Controllers
             return RedirectToAction("Profile", user);
         }
 
-        public IActionResult Course(int courseID)
-	 {
-            ViewBag.CurrentSite = "Courses";
-            currentUserID = _session.GetInt32("currentUserID") ?? 0;
-     		if (currentUserID != 0)
-     		{
-         		ViewBag.UserId = currentUserID;
-     		}
-         	ViewBag.courseId = courseID;
-     		return View();
-	 }
+           public IActionResult Course(int courseID)
+{
+       ViewBag.CurrentSite = "Courses";
+       currentUserID = _session.GetInt32("currentUserID") ?? 0;
+   		if (currentUserID != 0)
+   		{
+       		ViewBag.UserId = currentUserID;
+   		}
+       	ViewBag.courseId = courseID;
+       ViewBag.rating = getCurrentUserCourseRating(courseID);
+       return View();
+}
+
+   public double getCurrentUserCourseRating(int courseID)
+   {
+      
+       var rate = 0;
+       if (currentUserID != 0)
+       {
+           try
+           {
+
+               String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+
+               using (SqlConnection connection = new SqlConnection(connectionString))
+               {
+                   Console.WriteLine("tabela: ");
+                   connection.Open();
+                   String query = "select * from OcenyKursy where (userID=" + currentUserID + " and courseID=" + courseID + ")";
+
+                   using (SqlCommand command = new SqlCommand(query, connection))
+                   {
+                       using (SqlDataReader reader = command.ExecuteReader())
+                       {
+
+                           while (reader.Read())
+                           {
+                               
+                               rate = Convert.ToInt32(reader.GetDouble(3));
+
+                           }
+                       }
+                   }
+               }
+
+           }
+           catch (Exception ex)
+           {
+               Console.WriteLine(ex.Message);
+           }
+          
+       }
+
+       return rate;
+       
+   }
 
           [HttpPost]
   public IActionResult AddCourse(String title, String description, String difficulty)
