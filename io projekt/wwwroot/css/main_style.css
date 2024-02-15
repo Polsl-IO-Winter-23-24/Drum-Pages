@@ -220,6 +220,11 @@ ul
     width: 100%;
 }
 
+.form-group
+{
+    margin-bottom: 10px;
+}
+
 .row::after
 {
     content: "";
@@ -253,7 +258,7 @@ ul
     display: block;
     margin: 0px !important;
     width: 16.67%;
-    font-size: min(1.69vw, 18px);
+    font-size: min(0.957vw, 18px);
     transition: background-color 0.3s ease 0s;
 }
 
@@ -361,6 +366,7 @@ ul
 .navbar-nav {
     display: flex;
     justify-content: space-around;
+    margin: 10px 0px 10px 0px;
 }
 
 .nav-link {
