@@ -37,6 +37,7 @@ namespace io_projekt.Controllers
                 ViewBag.IsLoggedIn = whoIsLogged;
                 ViewBag.CurrentUserID = currentUserID;
             }
+            ViewBag.CurrentSite = "Home";
             return View();
         }
 
@@ -44,12 +45,14 @@ namespace io_projekt.Controllers
         
         public IActionResult SearchProfile(List<MainUser> users)
         {
+            ViewBag.CurrentSite = "Search Profile";
             return View(users);
         }
 
         public IActionResult Forum()
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
+            ViewBag.CurrentSite = "Forum";
             if (currentUserID != 0)
             {
                 whoIsLogged = MainUser.GetUserById(currentUserID).user.getAccountType();
@@ -82,6 +85,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Events()
         {
+            ViewBag.CurrentSite = "Events";
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
@@ -95,6 +99,7 @@ namespace io_projekt.Controllers
 
         public IActionResult Courses()
         {
+            ViewBag.CurrentSite = "Courses";
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             if (currentUserID != 0)
             {
@@ -111,11 +116,13 @@ namespace io_projekt.Controllers
         [HttpPost]
         public IActionResult SearchProfile(string searchData)
         {
+            ViewBag.CurrentSite = "Search Profile";
             List<MainUser> foundUsers = MainUser.searchUsersByNameOrSurname(searchData);
             return View(foundUsers);
         }
 
         public IActionResult Profile() {
+            ViewBag.CurrentSite = "Your Profile";
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             (MainUser user, string msg) = MainUser.GetUserById(currentUserID);
 
@@ -181,17 +188,62 @@ namespace io_projekt.Controllers
             return RedirectToAction("Profile", user);
         }
 
-        public IActionResult Course(int courseID)
-	 {
-     		currentUserID = _session.GetInt32("currentUserID") ?? 0;
-     		if (currentUserID != 0)
-     		{
-         		ViewBag.courseId = courseID;
-         		ViewBag.UserId = currentUserID;
-     		}
+           public IActionResult Course(int courseID)
+{
+       ViewBag.CurrentSite = "Courses";
+       currentUserID = _session.GetInt32("currentUserID") ?? 0;
+   		if (currentUserID != 0)
+   		{
+       		ViewBag.UserId = currentUserID;
+   		}
+       	ViewBag.courseId = courseID;
+       ViewBag.rating = getCurrentUserCourseRating(courseID);
+       return View();
+}
 
-     		return View();
-	 }
+   public double getCurrentUserCourseRating(int courseID)
+   {
+      
+       var rate = 0;
+       if (currentUserID != 0)
+       {
+           try
+           {
+
+               String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+
+               using (SqlConnection connection = new SqlConnection(connectionString))
+               {
+                   Console.WriteLine("tabela: ");
+                   connection.Open();
+                   String query = "select * from OcenyKursy where (userID=" + currentUserID + " and courseID=" + courseID + ")";
+
+                   using (SqlCommand command = new SqlCommand(query, connection))
+                   {
+                       using (SqlDataReader reader = command.ExecuteReader())
+                       {
+
+                           while (reader.Read())
+                           {
+                               
+                               rate = Convert.ToInt32(reader.GetDouble(3));
+
+                           }
+                       }
+                   }
+               }
+
+           }
+           catch (Exception ex)
+           {
+               Console.WriteLine(ex.Message);
+           }
+          
+       }
+
+       return rate;
+       
+   }
 
           [HttpPost]
   public IActionResult AddCourse(String title, String description, String difficulty)
@@ -261,7 +313,52 @@ namespace io_projekt.Controllers
             return RedirectToAction("Courses");
 }
 
+public IActionResult rateCourse(int rating, int courseID)
+{
+    currentUserID = _session.GetInt32("currentUserID") ?? 0;
+    if (currentUserID != 0)
+    {
+        try
+        {
+            String connectionString = "Data Source=(local)\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True";
+            // SQL query to insert a new row into the Kursy table
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
+                // Construct the SQL command with parameters
+                string sql = @"
+                 MERGE INTO OcenyKursy AS target
+                 USING (VALUES (@userID, @courseID, @rating)) AS source (userID, courseID, rating)
+                     ON target.userID = source.userID AND target.courseID = source.courseID
+                 WHEN MATCHED THEN
+                     UPDATE SET rating = source.rating
+                 WHEN NOT MATCHED THEN
+                     INSERT (userID, courseID, rating)
+                     VALUES (source.userID, source.courseID, source.rating);";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    // Add parameters to the command
+                    command.Parameters.AddWithValue("@userID", currentUserID);
+                    command.Parameters.AddWithValue("@courseID", courseID);
+                    command.Parameters.AddWithValue("@rating", rating);
+
+                    // Execute the command
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+
+    }
+    return RedirectToAction("Course", new { courseID = courseID });
+}
 
         [HttpPost]
         public IActionResult AddLesson(String title, String content, String videoURL, String courseID)
@@ -331,13 +428,14 @@ namespace io_projekt.Controllers
 
         public IActionResult Lesson(int classID)
         {
-	        ViewBag.LessonId = classID;
+            ViewBag.CurrentSite = "Courses";
+            ViewBag.LessonId = classID;
             ViewBag.UserId = currentUserID;
             return View();
         }
         public IActionResult AdminPanel()
         {
-            
+            ViewBag.CurrentSite = "Admin Panel";
             var threads = Thread.GetAllThreads();
 			int firstThreadId = threads.Count > 0 ? threads[0].getID() : 0;
 			List<Post> posts = Post.GetPostsByThreadId(firstThreadId);
@@ -435,12 +533,12 @@ namespace io_projekt.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddThread(string newThreadTheme)
+        public IActionResult AddThread(string newThreadTheme, string threadContent)
         {
             currentUserID = _session.GetInt32("currentUserID") ?? 0;
             DateTime creationDate = DateTime.Now;
 
-            (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, creationDate, currentUserID);
+            (String msg, bool ifWorked, int threadId) = Thread.AddNewThread(newThreadTheme, threadContent, creationDate, currentUserID);
             return RedirectToAction("Forum");
         }
 

@@ -38,7 +38,7 @@ namespace io_projekt.Models
                                 course.setDescription(reader.GetString(2));
                                 course.setAuthorID(reader.GetInt32(3));
                                 course.setDifficulty(reader.GetInt32(4));
-                                course.setRating(reader.GetInt32(5));
+                                course.setRating(reader.GetDouble(5));
 
                                 courses.Add(course);
                             }
@@ -60,7 +60,7 @@ namespace io_projekt.Models
                                 course.setDescription(reader.GetString(2));
                                 course.setAuthorID(reader.GetInt32(3));
                                 course.setDifficulty(reader.GetInt32(4));
-                                course.setRating(reader.GetInt32(5));
+                                course.setRating(reader.GetDouble(5));
 
                                 Topcourses.Add(course);
                             }
@@ -103,7 +103,7 @@ namespace io_projekt.Models
                          course.setDescription(reader.GetString(2));
                          course.setAuthorID(reader.GetInt32(3));
                          course.setDifficulty(reader.GetInt32(4));
-                         course.setRating(reader.GetInt32(5));
+                         course.setRating(reader.GetDouble(5));
 
                          Usercourses.Add(course);
                      }
@@ -131,7 +131,7 @@ namespace io_projekt.Models
         private string description;
         private int authorID;
         private int difficutly;
-        private int rating;
+        private double rating;
         private string authorName;
 
 
@@ -167,7 +167,7 @@ namespace io_projekt.Models
                                 description = reader.GetString(2);
                                 authorID = reader.GetInt32(3);
                                 difficutly = reader.GetInt32(4);
-                                rating = reader.GetInt32(5);
+                                rating = reader.GetDouble(5);
                             }
                         }
                     }
@@ -259,7 +259,7 @@ namespace io_projekt.Models
         public string getAuthorName() { return authorName; }
         public int getAuthorID() { return authorID; }
         public int getDifficulty() { return difficutly; }
-        public int getRating() { return rating; }
+        public double getRating() { return rating; }
 
         public void setID(int id) { this.id = id; }
         public void setTitle(string title) { this.title = title; }
@@ -268,7 +268,7 @@ namespace io_projekt.Models
 
         public void setAuthorName(String authorName) { this.authorName = authorName; }
         public void setDifficulty(int difficulty) { this.difficutly = difficulty; }
-        public void setRating(int rating) { this.rating = rating; }
+        public void setRating(double rating) { this.rating = rating; }
 
     }
 
