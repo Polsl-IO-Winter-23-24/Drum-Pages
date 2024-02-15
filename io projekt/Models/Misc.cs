@@ -424,7 +424,7 @@ namespace io_projekt.Models
 
             if (MainUser.UserExists(userId))
             {
-                if (GetGearById(styleId).ID != -1)
+                if (GetStyleById(styleId).ID != -1)
                 {
                     try
                     {
