@@ -166,28 +166,35 @@
     <div id="CoursesCurrentSection">
         @{
              foreach (var item in model.lessons)
- {
-     <div id="classesBox" class="CourseBlock">
-         <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="Lesson" asp-route-classID="@item.getID()">
-             <span class="CourseBlockTag">@item.getTitle()</span>
-         </a>
+            {
+                 <div id="classesBox" class="CourseBlock">
+                     <a asp-area="" class="courseBlockLink" asp-controller="Home" asp-action="Lesson" asp-route-classID="@item.getID()">
+                         <span class="CourseBlockTag">@item.getTitle()</span>
+                     </a>
 
-         <br />
+                     <br />
 
-         <a asp-area="" asp-controller="Home" asp-action="deleteLesson" asp-route-lessonID="@item.getID()" asp-route-courseID="@id">
-             <center><button style="font-size: 8px;">Delete</button></center>
-         </a>
+                    @if (model.getAuthorID() == ViewBag.UserID)
+                    {
+                    <a asp-area="" asp-controller="Home" asp-action="deleteLesson" asp-route-lessonID="@item.getID()" asp-route-courseID="@id">
+                        <center><button style="font-size: 8px;">Delete</button></center>
+                    </a>
 
-     </div>
-     
- }
+                
+                    }
+                </div>
+                     
+
+            }
         }
     </div>
 
-</div>
-@{
-    if (model.getAuthorID() == ViewBag.UserID)
+    </div>
+    @{
+        
+        if (model.getAuthorID() == ViewBag.UserID)
     {
+        
         <a asp-area="" asp-controller="Home" asp-action="deleteCourse" asp-route-courseID="@id">
             <button>Delete course</button>
         </a>

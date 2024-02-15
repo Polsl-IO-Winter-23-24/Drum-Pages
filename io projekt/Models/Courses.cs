@@ -173,7 +173,7 @@ namespace io_projekt.Models
                     }
 
 
-                    query = "select login from Uzytkownicy where uzytkownikId = " + authorID;
+                    query = "select imie, nazwisko from Uzytkownicy where uzytkownikId = " + authorID;
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -182,8 +182,9 @@ namespace io_projekt.Models
 
                             while (reader.Read())
                             {
-                              
-                               authorName = reader.GetString(0);
+                               String name = reader.GetString(0);
+                                String surname = reader.GetString(1);
+                                authorName = name + " " + surname;
                             }
                         }
                     }
