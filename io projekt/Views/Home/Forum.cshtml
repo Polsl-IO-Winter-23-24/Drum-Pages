@@ -75,15 +75,15 @@
 
                                 <div class="post">
                                                                      @* ZDJECIE AUTORA WPISU!!!!!!!!!!!!!!  *@
-                                    <div class="post__avatar"><img src=@user.getImage() alt="Avatar" class="post__avatar"></div>
+                                    <div class="post__avatar post__avatar_place"><img src=@user.getImage() alt="Avatar" class="post__avatar"></div>
                                     <h3 class="post__author">
                                         @(user != null ? user.getName() : "Account Deleted")
                                     </h3>
                                     <h4 class="post__timestamp">
-                                        @threadData.Item2[0].getCreationDate();
+                                        @threadData.Item2[0].getCreationDate()
                                     </h4>
                                     <p class="post__body">
-                                        @threadData.Item2[0].getContent();
+                                        @threadData.Item2[0].getContent()
                                     </p>
                                     <div class="post__actions">
                                         @{
