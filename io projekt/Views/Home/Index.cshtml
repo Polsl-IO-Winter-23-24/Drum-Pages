@@ -193,24 +193,24 @@
                     <div class="col-12 form_fields">
                         <div class="row">
                             <div class="col-6">
-                                <label for="name"><b>Imie</b></label><br>
-                                <input type="text" placeholder="Podaj imię" name="name" id="name" autocomplete="on" required><br><br>
-                                <label for="surname"><b>Nazwisko</b></label><br>
-                                <input type="text" placeholder="Podaj nazwisko" name="surname" id="surname" required><br><br>
+                                <label for="name"><b>Name</b></label><br>
+                                <input type="text" placeholder="Enter Your name" name="name" id="name" autocomplete="on" required><br><br>
+                                <label for="surname"><b>Last Name</b></label><br>
+                                <input type="text" placeholder="Enter Your last name" name="surname" id="surname" required><br><br>
                                 <label for="email"><b>Email</b></label><br>
-                                <input type="email" placeholder="Adres email" name="email" id="email" autocomplete="on" required><br><br>
-                                <label for="regname"><b>Wiek</b></label><br>
-                                <input type="number" placeholder="Podaj swój wiek" name="age" id="age" min="1" max="1000000" required><br><br>
+                                <input type="email" placeholder="Email" name="email" id="email" autocomplete="on" required><br><br>
+                                <label for="regname"><b>Age</b></label><br>
+                                <input type="number" placeholder=" age" name="age" id="age" min="1" max="1000000" required><br><br>
 
-                                <label for="regname"><b>Rodzaj użytkownika</b></label><br>
+                                <label for="regname"><b>Account type</b></label><br>
                                 <select name="accountType" id="accountType" multiple>
-                                    <option value="Amator">Zwykły użytkownik</option>
+                                    <option value="Amator">Casual</option>
                                     <option value="NPro">Pro</option>
                                 </select>
                                 <br />
                             </div>
                             <div class="col-6">
-                                <label for="regname"><b>Poziom umiejętności <br />(1 - początkujący, 5 - zaawansowany)</b></label><br>
+                                <label for="regname"><b>Skill level <br />(1 - beginner, 5 - advanced)</b></label><br>
                                 <select name="skill" id="skill" multiple>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -221,21 +221,21 @@
                                 <br /><br />
 
                                 <label for="regname"><b>Login</b></label><br>
-                                <input type="text" placeholder="Podaj login" name="regname" id="regname" required><br><br>
+                                <input type="text" placeholder="Enter Your login" name="regname" id="regname" required><br><br>
                                 <label for="regpass"><b>Hasło</b></label><br>
-                                <input type="password" placeholder="Podaj hasło" name="regpass" id="regpass" required oninput="check()"><br><br><br>
+                                <input type="password" placeholder="Enter Your password" name="regpass" id="regpass" required oninput="check()"><br><br><br>
                                 <button type="submit" class="cancelbtn formBtn" id="regbtn">Register</button>
                             </div>
                         </div>
                     </div>
                     @* WALIDACJA HASLA *@
-                    <!--<div>
+                   <div>
                         <div id="logincheck"><span></span> </div>
-                        <div id="passVal"> <span>Wymagania hasla</span> </div>
+                        <div id="passVal"> <span>Password requirements:</span> </div>
                         <div id="check0">  <span>Length more than 5</span> </div>
                         <div id="check1">  <span>Contains numerical character</span> </div>
                         <div id="check2">  <span>Contains special character</span> </div>
-                    </div>-->
+                    </div>
                 </div>
             </div>
             <div class="col-2"></div>
